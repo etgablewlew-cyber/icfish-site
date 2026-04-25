@@ -105,12 +105,12 @@ sudo php -S 0.0.0.0:80
 │ fake iCloud  │     │ local test logs      │     │ fake 2FA code     │
 │ login/pass   │     │                      │     │ interaction       │
 └──────────────┘     └──────────────────────┘     └─────────┬─────────┘
-                                                             │
-                                                             v
-                                                   ┌──────────────────────────┐
-                                                   │ captures/capture_2fa.php │
-                                                   │ local test logs          │
-                                                   └──────────────────────────┘
+                                                            │
+                                                            v
+                                                ┌──────────────────────────┐
+                                                │ captures/capture_2fa.php │
+                                                │ local test logs          │
+                                                └──────────────────────────┘
 ```
 
 1. Open the local project URL.
