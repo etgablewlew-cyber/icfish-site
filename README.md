@@ -1,24 +1,24 @@
 # icfish
 
-```text
-      _        __ _     _
-     (_) ___  / _(_)___| |__
-     | |/ __|| |_| / __| '_ \
-     | | (__ |  _| \__ \ | | |
-     |_|\___||_| |_|___/_| |_|
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=rect&height=180&color=0:050505,45:062b16,100:0f172a&text=ICFISH&fontColor=39ff14&fontSize=64&fontAlignY=42&desc=educational%20phishing-awareness%20project&descAlignY=68&descSize=18&animation=fadeIn" alt="icfish hacking style banner">
+</p>
 
-     educational phishing-awareness project
-     localhost / 192.168.x.x only
-```
+<p align="center">
+  <img src="https://img.shields.io/badge/Author-vyahello-39ff14?style=for-the-badge&labelColor=050505" alt="Author: vyahello">
+  <img src="https://img.shields.io/badge/Open%20Source-Yes-00d4ff?style=for-the-badge&labelColor=050505" alt="Open Source: Yes">
+  <img src="https://img.shields.io/badge/Maintained-Yes-7c3aed?style=for-the-badge&labelColor=050505" alt="Maintained: Yes">
+  <img src="https://img.shields.io/badge/Written%20in-HTML%20%26%20PHP%20%26%20Bash-ff2bd6?style=for-the-badge&labelColor=050505" alt="Written in: HTML, PHP and Bash">
+</p>
 
 ```text
 ┌────────────────────────────────────────────────────────────────────┐
-│  EDUCATIONAL USE ONLY                                               │
-│  Learn how credential-harvesting pages work so you can recognize,   │
-│  explain, test, and prevent them.                                   │
+│  EDUCATIONAL USE ONLY                                              │
+│  Learn how credential-harvesting pages work so you can recognize,  │
+│  explain, test, and prevent them.                                  │
 │                                                                    │
-│  Do not use against real people, real accounts, public networks,    │
-│  production systems, or any target without explicit permission.     │
+│  Do not use against real people, real accounts, public networks,   │
+│  production systems, or any target without explicit permission.    │
 └────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -49,11 +49,13 @@ Password:  training-password
 
 ```text
 .
-├── index.html        # Fake iCloud training login page with Apple ID/password flow
-├── verify.html       # Fake iCloud training 2FA page with six-digit code flow
-├── capture.php       # Local JSON receiver for test credentials
-├── capture_2fa.php   # Local JSON receiver for test 2FA codes
-└── start_server.sh   # Convenience launcher for the PHP dev server
+├── index.html                  # Fake iCloud training login page with Apple ID/password flow
+├── pages/
+│   └── verify.html             # Fake iCloud training 2FA page with six-digit code flow
+├── captures/
+│   ├── capture.php             # Local JSON receiver for test credentials
+│   └── capture_2fa.php         # Local JSON receiver for test 2FA codes
+└── start_server.sh             # Convenience launcher for the PHP dev server
 ```
 
 Generated test output is written to `creds/` in the project directory. Treat that folder as sensitive local test output and delete it after exercises.
@@ -98,24 +100,24 @@ sudo php -S 0.0.0.0:80
 ## Educational Flow
 
 ```text
-┌──────────────┐     ┌──────────────┐     ┌────────────────┐
-│ index.html   │ --> │ capture.php  │ --> │ verify.html    │
-│ fake iCloud  │     │ local logs   │     │ fake 2FA code  │
-│ login/pass   │     │              │     │ interaction    │
-└──────────────┘     └──────────────┘     └───────┬────────┘
-                                                   │
-                                                   v
-                                           ┌─────────────────┐
-                                           │ capture_2fa.php │
-                                           │ local logs      │
-                                           └─────────────────┘
+┌──────────────┐     ┌──────────────────────┐     ┌───────────────────┐
+│ index.html   │ --> │ captures/capture.php │ --> │ pages/verify.html │
+│ fake iCloud  │     │ local test logs      │     │ fake 2FA code     │
+│ login/pass   │     │                      │     │ interaction       │
+└──────────────┘     └──────────────────────┘     └─────────┬─────────┘
+                                                             │
+                                                             v
+                                                   ┌──────────────────────────┐
+                                                   │ captures/capture_2fa.php │
+                                                   │ local test logs          │
+                                                   └──────────────────────────┘
 ```
 
 1. Open the local project URL.
 2. Enter fake training credentials.
-3. The page sends a local JSON request to `capture.php`.
+3. The page sends a local JSON request to `captures/capture.php`.
 4. Enter a fake six-digit training code.
-5. The page sends a local JSON request to `capture_2fa.php`.
+5. The page sends a local JSON request to `captures/capture_2fa.php`.
 
 ## Viewing Test Output
 

