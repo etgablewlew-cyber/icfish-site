@@ -1,3 +1,6 @@
+# fake test creds
+creds/
+
 # Pycharm trash
 .idea
 __pycache__/
