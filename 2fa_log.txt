@@ -1,0 +1,204 @@
+[2026-05-15 07:48:29] Login attempt: email=test@test.com&password=Pass123 to https://www.icloud.com/validate_creds
+[2026-05-15 07:51:59] Login attempt: {"appleid":"dasdsadsad","password":"sadsad"} to https://www.icloud.com/validate_creds
+[[2026-05-15 08:52:09] Forwarding login for test@test.com
+[2026-05-15 09:01:45] Login redirect for: test@test.com
+[2026-05-15 09:01:46] Apple response: /idmsdweb/start?service=gettoken&accountName=test@test.com - status=403
+[2026-05-15 09:20:15] Validating credentials for: test@test.com
+[2026-05-15 09:20:45] User wants to validate: test@test.com
+[2026-05-15 09:20:45] Redirecting to Apple login page for: test@test.com
+[2026-05-15 09:20:46] Apple /idmsdweb/start?service=gettoken&accountName=test@test.com: status=403
+[2026-05-15 09:21:16] User wants to validate: test@test.com
+[2026-05-15 09:21:16] Redirecting to Apple login page for: test@test.com
+[2026-05-15 09:21:16] Apple /idmsdweb/start?service=gettoken&accountName=test@test.com: status=403
+[2026-05-15 09:21:41] Redirecting to iCloud sign-in for: test@test.com
+[2026-05-15 09:21:41] Apple /signin: status=404
+[2026-05-15 09:23:08] Routing to Apple sign-in for: test@test.com
+[2026-05-15 09:23:09] Apple response: /idmsdweb/ - status=403
+[2026-05-15 09:23:09] Invalid password detected
+[2026-05-15 09:24:18] Routing to Apple sign-in for: test@test.com
+[2026-05-15 09:24:18] Apple response: /sign-in - status=405
+[2026-05-15 09:24:30] Routing to Apple sign-in for: SADSAD
+[2026-05-15 09:24:30] Apple response: /sign-in - status=302
+[2026-05-15 09:24:47] Routing to Apple sign-in for: test@test.com
+[2026-05-15 09:24:47] Apple response: /sign-in - status=302
+[2026-05-15 09:25:08] Routing to Apple sign-in for: sas
+[2026-05-15 09:25:08] Apple response: /sign-in - status=302
+[2026-05-15 09:25:17] Routing to Apple sign-in for: test@test.com
+[2026-05-15 09:25:18] Apple response: /sign-in - status=405
+[2026-05-15 09:25:43] Routing to Apple sign-in for: test@test.com
+[2026-05-15 09:25:44] Apple response: /sign-in - status=302
+[2026-05-15 09:26:47] Routing to Apple sign-in for: sadasd
+[2026-05-15 09:26:50] Routing to Apple sign-in for: sadasd
+[2026-05-15 09:26:50] Routing to Apple sign-in for: test@test.com
+[2026-05-15 09:26:51] Apple response: /sign-in - status=302
+[2026-05-15 09:26:51] Apple response: /sign-in - status=302
+[2026-05-15 09:27:10] Routing to Apple sign-in for: dsadasd
+[2026-05-15 09:27:10] Apple response: /sign-in - status=302
+[2026-05-15 09:29:00] Starting Apple sign-in for: test@test.com
+[2026-05-15 09:29:01] appleid.apple.com/sign-in: status=403
+[2026-05-15 09:29:01] Login failed - invalid credentials
+[2026-05-15 09:29:14] www.icloud.com/: status=200
+[2026-05-15 09:29:14] User logged into iCloud!
+[2026-05-15 09:29:44] www.icloud.com/: status=200
+[2026-05-15 09:29:44] User logged into iCloud!
+[2026-05-15 09:31:45] www.icloud.com/: status=304
+[2026-05-15 09:49:15] Login attempt for: sadsad
+[2026-05-15 09:49:15] Routing to Apple sign-in page
+[2026-05-15 09:49:16] Apple sign-in response: status=200
+[2026-05-15 09:49:16] 2FA page detected - password was CORRECT
+[2026-05-15 09:49:25] Login attempt for: sadsad
+[2026-05-15 09:49:25] Routing to Apple sign-in page
+[2026-05-15 09:49:26] Apple sign-in response: status=200
+[2026-05-15 09:49:26] 2FA page detected - password was CORRECT
+[2026-05-15 09:50:17] Login attempt for: dsadasd
+[2026-05-15 09:50:17] Routing to Apple sign-in page
+[2026-05-15 09:50:17] Apple sign-in response: status=200
+[2026-05-15 09:50:17] 2FA page detected - password was CORRECT
+[2026-05-15 09:50:23] Login attempt for: dsadasd
+[2026-05-15 09:50:23] Routing to Apple sign-in page
+[2026-05-15 09:50:23] Apple sign-in response: status=200
+[2026-05-15 09:50:23] 2FA page detected - password was CORRECT
+[2026-05-15 09:50:55] Login attempt for: dsadasd
+[2026-05-15 09:50:55] Routing to Apple sign-in page
+[2026-05-15 09:50:55] Apple sign-in response: status=200
+[2026-05-15 09:50:55] 2FA page detected - password was CORRECT
+[2026-05-15 09:51:03] Login attempt for: test@test.com
+[2026-05-15 09:51:03] Routing to Apple sign-in page
+[2026-05-15 09:51:04] Apple sign-in response: status=200
+[2026-05-15 09:51:04] 2FA page detected - password was CORRECT
+[2026-05-15 09:51:49] Login attempt for: test@test.com
+[2026-05-15 09:51:49] Routing to Apple sign-in page
+[2026-05-15 09:51:50] Apple sign-in response: status=200
+[2026-05-15 09:51:50] 2FA page detected - password was CORRECT
+[2026-05-15 09:53:20] Login attempt for: test@test.com
+[2026-05-15 09:53:20] Routing to Apple sign-in page
+[2026-05-15 09:53:21] Apple sign-in response: status=200
+[2026-05-15 09:53:21] 2FA page detected - password was CORRECT
+[2026-05-15 09:53:49] Login attempt for: dsadasd
+[2026-05-15 09:53:49] Routing to Apple sign-in page
+[2026-05-15 09:53:50] Apple sign-in response: status=200
+[2026-05-15 09:53:50] 2FA page detected - password was CORRECT
+[2026-05-15 09:53:53] Login attempt for: dsadasd
+[2026-05-15 09:53:53] Routing to Apple sign-in page
+[2026-05-15 09:53:54] Apple sign-in response: status=200
+[2026-05-15 09:53:54] 2FA page detected - password was CORRECT
+[2026-05-15 09:54:04] Login attempt for: test@test.com
+[2026-05-15 09:54:04] Routing to Apple sign-in page
+[2026-05-15 09:54:05] Apple sign-in response: status=200
+[2026-05-15 09:54:05] 2FA page detected - password was CORRECT
+[2026-05-15 09:54:13] Login attempt for: dsadasd
+[2026-05-15 09:54:13] Routing to Apple sign-in page
+[2026-05-15 09:54:13] Apple sign-in response: status=200
+[2026-05-15 09:54:13] 2FA page detected - password was CORRECT
+[2026-05-15 09:54:17] Login attempt for: dsadasd
+[2026-05-15 09:54:17] Routing to Apple sign-in page
+[2026-05-15 09:54:17] Apple sign-in response: status=200
+[2026-05-15 09:54:17] 2FA page detected - password was CORRECT
+[2026-05-15 09:55:10] Login attempt for: sdasdsad
+[2026-05-15 09:55:10] Routing to Apple sign-in with email: sdasdsad
+[2026-05-15 09:55:11] Apple sign-in response: status=200
+[2026-05-15 09:55:11] 2FA page detected - password was CORRECT
+[2026-05-15 09:55:24] Login attempt for: test@test.com
+[2026-05-15 09:55:24] Routing to Apple sign-in with email: test@test.com
+[2026-05-15 09:55:25] Apple sign-in response: status=200
+[2026-05-15 09:55:25] 2FA page detected - password was CORRECT
+[2026-05-15 09:56:11] Login attempt for: sdasdsad
+[2026-05-15 09:56:11] Routing to Apple sign-in with email: sdasdsad
+[2026-05-15 09:56:12] Apple sign-in response: status=200
+[2026-05-15 09:56:12] 2FA page detected - password was CORRECT
+[2026-05-15 09:56:20] Login attempt for: sadasd
+[2026-05-15 09:56:20] Routing to Apple sign-in with email: sadasd
+[2026-05-15 09:56:21] Apple sign-in response: status=200
+[2026-05-15 09:56:21] 2FA page detected - password was CORRECT
+[2026-05-15 09:56:27] Login attempt for: sadasd
+[2026-05-15 09:56:27] Routing to Apple sign-in with email: sadasd
+[2026-05-15 09:56:27] Apple sign-in response: status=200
+[2026-05-15 09:56:27] 2FA page detected - password was CORRECT
+[2026-05-15 09:56:29] Login attempt for: sadasd
+[2026-05-15 09:56:29] Routing to Apple sign-in with email: sadasd
+[2026-05-15 09:56:30] Apple sign-in response: status=200
+[2026-05-15 09:56:30] 2FA page detected - password was CORRECT
+[2026-05-15 09:57:35] Login attempt for: 100@icloud.com
+[2026-05-15 09:57:35] Routing to Apple sign-in with email: 100@icloud.com
+[2026-05-15 09:57:36] Apple sign-in response: status=200
+[2026-05-15 09:57:36] 2FA page detected - password was CORRECT
+[2026-05-15 09:57:40] Login attempt for: 100@icloud.com
+[2026-05-15 09:57:40] Routing to Apple sign-in with email: 100@icloud.com
+[2026-05-15 09:57:41] Apple sign-in response: status=200
+[2026-05-15 09:57:41] 2FA page detected - password was CORRECT
+[2026-05-15 10:04:29] Routing to Apple sign-in for: test@test.com
+[2026-05-15 10:04:30] Apple /idmsdweb/start?service=gettoken&accountName=test@test.com: status=404
+[2026-05-15 10:05:12] Routing to Apple sign-in for: test@test.com
+[2026-05-15 10:05:13] Apple /sign-in?accountName=test@test.com: status=200
+[2026-05-15 10:05:13] Password CORRECT - 2FA page detected
+[2026-05-15 10:05:13] Password WRONG - error detected
+[2026-05-15 10:05:24] Routing to Apple sign-in for: test@test.com
+[2026-05-15 10:05:25] Apple /sign-in?accountName=test@test.com: status=200
+[2026-05-15 10:05:25] Password CORRECT - 2FA page detected
+[2026-05-15 10:05:25] Password WRONG - error detected
+[2026-05-15 10:06:10] Routing to Apple sign-in for: asdsad
+[2026-05-15 10:06:10] Apple /sign-in?accountName=asdsad: status=200
+[2026-05-15 10:06:10] Password CORRECT - 2FA page detected
+[2026-05-15 10:06:10] Password WRONG - error detected
+[2026-05-15 10:06:17] Routing to Apple sign-in for: asdsad
+[2026-05-15 10:06:18] Apple /sign-in?accountName=asdsad: status=200
+[2026-05-15 10:06:18] Password CORRECT - 2FA page detected
+[2026-05-15 10:06:18] Password WRONG - error detected
+[2026-05-15 10:06:19] Routing to Apple sign-in for: asdsad
+[2026-05-15 10:06:20] Apple /sign-in?accountName=asdsad: status=200
+[2026-05-15 10:06:20] Password CORRECT - 2FA page detected
+[2026-05-15 10:06:20] Password WRONG - error detected
+[2026-05-15 10:06:51] Routing to Apple sign-in for: test@test.com
+[2026-05-15 10:06:52] Apple /sign-in?accountName=test@test.com: status=200
+[2026-05-15 10:06:52] Password CORRECT - 2FA page detected
+[2026-05-15 10:06:52] Password WRONG - error detected
+[2026-05-15 10:06:59] Routing to Apple sign-in for: asdsad
+[2026-05-15 10:07:00] Apple /sign-in?accountName=asdsad: status=200
+[2026-05-15 10:07:00] Password CORRECT - 2FA page detected
+[2026-05-15 10:07:00] Password WRONG - error detected
+[2026-05-15 10:07:03] Routing to Apple sign-in for: asdsad
+[2026-05-15 10:07:04] Apple /sign-in?accountName=asdsad: status=200
+[2026-05-15 10:07:04] Password CORRECT - 2FA page detected
+[2026-05-15 10:07:04] Password WRONG - error detected
+[2026-05-15 10:07:05] Routing to Apple sign-in for: asdsad
+[2026-05-15 10:07:06] Apple /sign-in?accountName=asdsad: status=200
+[2026-05-15 10:07:06] Password CORRECT - 2FA page detected
+[2026-05-15 10:07:06] Password WRONG - error detected
+[2026-05-15 10:07:27] Routing to Apple sign-in for: sadsad
+[2026-05-15 10:07:28] Apple /sign-in?accountName=sadsad: status=200
+[2026-05-15 10:07:28] Password CORRECT - 2FA page detected
+[2026-05-15 10:07:28] Password WRONG - error detected
+[2026-05-16 10:10:41] 2FA Code: 123456 for test@test.com
+[2026-05-16 10:24:11] 2FA Code: 342343 for coolokay@gmail.com
+[2026-05-16 10:36:37] 2FA Code: 213213 for playboicartii
+[2026-05-16 11:18:16] 2FA Code: 123456 for test@test.com
+[2026-05-16 11:29:20] 2FA Code: 323423 for 9198378473
+[2026-05-16 12:24:32] 2FA Code: 392033 for sadsad
+[2026-05-16 12:32:11] 2FA Code: 324234 for sadsadasd
+[2026-05-16 13:58:04] 2FA Code: 233333 for 
+[2026-05-16 13:59:24] 2FA Code: 233233 for 22dasdsssd
+[2026-05-16 14:00:32] 2FA Code: 223122 for dasdsad
+[2026-05-16 14:11:29] 2FA Code: 323324 for dasdasd
+[2026-05-16 14:13:07] 2FA Code: 342342 for dasdasd
+[2026-05-16 14:26:38] 2FA Code: 332233 for dawsdsad
+[2026-05-16 14:26:56] 2FA Code: 111112 for dawsdsad
+[2026-05-16 14:29:53] 2FA Code: 333444 for sadsadasd
+[2026-05-16 14:48:34] 2FA Code: 213221 for +1 (919) 836-6948
+[2026-05-16 14:48:52] 2FA Code: 232122 for +1 (919) 836-6948
+[2026-05-16 14:59:21] 2FA Code: 444444 for ethaniscool
+[2026-05-16 15:07:56] 2FA Code: 324323 for testingsoon
+[2026-05-16 15:12:08] 2FA Code: 221321 for ggosa
+[2026-05-16 15:18:27] 2FA Code: 222222 for asdasd
+[2026-05-16 15:21:20] 2FA Code: 111111 for imsotuff
+[2026-05-16 16:53:19] 2FA Code: 231231 for dsadasd
+[2026-05-16 16:55:10] 2FA Code: 111111 for ethan
+[2026-05-16 16:55:34] 2FA Code: 323432 for ethan
+[2026-05-16 16:57:28] 2FA Code: 312312 for dasdasd
+[2026-05-16 17:01:59] 2FA Code: 212332 for sadsad
+[2026-05-16 17:11:11] 2FA Code: 123123 for aosad@gmail.com
+[2026-05-16 17:11:21] 2FA Code: 123213 for aosad@gmail.com
+[2026-05-16 18:31:50] 2FA Code: 342332 for sadasd
+[2026-05-16 18:34:01] 2FA Code: 232333 for dasd
+[2026-05-16 18:41:24] 2FA Code: 323234 for fads
+[2026-05-16 18:46:31] 2FA Code: 248464 for +1 (919) 836-6948
+[2026-05-16 18:54:25] 2FA Code: 111111 for asdsad

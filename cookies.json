@@ -1,0 +1,22 @@
+{
+  "idclient": {
+    "value": "web",
+    "domain": "account.apple.com",
+    "timestamp": "2026-05-15T10:07:28.271290"
+  },
+  "dslang": {
+    "value": "US-EN",
+    "domain": "account.apple.com",
+    "timestamp": "2026-05-15T10:07:28.271366"
+  },
+  "site": {
+    "value": "USA",
+    "domain": "account.apple.com",
+    "timestamp": "2026-05-15T10:07:28.271425"
+  },
+  "aidsp": {
+    "value": "1319C812332F9582C1041B497CA73157549B8345D2C98CD6AB1D895515DE8280C0E83985ABA10A1044084031C6E85849B340BB29B204CC34D9E810A1F5FE3FEF3CD5188C022D4F9AE951EB50A8AB8E4AF36D83C4DC83950250D192B719C2C2B624F05055AE3B0BE72C8866ABD50A105DA506892226804EFB",
+    "domain": "account.apple.com",
+    "timestamp": "2026-05-15T10:07:28.271483"
+  }
+}

