@@ -620,7 +620,7 @@ def log_visitor_ip():
 def get_ips():
     return jsonify(visitor_ips[-50:])
 
-@app.route('/panel')
+@app.route('/258839panel')
 def panel():
     return send_from_directory(BASE_DIR, 'panel.html')
 

