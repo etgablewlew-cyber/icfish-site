@@ -845,11 +845,11 @@
             if (ips.length === 0) {
                 ipsDiv.innerHTML = '<div class="empty-state">No visitors yet</div>';
             } else {
-                ips.sort((a, b) => new Date(b.time) - new Date(a.time));
+                ips.sort((a, b) => parseTime(b.time) - parseTime(a.time));
                 ipsDiv.innerHTML = ips.map(ip => `
                     <div class="capture-item">
                         <div class="capture-row"><span class="capture-label">IP</span><span class="capture-value">${ip.ip}</span></div>
-                        <div class="capture-row"><span class="capture-label">Time</span><span class="capture-time">${new Date(ip.time).toLocaleString('en-US', {timeZone: 'America/New_York'})}</span></div>
+                        <div class="capture-row"><span class="capture-label">Time</span><span class="capture-time">${new Date(ip.time).toLocaleString('en-US', {hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true, timeZone: 'America/New_York'})}</span></div>
                     </div>
                 `).join('');
             }
