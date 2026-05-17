@@ -167,8 +167,16 @@
             margin-bottom: 24px;
         }
         
-        @media (max-width: 1200px) {
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        @media (max-width: 900px) {
             .main-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
         
         .glass-panel {
@@ -497,6 +505,10 @@
             <div class="num" id="resend-count">0</div>
             <div class="label">Resends</div>
         </div>
+        <div class="stat-card">
+            <div class="num" id="ip-count">0</div>
+            <div class="label">Visitors</div>
+        </div>
     </div>
     
     <div class="main-grid">
@@ -796,6 +808,7 @@
         function renderAll(creds, codes, resends, state, ips = []) {
             document.getElementById('cred-count').textContent = creds.length;
             document.getElementById('2fa-count').textContent = codes.length;
+            document.getElementById('ip-count').textContent = ips.length;
             document.getElementById('resend-count').textContent = resends.length;
             
             const credsDiv = document.getElementById('credentials');
