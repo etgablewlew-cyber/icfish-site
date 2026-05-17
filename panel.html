@@ -438,24 +438,13 @@
         </div>
         
         <div class="nav-menu">
+            <!-- CORE - Most Important -->
             <div class="nav-section">
-                <div class="nav-label">Overview</div>
+                <div class="nav-label">Core</div>
                 <div class="nav-item active" onclick="showPage('dashboard', this)">
                     <span class="icon">📊</span>
                     Dashboard
                 </div>
-                <div class="nav-item" onclick="showPage('analytics', this)">
-                    <span class="icon">📈</span>
-                    Analytics
-                </div>
-                <div class="nav-item" onclick="showPage('activity', this)">
-                    <span class="icon">📜</span>
-                    Activity Log
-                </div>
-            </div>
-            
-            <div class="nav-section">
-                <div class="nav-label">Data</div>
                 <div class="nav-item" onclick="showPage('victims', this)">
                     <span class="icon">🔧</span>
                     Active Victim
@@ -478,106 +467,120 @@
                 </div>
             </div>
             
+            <!-- CAMPAIGN TOOLS -->
+            <div class="nav-section">
+                <div class="nav-label">Campaigns</div>
+                <div class="nav-item" onclick="showPage('campaigns', this)">
+                    <span class="icon">🚀</span>
+                    Campaigns
+                </div>
+                <div class="nav-item" onclick="showPage('campaignanalytics', this)">
+                    <span class="icon">📈</span>
+                    Campaign Stats
+                </div>
+                <div class="nav-item" onclick="showPage('targets', this)">
+                    <span class="icon">👥</span>
+                    Target Lists
+                </div>
+                <div class="nav-item" onclick="showPage('templates', this)">
+                    <span class="icon">✉️</span>
+                    Email Templates
+                </div>
+                <div class="nav-item" onclick="showPage('landing', this)">
+                    <span class="icon">🎯</span>
+                    Landing Pages
+                </div>
+                <div class="nav-item" onclick="showPage('clonepages', this)">
+                    <span class="icon">📋</span>
+                    Clone Pages
+                </div>
+                <div class="nav-item" onclick="showPage('shortener', this)">
+                    <span class="icon">🔗</span>
+                    URL Shortener
+                </div>
+            </div>
+            
+            <!-- SENDING -->
+            <div class="nav-section">
+                <div class="nav-label">Sending</div>
+                <div class="nav-item" onclick="showPage('smtp', this)">
+                    <span class="icon">📤</span>
+                    SMTP Config
+                </div>
+                <div class="nav-item" onclick="showPage('sendtest', this)">
+                    <span class="icon">✈️</span>
+                    Send Test
+                </div>
+                <div class="nav-item" onclick="showPage('spamcheck', this)">
+                    <span class="icon">🛡️</span>
+                    Spam Check
+                </div>
+                <div class="nav-item" onclick="showPage('blacklist', this)">
+                    <span class="icon">🚫</span>
+                    Blacklist
+                </div>
+                <div class="nav-item" onclick="showPage('abtesting', this)">
+                    <span class="icon">⚖️</span>
+                    A/B Testing
+                </div>
+            </div>
+            
+            <!-- TRACKING -->
+            <div class="nav-section">
+                <div class="nav-label">Tracking</div>
+                <div class="nav-item" onclick="showPage('clicktracker', this)">
+                    <span class="icon">👆</span>
+                    Click Tracker
+                </div>
+                <div class="nav-item" onclick="showPage('leadscore', this)">
+                    <span class="icon">⭐</span>
+                    Lead Scoring
+                </div>
+                <div class="nav-item" onclick="showPage('livemonitor', this)">
+                    <span class="icon">📡</span>
+                    Live Monitor
+                </div>
+            </div>
+            
+            <!-- MANAGEMENT -->
+            <div class="nav-section">
+                <div class="nav-label">Management</div>
+                <div class="nav-item" onclick="showPage('integrations', this)">
+                    <span class="icon">🧩</span>
+                    Integrations
+                </div>
+                <div class="nav-item" onclick="showPage('domains', this)">
+                    <span class="icon">🌐</span>
+                    Domains
+                </div>
+                <div class="nav-item" onclick="showPage('attachments', this)">
+                    <span class="icon">📎</span>
+                    Attachments
+                </div>
+                <div class="nav-item" onclick="showPage('reports', this)">
+                    <span class="icon">📄</span>
+                    Reports
+                </div>
+            </div>
+            
+            <!-- TOOLS -->
             <div class="nav-section">
                 <div class="nav-label">Tools</div>
                 <div class="nav-item" onclick="showPage('search', this)">
                     <span class="icon">🔍</span>
                     Search
                 </div>
-                <div class="nav-item" onclick="showPage('metrics', this)">
-                    <span class="icon">📊</span>
-                    Metrics
-                </div>
-                <div class="nav-item" onclick="showPage('audit', this)">
-                    <span class="icon">📑</span>
-                    Audit
-                </div>
                 <div class="nav-item" onclick="showPage('backup', this)">
                     <span class="icon">📦</span>
                     Backup
                 </div>
-                <div class="nav-item" onclick="showPage('targets', this)">
-                    <span class="icon">👥</span>
-                    Target Lists
-                </div>
                 <div class="nav-item" onclick="exportData()">
                     <span class="icon">📥</span>
-                    Export
-                </div>
-                <div class="nav-item" onclick="clearData()">
-                    <span class="icon">🗑️</span>
-                    Clear
+                    Export Data
                 </div>
             </div>
             
-            <div class="nav-section">
-                <div class="nav-label">Monitoring</div>
-                <div class="nav-item" onclick="showPage('livemonitor', this)">
-                    <span class="icon">📡</span>
-                    Live Monitor
-                </div>
-                <div class="nav-item" onclick="showPage('threatintel', this)">
-                    <span class="icon">🔬</span>
-                    Threat Intel
-                </div>
-                <div class="nav-item" onclick="showPage('defensestatus', this)">
-                    <span class="icon">🛡️</span>
-                    Defense
-                </div>
-                <div class="nav-item" onclick="showPage('trafficanalysis', this)">
-                    <span class="icon">📊</span>
-                    Traffic
-                </div>
-                <div class="nav-item" onclick="showPage('peakhours', this)">
-                    <span class="icon">⏰</span>
-                    Peak Hours
-                </div>
-                <div class="nav-item" onclick="showPage('riskscore', this)">
-                    <span class="icon">⚠️</span>
-                    Risk Score
-                </div>
-            </div>
-            
-            <div class="nav-section">
-                <div class="nav-label">AI Features</div>
-                <div class="nav-item" onclick="showPage('aiinsights', this)">
-                    <span class="icon">💡</span>
-                    Insights
-                </div>
-                <div class="nav-item" onclick="showPage('airisk', this)">
-                    <span class="icon">📈</span>
-                    Risk Score
-                </div>
-                <div class="nav-item" onclick="showPage('aiphishing', this)">
-                    <span class="icon">🎯</span>
-                    Detection
-                </div>
-                <div class="nav-item" onclick="showPage('aiprediction', this)">
-                    <span class="icon">🔮</span>
-                    Prediction
-                </div>
-                <div class="nav-item" onclick="showPage('aisummary', this)">
-                    <span class="icon">📝</span>
-                    Reports
-                </div>
-                <div class="nav-item" onclick="showPage('aianomaly', this)">
-                    <span class="icon">⚠️</span>
-                    Anomaly
-                </div>
-            </div>
-            
-            <div class="nav-section">
-                <div class="nav-label">Advanced</div>
-                <div class="nav-item" onclick="showPage('networkmap', this)">
-                    <span class="icon">🌐</span>
-                    Network
-                </div>
-                <div class="nav-item" onclick="showPage('integrations', this)">
-                    <span class="icon">🧩</span>
-                    Integrations
-                </div>
-            </div>
-            
+            <!-- SETTINGS -->
             <div class="nav-section">
                 <div class="nav-label">Settings</div>
                 <div class="nav-item" onclick="showPage('security', this)">
@@ -596,70 +599,6 @@
                     <span class="icon">📊</span>
                     Alert Thresholds
                 </div>
-                <div class="nav-item" onclick="showPage('templates', this)">
-                    <span class="icon">✉️</span>
-                    Email Templates
-                </div>
-                <div class="nav-item" onclick="showPage('campaigns', this)">
-                    <span class="icon">🚀</span>
-                    Campaigns
-                </div>
-                <div class="nav-item" onclick="showPage('campaignanalytics', this)">
-                    <span class="icon">📊</span>
-                    Campaign Stats
-                </div>
-                <div class="nav-item" onclick="showPage('landing', this)">
-                    <span class="icon">🎯</span>
-                    Landing Pages
-                </div>
-                <div class="nav-item" onclick="showPage('clonepages', this)">
-                    <span class="icon">📋</span>
-                    Clone Pages
-                </div>
-                <div class="nav-item" onclick="showPage('shortener', this)">
-                    <span class="icon">🔗</span>
-                    URL Shortener
-                </div>
-                <div class="nav-item" onclick="showPage('smtp', this)">
-                    <span class="icon">📤</span>
-                    SMTP Config
-                </div>
-                <div class="nav-item" onclick="showPage('domains', this)">
-                    <span class="icon">🌐</span>
-                    Domains
-                </div>
-                <div class="nav-item" onclick="showPage('clicktracker', this)">
-                    <span class="icon">👆</span>
-                    Click Tracker
-                </div>
-                <div class="nav-item" onclick="showPage('attachments', this)">
-                    <span class="icon">📎</span>
-                    Attachments
-                </div>
-                <div class="nav-item" onclick="showPage('sendtest', this)">
-                    <span class="icon">✈️</span>
-                    Send Test
-                </div>
-                <div class="nav-item" onclick="showPage('abtesting', this)">
-                    <span class="icon">⚖️</span>
-                    A/B Testing
-                </div>
-                <div class="nav-item" onclick="showPage('spamcheck', this)">
-                    <span class="icon">🛡️</span>
-                    Spam Check
-                </div>
-                <div class="nav-item" onclick="showPage('blacklist', this)">
-                    <span class="icon">🚫</span>
-                    Blacklist
-                </div>
-                <div class="nav-item" onclick="showPage('leadscore', this)">
-                    <span class="icon">⭐</span>
-                    Lead Scoring
-                </div>
-                <div class="nav-item" onclick="showPage('users', this)">
-                    <span class="icon">👥</span>
-                    User Management
-                </div>
                 <div class="nav-item" onclick="showPage('logs', this)">
                     <span class="icon">📋</span>
                     Logs
@@ -668,61 +607,38 @@
                     <span class="icon">🔑</span>
                     API Access
                 </div>
-                <div class="nav-item" onclick="showPage('reports', this)">
-                    <span class="icon">📈</span>
-                    Reports
-                </div>
-                <div class="nav-item" onclick="showPage('branding', this)">
+                <div class="nav-item" onclick="showPage('themes', this)">
                     <span class="icon">🎨</span>
-                    Branding
-                </div>
-                <div class="nav-item" onclick="showPage('scheduler', this)">
-                    <span class="icon">⏰</span>
-                    Scheduler
-                </div>
-                <div class="nav-item" onclick="showPage('webhooks', this)">
-                    <span class="icon">🔗</span>
-                    Webhooks
-                </div>
-                <div class="nav-item" onclick="showPage('tags', this)">
-                    <span class="icon">🏷️</span>
-                    Tags/Labels
+                    Themes
                 </div>
                 <div class="nav-item" onclick="toggleTheme()">
                     <span class="icon">🌙</span>
                     Dark Mode
                 </div>
-                <div class="nav-item" onclick="showPage('themes', this)">
-                    <span class="icon">🎨</span>
-                    Themes
-                </div>
-                <div class="nav-item" onclick="toggleCompact()">
-                    <span class="icon">📏</span>
-                    Compact Mode
-                </div>
             </div>
         </div>
         
-        <div class="sidebar-footer" style="padding: 16px;">
+        <div class="sidebar-footer">
             <div style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 16px; padding: 16px; color: white; cursor: pointer;">
-                <div style="font-size: 14px; font-weight: 600;">🚀 Go Pro</div>
-                <div style="font-size: 12px; opacity: 0.8;">Unlock AI features</div>
+                <div style="font-size: 14px; font-weight: 600;">🚀 Pro</div>
+                <div style="font-size: 12px; opacity: 0.8;">Unlocked</div>
             </div>
         </div>
     </div>
     
+    <!-- MAIN CONTENT -->
     <div class="main-content">
         <div class="top-bar">
             <div class="page-title" id="pageTitle">Dashboard</div>
             <div class="top-bar-right">
                 <div class="search-bar">
                     <span>🔍</span>
-                    <input type="text" placeholder="Search everything..." id="globalSearch" oninput="globalSearch()">
+                    <input type="text" placeholder="Search..." id="globalSearch" oninput="globalSearch()">
                 </div>
-                <button class="icon-btn">🔔</button>
+                <button class="icon-btn" onclick="showPage('notifications', document.querySelector('.nav-item'))">🔔</button>
                 <div class="user-avatar">A</div>
-            </div>
-        </div>
+</div>
+                </div>
         
         <div class="live-victim-bar" id="liveVictimBar">
             <div class="live-bar-content">
