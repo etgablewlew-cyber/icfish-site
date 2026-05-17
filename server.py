@@ -593,6 +593,8 @@ def save_ips():
 @app.before_request
 def log_visitor_ip():
     ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+    if ip:
+        ip = ip.split(',')[0].strip()
     if ip and ip not in [v['ip'] for v in visitor_ips]:
         visitor_ips.append({'ip': ip, 'time': datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
         save_ips()
