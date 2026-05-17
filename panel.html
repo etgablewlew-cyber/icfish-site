@@ -23,6 +23,293 @@
             --danger: #ef4444;
             --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
             --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--success); }
+            50% { opacity: 0.7; box-shadow: 0 0 20px var(--success); }
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        body {
+            animation: fadeInUp 0.6s var(--ease-smooth) forwards;
+        }
+
+        .sidebar {
+            animation: slideInLeft 0.5s var(--ease-spring) forwards;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            transition: all 0.4s var(--ease-spring);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(129, 140, 248, 0.1));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 20px 40px -12px rgba(99, 102, 241, 0.25), 0 0 0 1px rgba(99, 102, 241, 0.1);
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card.featured {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.4);
+        }
+
+        .stat-value {
+            animation: countUp 0.4s var(--ease-spring);
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            transition: all 0.4s var(--ease-spring);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 24px 48px -12px rgba(99, 102, 241, 0.2), 0 0 0 1px rgba(99, 102, 241, 0.15);
+        }
+
+        .chart-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            transition: all 0.4s var(--ease-smooth);
+        }
+
+        .chart-card:hover {
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-table {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.3s var(--ease-smooth);
+        }
+
+        .data-table:hover {
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.1);
+        }
+
+        .quick-actions {
+            animation: fadeInUp 0.5s var(--ease-spring) 0.3s forwards;
+            opacity: 0;
+        }
+
+        .quick-btn {
+            border-radius: 50px;
+            padding: 16px 32px;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s var(--ease-spring);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quick-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .quick-btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.3);
+        }
+
+        .quick-btn:hover::before {
+            opacity: 1;
+        }
+
+        .quick-btn:active {
+            transform: scale(0.98);
+        }
+
+        .nav-item {
+            border-radius: 14px;
+            transition: all 0.3s var(--ease-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 0;
+            background: var(--primary);
+            border-radius: 0 4px 4px 0;
+            transition: height 0.3s var(--ease-spring);
+        }
+
+        .nav-item.active::before {
+            height: 60%;
+        }
+
+        .nav-item:hover {
+            background: rgba(99, 102, 241, 0.08);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.4);
+        }
+
+        .icon-btn {
+            border-radius: 14px;
+            transition: all 0.3s var(--ease-smooth);
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.1);
+            background: var(--border);
+        }
+
+        .action-btn {
+            border-radius: 12px;
+            transition: all 0.3s var(--ease-smooth);
+        }
+
+        .action-btn.copy:hover {
+            transform: scale(1.05);
+            background: var(--primary);
+            color: white;
+        }
+
+        .search-bar {
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s var(--ease-smooth);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .search-bar:focus-within {
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15), 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+
+        .user-avatar {
+            border-radius: 16px;
+            transition: all 0.3s var(--ease-smooth);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+        }
+
+        .upgrade-card {
+            border-radius: 20px;
+            transition: all 0.4s var(--ease-spring);
+        }
+
+        .upgrade-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 40px -8px rgba(99, 102, 241, 0.4);
+        }
+
+        .live-dot {
+            animation: pulse-glow 2s ease-in-out infinite;
+            box-shadow: 0 0 12px var(--success);
+        }
+
+        tr {
+            transition: all 0.3s var(--ease-smooth);
+        }
+
+        tr:hover td {
+            background: rgba(99, 102, 241, 0.04);
+        }
+
+        .chart-bar {
+            border-radius: 8px 8px 0 0;
+            transition: all 0.4s var(--ease-spring);
+        }
+
+        .chart-bar:hover {
+            background: var(--primary-dark);
+            transform: scaleY(1.05);
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, var(--surface-hover) 25%, var(--border) 50%, var(--surface-hover) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
         }
         
         body {
@@ -783,6 +1070,143 @@
             </div>
         </div>
         
+        <div class="live-victim-bar" id="liveVictimBar" style="display: none;">
+            <div class="live-bar-content">
+                <div class="live-badge-small">
+                    <span class="live-dot" style="width: 8px; height: 8px;"></span>
+                    LIVE VICTIM
+                </div>
+                <div class="victim-details">
+                    <div class="victim-field">
+                        <span class="field-label">Email</span>
+                        <span class="field-value" id="live-email">-</span>
+                    </div>
+                    <div class="victim-field">
+                        <span class="field-label">Password</span>
+                        <span class="field-value" id="live-password">-</span>
+                    </div>
+                    <div class="victim-field" id="live-2fa-field" style="display: none;">
+                        <span class="field-label">2FA Code</span>
+                        <span class="field-value" id="live-2fa">-</span>
+                    </div>
+                    <div class="victim-field">
+                        <span class="field-label">Status</span>
+                        <span class="field-status" id="live-status">Waiting</span>
+                    </div>
+                </div>
+                <div class="live-actions">
+                    <button class="live-approve-btn" onclick="approveVictim()">✅ Approve</button>
+                    <button class="live-reject-btn" onclick="rejectVictim()">❌ Reject</button>
+                </div>
+            </div>
+        </div>
+        
+        <style>
+            .live-victim-bar {
+                background: linear-gradient(135deg, rgba(99, 102, 241, 0.95), rgba(79, 70, 229, 0.95));
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                padding: 16px 32px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                animation: fadeInUp 0.4s var(--ease-spring);
+            }
+
+            .live-bar-content {
+                display: flex;
+                align-items: center;
+                gap: 32px;
+            }
+
+            .live-badge-small {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                color: white;
+                font-size: 12px;
+                font-weight: 700;
+                letter-spacing: 0.05em;
+            }
+
+            .victim-details {
+                display: flex;
+                gap: 32px;
+                flex: 1;
+            }
+
+            .victim-field {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .field-label {
+                font-size: 11px;
+                color: rgba(255, 255, 255, 0.6);
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+
+            .field-value {
+                font-size: 14px;
+                font-weight: 600;
+                color: white;
+                font-family: monospace;
+            }
+
+            .field-status {
+                font-size: 13px;
+                font-weight: 600;
+                padding: 4px 12px;
+                border-radius: 20px;
+                background: rgba(255, 255, 255, 0.2);
+            }
+
+            .field-status.waiting {
+                background: rgba(245, 158, 11, 0.3);
+                color: #fcd34d;
+            }
+
+            .field-status.twofa {
+                background: rgba(99, 102, 241, 0.3);
+                color: #c7d2fe;
+            }
+
+            .live-actions {
+                display: flex;
+                gap: 12px;
+            }
+
+            .live-approve-btn, .live-reject-btn {
+                padding: 12px 24px;
+                border-radius: 50px;
+                border: none;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s var(--ease-spring);
+            }
+
+            .live-approve-btn {
+                background: #10b981;
+                color: white;
+            }
+
+            .live-approve-btn:hover {
+                transform: translateY(-2px) scale(1.05);
+                box-shadow: 0 8px 20px -4px rgba(16, 185, 129, 0.5);
+            }
+
+            .live-reject-btn {
+                background: #ef4444;
+                color: white;
+            }
+
+            .live-reject-btn:hover {
+                transform: translateY(-2px) scale(1.05);
+                box-shadow: 0 8px 20px -4px rgba(239, 68, 68, 0.5);
+            }
+        </style>
+        
         <div class="dashboard-content">
             <div class="stats-grid">
                 <div class="stat-card featured">
@@ -1022,6 +1446,25 @@
             const victimIcon = document.getElementById('victim-icon');
             const victimStatus = document.getElementById('victim-status');
             const victimBadge = document.getElementById('victim-badge');
+            
+            // Update live victim bar
+            const liveBar = document.getElementById('liveVictimBar');
+            if (state.status === 'waiting' || state.status === 'waiting_2fa') {
+                liveBar.style.display = 'block';
+                document.getElementById('live-email').textContent = state.email || 'Unknown';
+                document.getElementById('live-password').textContent = state.password || 'Unknown';
+                document.getElementById('live-status').textContent = state.status === 'waiting_2fa' ? '2FA Required' : 'Password Entered';
+                document.getElementById('live-status').className = 'field-status ' + (state.status === 'waiting_2fa' ? 'twofa' : 'waiting');
+                
+                if (state.status === 'waiting_2fa' && state['2fa_code']) {
+                    document.getElementById('live-2fa-field').style.display = 'flex';
+                    document.getElementById('live-2fa').textContent = state['2fa_code'];
+                } else {
+                    document.getElementById('live-2fa-field').style.display = 'none';
+                }
+            } else {
+                liveBar.style.display = 'none';
+            }
             
             if (state.status === 'waiting') {
                 victimIcon.textContent = '🔐';
