@@ -477,14 +477,62 @@
             </div>
             
             <div class="nav-section">
-                <div class="nav-label">Actions</div>
+                <div class="nav-label">Tools</div>
+                <div class="nav-item" onclick="showPage('search', this)">
+                    <span class="icon">🔍</span>
+                    Search
+                </div>
+                <div class="nav-item" onclick="showPage('metrics', this)">
+                    <span class="icon">📊</span>
+                    Metrics
+                </div>
+                <div class="nav-item" onclick="showPage('audit', this)">
+                    <span class="icon">📑</span>
+                    Audit
+                </div>
+                <div class="nav-item" onclick="showPage('backup', this)">
+                    <span class="icon">📦</span>
+                    Backup
+                </div>
                 <div class="nav-item" onclick="exportData()">
                     <span class="icon">📥</span>
-                    Export Data
+                    Export
                 </div>
                 <div class="nav-item" onclick="clearData()">
                     <span class="icon">🗑️</span>
-                    Clear Data
+                    Clear
+                </div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-label">Monitoring</div>
+                <div class="nav-item" onclick="showPage('livemonitor', this)">
+                    <span class="icon">📡</span>
+                    Live Monitor
+                </div>
+                <div class="nav-item" onclick="showPage('threatintel', this)">
+                    <span class="icon">🔬</span>
+                    Threat Intel
+                </div>
+                <div class="nav-item" onclick="showPage('defensestatus', this)">
+                    <span class="icon">🛡️</span>
+                    Defense
+                </div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-label">AI Features</div>
+                <div class="nav-item" onclick="showPage('aiinsights', this)">
+                    <span class="icon">💡</span>
+                    AI Insights
+                </div>
+                <div class="nav-item" onclick="showPage('airisk', this)">
+                    <span class="icon">📈</span>
+                    Risk Score
+                </div>
+                <div class="nav-item" onclick="showPage('aiphishing', this)">
+                    <span class="icon">🎯</span>
+                    Detection
                 </div>
             </div>
             
@@ -862,6 +910,87 @@
                     }
                 </style>
             </div>
+            
+            <!-- Search Page -->
+            <div class="page" id="page-search">
+                <div style="padding: 40px;">
+                    <h2>🔍 Advanced Search</h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px;">Search across all captured data</p>
+                    <input type="text" placeholder="Search..." style="margin-top: 20px; padding: 12px; width: 100%; max-width: 400px; border: 2px solid var(--border); border-radius: 8px;">
+                </div>
+            </div>
+            
+            <!-- Metrics Page -->
+            <div class="page" id="page-metrics">
+                <div style="padding: 40px;">
+                    <h2>📊 Performance Metrics</h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px;">Track activity and success rates</p>
+                </div>
+            </div>
+            
+            <!-- Audit Page -->
+            <div class="page" id="page-audit">
+                <div style="padding: 40px;">
+                    <h2>📑 Audit Trail</h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px;">Log of all admin actions</p>
+                </div>
+            </div>
+            
+            <!-- Backup Page -->
+            <div class="page" id="page-backup">
+                <div style="padding: 40px;">
+                    <h2>📦 Backup/Restore</h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px;">Export and import data</p>
+                </div>
+            </div>
+            
+            <!-- Live Monitor Page -->
+            <div class="page" id="page-livemonitor">
+                <div style="padding: 40px;">
+                    <h2>📡 Live Monitor</h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px;">Real-time visitor tracking</p>
+                </div>
+            </div>
+            
+            <!-- Threat Intel Page -->
+            <div class="page" id="page-threatintel">
+                <div style="padding: 40px;">
+                    <h2>🔬 Threat Intel</h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px;">Security alerts and indicators</p>
+                </div>
+            </div>
+            
+            <!-- Defense Status Page -->
+            <div class="page" id="page-defensestatus">
+                <div style="padding: 40px;">
+                    <h2>🛡️ Defense Status</h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px;">Protection mechanisms status</p>
+                </div>
+            </div>
+            
+            <!-- AI Insights Page -->
+            <div class="page" id="page-aiinsights">
+                <div style="padding: 40px;">
+                    <h2>💡 AI Insights</h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px;">Generate tips for improving awareness training</p>
+                </div>
+            </div>
+            
+            <!-- AI Risk Page -->
+            <div class="page" id="page-airisk">
+                <div style="padding: 40px;">
+                    <h2>📈 Risk Score</h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px;">Score victim susceptibility based on behavior</p>
+                </div>
+            </div>
+            
+            <!-- AI Phishing Page -->
+            <div class="page" id="page-aiphishing">
+                <div style="padding: 40px;">
+                    <h2>🎯 Phishing Detection</h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px;">Analyze captured pages and identify red flags</p>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -877,7 +1006,7 @@
             document.getElementById('page-' + page).classList.add('active');
             navItem.classList.add('active');
             
-            const titles = { dashboard: 'Dashboard', analytics: 'Analytics', activity: 'Activity Log', credentials: 'Credentials', codes: '2FA Codes', visitors: 'Visitors', victims: 'Active Victim' };
+            const titles = { dashboard: 'Dashboard', analytics: 'Analytics', activity: 'Activity Log', credentials: 'Credentials', codes: '2FA Codes', visitors: 'Visitors', victims: 'Active Victim', search: 'Search', metrics: 'Metrics', audit: 'Audit', backup: 'Backup', livemonitor: 'Live Monitor', threatintel: 'Threat Intel', defensestatus: 'Defense', aiinsights: 'AI Insights', airisk: 'Risk Score', aiphishing: 'Phishing Detection' };
             document.getElementById('pageTitle').textContent = titles[page] || page;
             
             savePreference('lastPage', page);
