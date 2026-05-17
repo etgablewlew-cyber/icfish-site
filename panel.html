@@ -26,6 +26,8 @@
             --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
             --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
         }
+        
+        body.dark-mode { --bg: #0f172a; --surface: #1e293b; --surface-hover: #334155; --border: #334155; --text: #f1f5f9; --text-secondary: #94a3b8; }
 
         html { scroll-behavior: smooth; }
         
@@ -518,13 +520,25 @@
                     <span class="icon">🛡️</span>
                     Defense
                 </div>
+                <div class="nav-item" onclick="showPage('trafficanalysis', this)">
+                    <span class="icon">📊</span>
+                    Traffic
+                </div>
+                <div class="nav-item" onclick="showPage('peakhours', this)">
+                    <span class="icon">⏰</span>
+                    Peak Hours
+                </div>
+                <div class="nav-item" onclick="showPage('riskscore', this)">
+                    <span class="icon">⚠️</span>
+                    Risk Score
+                </div>
             </div>
             
             <div class="nav-section">
                 <div class="nav-label">AI Features</div>
                 <div class="nav-item" onclick="showPage('aiinsights', this)">
                     <span class="icon">💡</span>
-                    AI Insights
+                    Insights
                 </div>
                 <div class="nav-item" onclick="showPage('airisk', this)">
                     <span class="icon">📈</span>
@@ -533,6 +547,46 @@
                 <div class="nav-item" onclick="showPage('aiphishing', this)">
                     <span class="icon">🎯</span>
                     Detection
+                </div>
+                <div class="nav-item" onclick="showPage('aiprediction', this)">
+                    <span class="icon">🔮</span>
+                    Prediction
+                </div>
+                <div class="nav-item" onclick="showPage('aisummary', this)">
+                    <span class="icon">📝</span>
+                    Reports
+                </div>
+                <div class="nav-item" onclick="showPage('aianomaly', this)">
+                    <span class="icon">⚠️</span>
+                    Anomaly
+                </div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-label">Advanced</div>
+                <div class="nav-item" onclick="showPage('networkmap', this)">
+                    <span class="icon">🌐</span>
+                    Network
+                </div>
+                <div class="nav-item" onclick="showPage('integrations', this)">
+                    <span class="icon">🧩</span>
+                    Integrations
+                </div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-label">Settings</div>
+                <div class="nav-item" onclick="showPage('security', this)">
+                    <span class="icon">🔐</span>
+                    Security
+                </div>
+                <div class="nav-item" onclick="toggleTheme()">
+                    <span class="icon">🌙</span>
+                    Dark Mode
+                </div>
+                <div class="nav-item" onclick="showPage('themes', this)">
+                    <span class="icon">🎨</span>
+                    Themes
                 </div>
             </div>
             
@@ -991,6 +1045,70 @@
                     <p style="color: var(--text-secondary); margin-top: 16px;">Analyze captured pages and identify red flags</p>
                 </div>
             </div>
+            
+            <!-- AI Prediction Page -->
+            <div class="page" id="page-aiprediction">
+                <div style="padding: 40px;">
+                    <h2>🔮 Behavior Prediction</h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px;">Predict which users might fall for simulations</p>
+                </div>
+            </div>
+            
+            <!-- AI Summary Page -->
+            <div class="page" id="page-aisummary">
+                <div style="padding: 40px;">
+                    <h2>📝 Auto-Summary</h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px;">Generate training reports from captured data</p>
+                </div>
+            </div>
+            
+            <!-- AI Anomaly Page -->
+            <div class="page" id="page-aianomaly">
+                <div style="padding: 40px;">
+                    <h2>⚠️ Anomaly Detection</h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px;">Flag unusual patterns in simulated attacks</p>
+                </div>
+            </div>
+            
+            <!-- Network Map Page -->
+            <div class="page" id="page-networkmap">
+                <div style="padding: 40px;">
+                    <h2>🌐 Network Map</h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px;">Connection topology</p>
+                </div>
+            </div>
+            
+            <!-- Integrations Page -->
+            <div class="page" id="page-integrations">
+                <div style="padding: 40px;">
+                    <h2>🧩 Integrations</h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px;">Connected services</p>
+                </div>
+            </div>
+            
+            <!-- Traffic Analysis Page -->
+            <div class="page" id="page-trafficanalysis">
+                <div style="padding: 40px;">
+                    <h2>📊 Traffic Analysis</h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px;">Request patterns and anomalies</p>
+                </div>
+            </div>
+            
+            <!-- Peak Hours Page -->
+            <div class="page" id="page-peakhours">
+                <div style="padding: 40px;">
+                    <h2>⏰ Peak Hours</h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px;">Activity by time</p>
+                </div>
+            </div>
+            
+            <!-- Security Page -->
+            <div class="page" id="page-security">
+                <div style="padding: 40px;">
+                    <h2>🔐 Security Settings</h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px;">Configure authentication and security</p>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -999,6 +1117,15 @@
         let sessionStartTime = null;
         let activityLog = [];
         let compactMode = localStorage.getItem('compactMode') === 'true';
+        let darkMode = localStorage.getItem('darkMode') === 'true';
+        
+        if (darkMode) document.body.classList.add('dark-mode');
+        
+        function toggleTheme() {
+            darkMode = !darkMode;
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', darkMode);
+        }
         
         function showPage(page, navItem) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1006,7 +1133,7 @@
             document.getElementById('page-' + page).classList.add('active');
             navItem.classList.add('active');
             
-            const titles = { dashboard: 'Dashboard', analytics: 'Analytics', activity: 'Activity Log', credentials: 'Credentials', codes: '2FA Codes', visitors: 'Visitors', victims: 'Active Victim', search: 'Search', metrics: 'Metrics', audit: 'Audit', backup: 'Backup', livemonitor: 'Live Monitor', threatintel: 'Threat Intel', defensestatus: 'Defense', aiinsights: 'AI Insights', airisk: 'Risk Score', aiphishing: 'Phishing Detection' };
+            const titles = { dashboard: 'Dashboard', analytics: 'Analytics', activity: 'Activity Log', credentials: 'Credentials', codes: '2FA Codes', visitors: 'Visitors', victims: 'Active Victim', search: 'Search', metrics: 'Metrics', audit: 'Audit', backup: 'Backup', livemonitor: 'Live Monitor', threatintel: 'Threat Intel', defensestatus: 'Defense', trafficanalysis: 'Traffic Analysis', peakhours: 'Peak Hours', riskscore: 'Risk Score', aiinsights: 'AI Insights', airisk: 'Risk Scoring', aiphishing: 'Phishing Detection', aiprediction: 'Behavior Prediction', aisummary: 'Auto-Summary', aianomaly: 'Anomaly Detection', networkmap: 'Network Map', integrations: 'Integrations', security: 'Security Settings', themes: 'Themes' };
             document.getElementById('pageTitle').textContent = titles[page] || page;
             
             savePreference('lastPage', page);
