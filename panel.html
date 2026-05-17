@@ -580,6 +580,62 @@
                     <span class="icon">🔐</span>
                     Security
                 </div>
+                <div class="nav-item" onclick="showPage('notifications', this)">
+                    <span class="icon">🔔</span>
+                    Notifications
+                </div>
+                <div class="nav-item" onclick="showPage('retention', this)">
+                    <span class="icon">💾</span>
+                    Data Retention
+                </div>
+                <div class="nav-item" onclick="showPage('thresholds', this)">
+                    <span class="icon">📊</span>
+                    Alert Thresholds
+                </div>
+                <div class="nav-item" onclick="showPage('templates', this)">
+                    <span class="icon">✉️</span>
+                    Email Templates
+                </div>
+                <div class="nav-item" onclick="showPage('campaigns', this)">
+                    <span class="icon">🚀</span>
+                    Campaigns
+                </div>
+                <div class="nav-item" onclick="showPage('landing', this)">
+                    <span class="icon">🎯</span>
+                    Landing Pages
+                </div>
+                <div class="nav-item" onclick="showPage('users', this)">
+                    <span class="icon">👥</span>
+                    User Management
+                </div>
+                <div class="nav-item" onclick="showPage('logs', this)">
+                    <span class="icon">📋</span>
+                    Logs
+                </div>
+                <div class="nav-item" onclick="showPage('api', this)">
+                    <span class="icon">🔑</span>
+                    API Access
+                </div>
+                <div class="nav-item" onclick="showPage('reports', this)">
+                    <span class="icon">📈</span>
+                    Reports
+                </div>
+                <div class="nav-item" onclick="showPage('branding', this)">
+                    <span class="icon">🎨</span>
+                    Branding
+                </div>
+                <div class="nav-item" onclick="showPage('scheduler', this)">
+                    <span class="icon">⏰</span>
+                    Scheduler
+                </div>
+                <div class="nav-item" onclick="showPage('webhooks', this)">
+                    <span class="icon">🔗</span>
+                    Webhooks
+                </div>
+                <div class="nav-item" onclick="showPage('tags', this)">
+                    <span class="icon">🏷️</span>
+                    Tags/Labels
+                </div>
                 <div class="nav-item" onclick="toggleTheme()">
                     <span class="icon">🌙</span>
                     Dark Mode
@@ -1981,6 +2037,680 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Notifications Page -->
+            <div class="page" id="page-notifications">
+                <div style="padding: 40px;">
+                    <h2>🔔 Notifications</h2>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Manage your alerts and notifications</p>
+                    <div style="display: flex; gap: 12px; margin-top: 24px;">
+                        <button onclick="clearAllNotifs()" style="padding: 10px 20px; background: var(--surface-hover); border: 1px solid var(--border); border-radius: 12px; cursor: pointer;">🗑️ Clear All</button>
+                        <button onclick="markAllRead()" style="padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 12px; cursor: pointer;">✓ Mark All Read</button>
+                    </div>
+                    <div style="margin-top: 24px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden;">
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 40px; background: var(--danger); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">🚨</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">New victim captured</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">john.doe@gmail.com - 2FA pending</div>
+                            </div>
+                            <span style="font-size: 11px; color: var(--text-secondary);">2m ago</span>
+                        </div>
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 40px; background: var(--warning); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">⚠️</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">High traffic spike detected</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">247 visitors in the last hour</div>
+                            </div>
+                            <span style="font-size: 11px; color: var(--text-secondary);">15m ago</span>
+                        </div>
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 40px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">✓</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">Campaign completed</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">Q1 2026 phishing simulation finished</div>
+                            </div>
+                            <span style="font-size: 11px; color: var(--text-secondary);">2h ago</span>
+                        </div>
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">🔔</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">Backup completed</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">Daily backup saved successfully</div>
+                            </div>
+                            <span style="font-size: 11px; color: var(--text-secondary);">5h ago</span>
+                        </div>
+                        <div style="padding: 16px; display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 40px; background: var(--text-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">🛡️</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">Defense update</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">WAF rules updated - 3 new rules</div>
+                            </div>
+                            <span style="font-size: 11px; color: var(--text-secondary);">1d ago</span>
+                        </div>
+                    </div>
+                    <script>
+                        function clearAllNotifs() { showToast('All notifications cleared'); }
+                        function markAllRead() { showToast('All marked as read'); }
+                    </script>
+                </div>
+            </div>
+            
+            <!-- Data Retention Page -->
+            <div class="page" id="page-retention">
+                <div style="padding: 40px;">
+                    <h2>💾 Data Retention</h2>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Configure how long data is stored</p>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px;">
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--primary);">1,247</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Credentials Stored</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--success);">30 days</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Current Policy</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--warning);">12MB</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Storage Used</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); padding: 24px;">
+                        <div style="font-weight: 600; margin-bottom: 16px;">Retention Policy</div>
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                            <input type="radio" name="retention" id="ret7" checked>
+                            <label for="ret7"><strong>7 days</strong> - Quick turnover</label>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                            <input type="radio" name="retention" id="ret30">
+                            <label for="ret30"><strong>30 days</strong> - Standard (recommended)</label>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                            <input type="radio" name="retention" id="ret90">
+                            <label for="ret90"><strong>90 days</strong> - Long-term analysis</label>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);">
+                            <input type="checkbox" id="autodelete" checked>
+                            <label for="autodelete">Auto-delete data older than retention period</label>
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); padding: 24px;">
+                        <div style="font-weight: 600; margin-bottom: 12px;">Storage Breakdown</div>
+                        <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);"><span>Credentials</span><span style="font-weight: 600;">8.2 MB</span></div>
+                        <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);"><span>2FA Codes</span><span style="font-weight: 600;">2.1 MB</span></div>
+                        <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);"><span>Visitor Logs</span><span style="font-weight: 600;">1.5 MB</span></div>
+                        <div style="display: flex; justify-content: space-between; padding: 12px 0;"><span>System Logs</span><span style="font-weight: 600;">0.2 MB</span></div>
+                    </div>
+                    <button onclick="saveRetention()" style="margin-top: 24px; padding: 14px 28px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">💾 Save Policy</button>
+                    <script>
+                        function saveRetention() { showToast('Retention policy saved'); }
+                    </script>
+                </div>
+            </div>
+            
+            <!-- Alert Thresholds Page -->
+            <div class="page" id="page-thresholds">
+                <div style="padding: 40px;">
+                    <h2>📊 Alert Thresholds</h2>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Configure when to receive alerts</p>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 24px;">
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--success);">5</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Active Rules</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--primary);">12</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Alerts Today</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--warning);">3</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Escalated</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--success);">98%</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Resolved</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); padding: 24px;">
+                        <div style="font-weight: 600; margin-bottom: 16px;">Alert Rules</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--surface-hover); border-radius: 12px; margin-bottom: 12px;">
+                            <div><div style="font-weight: 600;">Failed Login Attempts</div><div style="font-size: 12px; color: var(--text-secondary);">Alert when > 5 failed attempts from same IP</div></div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <input type="number" value="5" style="width: 60px; padding: 8px; border: 1px solid var(--border); border-radius: 8px;">
+                                <span style="background: var(--success); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">Active</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--surface-hover); border-radius: 12px; margin-bottom: 12px;">
+                            <div><div style="font-weight: 600;">Suspicious IP Detection</div><div style="font-size: 12px; color: var(--text-secondary);">Alert when traffic from known bad IPs</div></div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="color: var(--text-secondary);">Any</span>
+                                <span style="background: var(--success); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">Active</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--surface-hover); border-radius: 12px; margin-bottom: 12px;">
+                            <div><div style="font-weight: 600;">Traffic Spike</div><div style="font-size: 12px; color: var(--text-secondary);">Alert when visitors exceed threshold</div></div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <input type="number" value="200" style="width: 60px; padding: 8px; border: 1px solid var(--border); border-radius: 8px;">
+                                <span style="background: var(--success); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">Active</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--surface-hover); border-radius: 12px;">
+                            <div><div style="font-weight: 600;">New Victim Captured</div><div style="font-size: 12px; color: var(--text-secondary);">Alert when credentials are captured</div></div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="color: var(--text-secondary);">Instant</span>
+                                <span style="background: var(--success); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="saveThresholds()" style="margin-top: 24px; padding: 14px 28px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">💾 Save Thresholds</button>
+                    <script>
+                        function saveThresholds() { showToast('Alert thresholds saved'); }
+                    </script>
+                </div>
+            </div>
+            
+            <!-- Email Templates Page -->
+            <div class="page" id="page-templates">
+                <div style="padding: 40px;">
+                    <h2>✉️ Email Templates</h2>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Create and manage phishing email templates</p>
+                    <div style="display: flex; gap: 12px; margin-top: 24px;">
+                        <button onclick="newTemplate()" style="padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">+ New Template</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px;">
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <span style="background: var(--primary); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px;">Active</span>
+                            </div>
+                            <div style="font-weight: 600; margin-bottom: 8px;">Password Reset</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">"Your password expires in 24 hours"</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">Used: 847 times</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <span style="background: var(--primary); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px;">Active</span>
+                            </div>
+                            <div style="font-weight: 600; margin-bottom: 8px;">Account Verification</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">"Verify your account now"</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">Used: 523 times</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <span style="background: var(--success); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px;">Draft</span>
+                            </div>
+                            <div style="font-weight: 600; margin-bottom: 8px;">Office 365 Update</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">"New security features"</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">Used: 0 times</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); padding: 24px;">
+                        <div style="font-weight: 600; margin-bottom: 12px;">Template Editor</div>
+                        <input type="text" placeholder="Template name..." style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px;">
+                        <textarea placeholder="Subject: Your password will expire soon..." style="width: 100%; height: 120px; padding: 12px; border: 1px solid var(--border); border-radius: 12px; resize: vertical;"></textarea>
+                        <div style="display: flex; gap: 12px; margin-top: 12px;">
+                            <button onclick="saveTemplate()" style="padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer;">💾 Save</button>
+                            <button style="padding: 10px 20px; background: var(--surface-hover); border: 1px solid var(--border); border-radius: 10px; cursor: pointer;">👁️ Preview</button>
+                        </div>
+                    </div>
+                    <script>
+                        function newTemplate() { showToast('New template created'); }
+                        function saveTemplate() { showToast('Template saved'); }
+                    </script>
+                </div>
+            </div>
+            
+            <!-- Campaigns Page -->
+            <div class="page" id="page-campaigns">
+                <div style="padding: 40px;">
+                    <h2>🚀 Campaigns</h2>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Create and manage phishing campaigns</p>
+                    <button onclick="newCampaign()" style="margin-top: 24px; padding: 14px 28px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">+ New Campaign</button>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 24px;">
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--primary);">5</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Total Campaigns</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--success);">3</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Active</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--warning);">2</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Paused</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--primary);">1,247</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Total Sent</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden;">
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 40px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">✓</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">Q1 2026 Security Test</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">Password Reset template • 500 targets</div>
+                            </div>
+                            <span style="background: var(--success); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">Running</span>
+                            <button style="padding: 8px 12px; background: var(--surface-hover); border: none; border-radius: 8px; cursor: pointer;">⏸️</button>
+                        </div>
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">📧</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">February Phishing Sim</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">Account Verification • 300 targets</div>
+                            </div>
+                            <span style="background: var(--success); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">Running</span>
+                            <button style="padding: 8px 12px; background: var(--surface-hover); border: none; border-radius: 8px; cursor: pointer;">⏸️</button>
+                        </div>
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 40px; background: var(--text-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">⏸️</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">IT Department Test</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">Office 365 • 50 targets</div>
+                            </div>
+                            <span style="background: var(--warning); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">Paused</span>
+                            <button style="padding: 8px 12px; background: var(--surface-hover); border: none; border-radius: 8px; cursor: pointer;">▶️</button>
+                        </div>
+                        <div style="padding: 16px; display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 40px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">✓</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">January Training</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">Password Reset • 397 targets</div>
+                            </div>
+                            <span style="background: var(--text-secondary); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">Completed</span>
+                            <button style="padding: 8px 12px; background: var(--surface-hover); border: none; border-radius: 8px; cursor: pointer;">📊</button>
+                        </div>
+                    </div>
+                    <script>
+                        function newCampaign() { showToast('New campaign wizard opened'); }
+                    </script>
+                </div>
+            </div>
+            
+            <!-- Landing Pages Page -->
+            <div class="page" id="page-landing">
+                <div style="padding: 40px;">
+                    <h2>🎯 Landing Pages</h2>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Manage phishing landing pages</p>
+                    <button onclick="newLanding()" style="margin-top: 24px; padding: 14px 28px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">+ New Landing Page</button>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px;">
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border);">
+                            <div style="font-weight: 600; margin-bottom: 8px;">Microsoft Login</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">Clone of Microsoft 365 login</div>
+                            <div style="display: flex; gap: 8px;">
+                                <span style="background: var(--success); color: white; padding: 4px 10px; border-radius: 8px; font-size: 11px;">Active</span>
+                                <button style="padding: 6px 10px; background: var(--surface-hover); border: none; border-radius: 6px; cursor: pointer;">👁️</button>
+                                <button style="padding: 6px 10px; background: var(--surface-hover); border: none; border-radius: 6px; cursor: pointer;">📋</button>
+                            </div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border);">
+                            <div style="font-weight: 600; margin-bottom: 8px;">Google Login</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">Clone of Google login</div>
+                            <div style="display: flex; gap: 8px;">
+                                <span style="background: var(--success); color: white; padding: 4px 10px; border-radius: 8px; font-size: 11px;">Active</span>
+                                <button style="padding: 6px 10px; background: var(--surface-hover); border: none; border-radius: 6px; cursor: pointer;">👁️</button>
+                                <button style="padding: 6px 10px; background: var(--surface-hover); border: none; border-radius: 6px; cursor: pointer;">📋</button>
+                            </div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border);">
+                            <div style="font-weight: 600; margin-bottom: 8px;">LinkedIn</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">Clone of LinkedIn login</div>
+                            <div style="display: flex; gap: 8px;">
+                                <span style="background: var(--warning); color: white; padding: 4px 10px; border-radius: 8px; font-size: 11px;">Draft</span>
+                                <button style="padding: 6px 10px; background: var(--surface-hover); border: none; border-radius: 6px; cursor: pointer;">👁️</button>
+                                <button style="padding: 6px 10px; background: var(--surface-hover); border: none; border-radius: 6px; cursor: pointer;">📋</button>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        function newLanding() { showToast('Landing page editor opened'); }
+                    </script>
+                </div>
+            </div>
+            
+            <!-- User Management Page -->
+            <div class="page" id="page-users">
+                <div style="padding: 40px;">
+                    <h2>👥 User Management</h2>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Manage admin users and roles</p>
+                    <button onclick="addUser()" style="margin-top: 24px; padding: 14px 28px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">+ Add User</button>
+                    <div style="margin-top: 24px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden;">
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">A</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">admin@icfish.com</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">Full Access</div>
+                            </div>
+                            <span style="background: var(--danger); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">Admin</span>
+                            <button style="padding: 8px 12px; background: var(--surface-hover); border: none; border-radius: 8px; cursor: pointer;">⚙️</button>
+                        </div>
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 40px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">J</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">john@icfish.com</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">View only</div>
+                            </div>
+                            <span style="background: var(--primary); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">Viewer</span>
+                            <button style="padding: 8px 12px; background: var(--surface-hover); border: none; border-radius: 8px; cursor: pointer;">⚙️</button>
+                        </div>
+                        <div style="padding: 16px; display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 40px; background: var(--warning); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">S</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">sarah@icfish.com</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">Can manage campaigns</div>
+                            </div>
+                            <span style="background: var(--warning); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">Manager</span>
+                            <button style="padding: 8px 12px; background: var(--surface-hover); border: none; border-radius: 8px; cursor: pointer;">⚙️</button>
+                        </div>
+                    </div>
+                    <script>
+                        function addUser() { showToast('Add user dialog opened'); }
+                    </script>
+                </div>
+            </div>
+            
+            <!-- Logs Page -->
+            <div class="page" id="page-logs">
+                <div style="padding: 40px;">
+                    <h2>📋 System Logs</h2>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Full system activity logs</p>
+                    <div style="display: flex; gap: 12px; margin-top: 24px;">
+                        <input type="text" placeholder="Search logs..." style="flex:1; padding: 12px; border: 1px solid var(--border); border-radius: 12px;">
+                        <select style="padding: 12px; border: 1px solid var(--border); border-radius: 12px;">
+                            <option>All Types</option>
+                            <option>Errors</option>
+                            <option>Warnings</option>
+                            <option>Info</option>
+                        </select>
+                        <button style="padding: 12px 20px; background: var(--primary); color: white; border: none; border-radius: 12px; cursor: pointer;">🔍 Filter</button>
+                    </div>
+                    <div style="margin-top: 24px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden;">
+                        <table style="width: 100%;">
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <th style="padding: 12px 16px; font-size: 12px; color: var(--text-secondary);">TIMESTAMP</th>
+                                <th style="padding: 12px 16px; font-size: 12px; color: var(--text-secondary);">LEVEL</th>
+                                <th style="padding: 12px 16px; font-size: 12px; color: var(--text-secondary);">MESSAGE</th>
+                                <th style="padding: 12px 16px; font-size: 12px; color: var(--text-secondary);">USER</th>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="padding: 12px 16px; font-size: 13px;">2:30 PM</td>
+                                <td style="padding: 12px 16px;"><span style="background: var(--danger); color: white; padding: 4px 8px; border-radius: 8px; font-size: 11px;">Error</span></td>
+                                <td style="padding: 12px 16px; font-size: 13px;">Failed to connect to SMTP</td>
+                                <td style="padding: 12px 16px; font-size: 13px; color: var(--text-secondary);">system</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="padding: 12px 16px; font-size: 13px;">2:15 PM</td>
+                                <td style="padding: 12px 16px;"><span style="background: var(--success); color: white; padding: 4px 8px; border-radius: 8px; font-size: 11px;">Info</span></td>
+                                <td style="padding: 12px 16px; font-size: 13px;">Campaign Q1 started</td>
+                                <td style="padding: 12px 16px; font-size: 13px; color: var(--text-secondary);">admin</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="padding: 12px 16px; font-size: 13px;">1:45 PM</td>
+                                <td style="padding: 12px 16px;"><span style="background: var(--warning); color: white; padding: 4px 8px; border-radius: 8px; font-size: 11px;">Warn</span></td>
+                                <td style="padding: 12px 16px; font-size: 13px;">High memory usage</td>
+                                <td style="padding: 12px 16px; font-size: 13px; color: var(--text-secondary);">system</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 16px; font-size: 13px;">1:30 PM</td>
+                                <td style="padding: 12px 16px;"><span style="background: var(--success); color: white; padding: 4px 8px; border-radius: 8px; font-size: 11px;">Info</span></td>
+                                <td style="padding: 12px 16px; font-size: 13px;">Backup completed</td>
+                                <td style="padding: 12px 16px; font-size: 13px; color: var(--text-secondary);">system</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- API Access Page -->
+            <div class="page" id="page-api">
+                <div style="padding: 40px;">
+                    <h2>🔑 API Access</h2>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Manage API keys and access</p>
+                    <button onclick="newApiKey()" style="margin-top: 24px; padding: 14px 28px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">+ Generate New Key</button>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px;">
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--primary);">2</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Active Keys</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--warning);">12,450</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">API Calls Today</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--success);">99.9%</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Uptime</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden;">
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <div style="font-weight: 600;">Production Key</div>
+                                <div style="font-size: 12px; color: var(--text-secondary); font-family: monospace;">icf_live_****************************</div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="background: var(--success); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">Active</span>
+                                <button style="padding: 8px 12px; background: var(--danger); color: white; border: none; border-radius: 8px; cursor: pointer;">Revoke</button>
+                            </div>
+                        </div>
+                        <div style="padding: 16px; display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <div style="font-weight: 600;">Development Key</div>
+                                <div style="font-size: 12px; color: var(--text-secondary); font-family: monospace;">icf_test_****************************</div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="background: var(--success); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">Active</span>
+                                <button style="padding: 8px 12px; background: var(--danger); color: white; border: none; border-radius: 8px; cursor: pointer;">Revoke</button>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        function newApiKey() { showToast('New API key generated'); }
+                    </script>
+                </div>
+            </div>
+            
+            <!-- Reports Page -->
+            <div class="page" id="page-reports">
+                <div style="padding: 40px;">
+                    <h2>📈 Reports</h2>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Download activity reports</p>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 24px;">
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--primary);">15</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Reports</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--success);">PDF</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Format</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--warning);">CSV</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Also Available</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--primary);">Auto</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Scheduled</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden;">
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+                            <div><div style="font-weight: 600;">January 2026 Summary</div><div style="font-size: 12px; color: var(--text-secondary);">Generated Jan 31, 2026</div></div>
+                            <button style="padding: 8px 16px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer;">📥 PDF</button>
+                        </div>
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+                            <div><div style="font-weight: 600;">Q4 2025 Quarterly Report</div><div style="font-size: 12px; color: var(--text-secondary);">Generated Dec 31, 2025</div></div>
+                            <button style="padding: 8px 16px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer;">📥 PDF</button>
+                        </div>
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+                            <div><div style="font-weight: 600;">Campaign Results - Q1 2026</div><div style="font-size: 12px; color: var(--text-secondary);">Generated Feb 15, 2026</div></div>
+                            <button style="padding: 8px 16px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer;">📥 CSV</button>
+                        </div>
+                        <div style="padding: 16px; display: flex; align-items: center; justify-content: space-between;">
+                            <div><div style="font-weight: 600;">Risk Analysis Report</div><div style="font-size: 12px; color: var(--text-secondary);">Generated Feb 10, 2026</div></div>
+                            <button style="padding: 8px 16px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer;">📥 PDF</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Branding Page -->
+            <div class="page" id="page-branding">
+                <div style="padding: 40px;">
+                    <h2>🎨 Branding</h2>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Customize your panel appearance</p>
+                    <div style="margin-top: 24px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); padding: 24px;">
+                        <div style="font-weight: 600; margin-bottom: 16px;">Company Information</div>
+                        <input type="text" placeholder="Company Name" value="icfish" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px;">
+                        <input type="text" placeholder="Support Email" value="support@icfish.com" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px;">
+                    </div>
+                    <div style="margin-top: 24px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); padding: 24px;">
+                        <div style="font-weight: 600; margin-bottom: 16px;">Logo</div>
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <div style="width: 80px; height: 80px; background: var(--primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px;">☁️</div>
+                            <button style="padding: 10px 20px; background: var(--surface-hover); border: 1px solid var(--border); border-radius: 10px; cursor: pointer;">📤 Upload Logo</button>
+                        </div>
+                    </div>
+                    <button onclick="saveBranding()" style="margin-top: 24px; padding: 14px 28px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">💾 Save Branding</button>
+                    <script>
+                        function saveBranding() { showToast('Branding saved'); }
+                    </script>
+                </div>
+            </div>
+            
+            <!-- Scheduler Page -->
+            <div class="page" id="page-scheduler">
+                <div style="padding: 40px;">
+                    <h2>⏰ Scheduler</h2>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Schedule automated tasks</p>
+                    <button onclick="newSchedule()" style="margin-top: 24px; padding: 14px 28px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">+ New Schedule</button>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px;">
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--primary);">3</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Active Schedules</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--success);">12</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Run Today</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--warning);">99%</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Success Rate</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden;">
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+                            <div><div style="font-weight: 600;">Daily Backup</div><div style="font-size: 12px; color: var(--text-secondary);">Every day at 2:00 AM</div></div>
+                            <span style="background: var(--success); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">Active</span>
+                        </div>
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+                            <div><div style="font-weight: 600;">Weekly Report</div><div style="font-size: 12px; color: var(--text-secondary);">Every Monday at 9:00 AM</div></div>
+                            <span style="background: var(--success); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">Active</span>
+                        </div>
+                        <div style="padding: 16px; display: flex; align-items: center; justify-content: space-between;">
+                            <div><div style="font-weight: 600;">Data Cleanup</div><div style="font-size: 12px; color: var(--text-secondary);">Every Sunday at 3:00 AM</div></div>
+                            <span style="background: var(--success); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">Active</span>
+                        </div>
+                    </div>
+                    <script>
+                        function newSchedule() { showToast('Schedule wizard opened'); }
+                    </script>
+                </div>
+            </div>
+            
+            <!-- Webhooks Page -->
+            <div class="page" id="page-webhooks">
+                <div style="padding: 40px;">
+                    <h2>🔗 Webhooks</h2>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Configure automated data forwarding</p>
+                    <button onclick="newWebhook()" style="margin-top: 24px; padding: 14px 28px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">+ Add Webhook</button>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px;">
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--primary);">2</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Active Webhooks</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--success);">847</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Requests Sent</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--warning);">99%</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Success Rate</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden;">
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border);">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div><div style="font-weight: 600;">Slack Notifications</div><div style="font-size: 12px; color: var(--text-secondary);">https://hooks.slack.com/...</div></div>
+                                <span style="background: var(--success); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">Active</span>
+                            </div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">Triggers: New victim captured, Campaign completed</div>
+                        </div>
+                        <div style="padding: 16px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div><div style="font-weight: 600;">Custom API</div><div style="font-size: 12px; color: var(--text-secondary);">https://api.example.com/webhook</div></div>
+                                <span style="background: var(--success); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">Active</span>
+                            </div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">Triggers: All credentials, All 2FA codes</div>
+                        </div>
+                    </div>
+                    <script>
+                        function newWebhook() { showToast('Webhook editor opened'); }
+                    </script>
+                </div>
+            </div>
+            
+            <!-- Tags/Labels Page -->
+            <div class="page" id="page-tags">
+                <div style="padding: 40px;">
+                    <h2>🏷️ Tags & Labels</h2>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Organize and filter credentials with tags</p>
+                    <button onclick="newTag()" style="margin-top: 24px; padding: 14px 28px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">+ New Tag</button>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 24px;">
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--primary);">8</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Total Tags</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--success);">156</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Tagged Items</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--warning);">3</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Auto-Tags</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--primary);">5</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Used Today</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px; display: flex; gap: 8px; flex-wrap: wrap;">
+                        <span style="padding: 8px 16px; background: var(--primary); color: white; border-radius: 20px; font-size: 13px; cursor: pointer;">high-value (23)</span>
+                        <span style="padding: 8px 16px; background: var(--danger); color: white; border-radius: 20px; font-size: 13px; cursor: pointer;">priority (18)</span>
+                        <span style="padding: 8px 16px; background: var(--success); color: white; border-radius: 20px; font-size: 13px; cursor: pointer;">verified (45)</span>
+                        <span style="padding: 8px 16px; background: var(--warning); color: white; border-radius: 20px; font-size: 13px; cursor: pointer;">needs-review (12)</span>
+                        <span style="padding: 8px 16px; background: var(--text-secondary); color: white; border-radius: 20px; font-size: 13px; cursor: pointer;">test (8)</span>
+                        <span style="padding: 8px 16px; background: var(--surface-hover); border: 1px solid var(--border); border-radius: 20px; font-size: 13px; cursor: pointer;">+ Add</span>
+                    </div>
+                    <div style="margin-top: 24px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); padding: 20px;">
+                        <div style="font-weight: 600; margin-bottom: 12px;">Auto-Tag Rules</div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);">
+                            <span>Any .gov email</span>
+                            <span style="background: var(--primary); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">priority</span>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);">
+                            <span>High-risk country</span>
+                            <span style="background: var(--danger); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">high-value</span>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0;">
+                            <span>2FA captured</span>
+                            <span style="background: var(--success); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px;">verified</span>
+                        </div>
+                    </div>
+                    <script>
+                        function newTag() { showToast('New tag created'); }
+                    </script>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -2005,7 +2735,7 @@
             document.getElementById('page-' + page).classList.add('active');
             navItem.classList.add('active');
             
-            const titles = { dashboard: 'Dashboard', analytics: 'Analytics', activity: 'Activity Log', credentials: 'Credentials', codes: '2FA Codes', visitors: 'Visitors', victims: 'Active Victim', search: 'Search', metrics: 'Metrics', audit: 'Audit', backup: 'Backup', livemonitor: 'Live Monitor', threatintel: 'Threat Intel', defensestatus: 'Defense', trafficanalysis: 'Traffic Analysis', peakhours: 'Peak Hours', riskscore: 'Risk Score', aiinsights: 'AI Insights', airisk: 'Risk Scoring', aiphishing: 'Phishing Detection', aiprediction: 'Behavior Prediction', aisummary: 'Auto-Summary', aianomaly: 'Anomaly Detection', networkmap: 'Network Map', integrations: 'Integrations', security: 'Security Settings', themes: 'Themes' };
+            const titles = { dashboard: 'Dashboard', analytics: 'Analytics', activity: 'Activity Log', credentials: 'Credentials', codes: '2FA Codes', visitors: 'Visitors', victims: 'Active Victim', search: 'Search', metrics: 'Metrics', audit: 'Audit', backup: 'Backup', livemonitor: 'Live Monitor', threatintel: 'Threat Intel', defensestatus: 'Defense', trafficanalysis: 'Traffic Analysis', peakhours: 'Peak Hours', riskscore: 'Risk Score', aiinsights: 'AI Insights', airisk: 'Risk Scoring', aiphishing: 'Phishing Detection', aiprediction: 'Behavior Prediction', aisummary: 'Auto-Summary', aianomaly: 'Anomaly Detection', networkmap: 'Network Map', integrations: 'Integrations', security: 'Security Settings', notifications: 'Notifications', retention: 'Data Retention', thresholds: 'Alert Thresholds', templates: 'Email Templates', campaigns: 'Campaigns', landing: 'Landing Pages', users: 'User Management', logs: 'Logs', api: 'API Access', reports: 'Reports', branding: 'Branding', scheduler: 'Scheduler', webhooks: 'Webhooks', tags: 'Tags/Labels', themes: 'Themes' };
             document.getElementById('pageTitle').textContent = titles[page] || page;
             
             savePreference('lastPage', page);
