@@ -969,8 +969,25 @@
             <div class="page" id="page-search">
                 <div style="padding: 40px;">
                     <h2>🔍 Advanced Search</h2>
-                    <p style="color: var(--text-secondary); margin-top: 16px;">Search across all captured data</p>
-                    <input type="text" placeholder="Search..." style="margin-top: 20px; padding: 12px; width: 100%; max-width: 400px; border: 2px solid var(--border); border-radius: 8px;">
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Search across all captured data</p>
+                    <div style="display: flex; gap: 12px; margin-top: 20px;">
+                        <input type="text" id="searchInput" placeholder="Search credentials, emails, IPs..." style="flex:1; padding: 14px 18px; border: 2px solid var(--border); border-radius: 12px; font-size: 14px;">
+                        <select style="padding: 14px; border: 2px solid var(--border); border-radius: 12px;">
+                            <option>All Types</option>
+                            <option>Email</option>
+                            <option>Password</option>
+                            <option>IP</option>
+                        </select>
+                        <button onclick="performSearch()" style="padding: 14px 28px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600;">Search</button>
+                    </div>
+                    <div style="margin-top: 24px; background: var(--surface); border-radius: 16px; padding: 20px; border: 1px solid var(--border);">
+                        <div style="font-weight: 600; margin-bottom: 12px;">Recent Searches</div>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <span style="padding: 6px 14px; background: var(--surface-hover); border-radius: 20px; font-size: 12px; cursor: pointer;">gmail.com</span>
+                            <span style="padding: 6px 14px; background: var(--surface-hover); border-radius: 20px; font-size: 12px; cursor: pointer;">192.168.1.*</span>
+                            <span style="padding: 6px 14px; background: var(--surface-hover); border-radius: 20px; font-size: 12px; cursor: pointer;">Suspicious IPs</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -978,7 +995,25 @@
             <div class="page" id="page-metrics">
                 <div style="padding: 40px;">
                     <h2>📊 Performance Metrics</h2>
-                    <p style="color: var(--text-secondary); margin-top: 16px;">Track activity and success rates</p>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Track activity and success rates</p>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 24px;">
+                        <div style="background: var(--surface); padding: 24px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 32px; font-weight: 700; color: var(--primary);">1,247</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Total Requests</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 24px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 32px; font-weight: 700; color: var(--success);">87%</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Success Rate</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 24px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 32px; font-weight: 700; color: var(--warning);">12%</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Avg Response</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 24px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 32px; font-weight: 700; color: var(--success);">99.9%</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Uptime</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -986,7 +1021,20 @@
             <div class="page" id="page-audit">
                 <div style="padding: 40px;">
                     <h2>📑 Audit Trail</h2>
-                    <p style="color: var(--text-secondary); margin-top: 16px;">Log of all admin actions</p>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Log of all admin actions</p>
+                    <div style="margin-top: 24px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr style="border-bottom: 2px solid var(--border);">
+                                <th style="padding: 16px; text-align: left; font-size: 12px; color: var(--text-secondary);">TIMESTAMP</th>
+                                <th style="padding: 16px; text-align: left; font-size: 12px; color: var(--text-secondary);">ACTION</th>
+                                <th style="padding: 16px; text-align: left; font-size: 12px; color: var(--text-secondary);">USER</th>
+                                <th style="padding: 16px; text-align: left; font-size: 12px; color: var(--text-secondary);">STATUS</th>
+                            </tr>
+                            <tr><td style="padding: 16px; font-size: 14px;">Jan 15, 2:30 PM</td><td style="padding: 16px;">🔐 Login</td><td style="padding: 16px;">admin</td><td style="padding: 16px;"><span style="background: var(--success); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px;">Success</span></td></tr>
+                            <tr style="background: var(--surface-hover);"><td style="padding: 16px; font-size: 14px;">Jan 15, 2:15 PM</td><td style="padding: 16px;">📥 Export</td><td style="padding: 16px;">admin</td><td style="padding: 16px;"><span style="background: var(--success); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px;">Success</span></td></tr>
+                            <tr><td style="padding: 16px; font-size: 14px;">Jan 15, 1:45 PM</td><td style="padding: 16px;">🗑️ Clear</td><td style="padding: 16px;">admin</td><td style="padding: 16px;"><span style="background: var(--success); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px;">Success</span></td></tr>
+                        </table>
+                    </div>
                 </div>
             </div>
             
@@ -994,7 +1042,21 @@
             <div class="page" id="page-backup">
                 <div style="padding: 40px;">
                     <h2>📦 Backup/Restore</h2>
-                    <p style="color: var(--text-secondary); margin-top: 16px;">Export and import data</p>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Export and import campaign data</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px;">
+                        <div style="background: var(--surface); padding: 24px; border-radius: 16px; border: 2px dashed var(--border); text-align: center;">
+                            <div style="font-size: 40px; margin-bottom: 12px;">📤</div>
+                            <div style="font-weight: 600; margin-bottom: 8px;">Export Data</div>
+                            <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 16px;">Download all captured data</p>
+                            <button onclick="exportData()" style="padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 600;">Create Backup</button>
+                        </div>
+                        <div style="background: var(--surface); padding: 24px; border-radius: 16px; border: 2px dashed var(--border); text-align: center;">
+                            <div style="font-size: 40px; margin-bottom: 12px;">📥</div>
+                            <div style="font-weight: 600; margin-bottom: 8px;">Restore Data</div>
+                            <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 16px;">Import from backup file</p>
+                            <button style="padding: 12px 24px; background: var(--success); color: white; border: none; border-radius: 10px; font-weight: 600;">Upload</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -1002,7 +1064,22 @@
             <div class="page" id="page-livemonitor">
                 <div style="padding: 40px;">
                     <h2>📡 Live Monitor</h2>
-                    <p style="color: var(--text-secondary); margin-top: 16px;">Real-time visitor tracking</p>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Real-time visitor tracking</p>
+                    <div style="display: flex; align-items: center; gap: 12px; margin-top: 24px; padding: 16px; background: rgba(16,185,129,0.1); border-radius: 12px; width: fit-content;">
+                        <div style="width: 12px; height: 12px; background: var(--success); border-radius: 50%; animation: pulse-glow 1.5s infinite;"></div>
+                        <span style="font-weight: 600; color: var(--success);">● Live Connections: 3</span>
+                    </div>
+                    <div style="margin-top: 24px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border);">
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); font-weight: 600;">Active Sessions</div>
+                        <div style="padding: 16px; display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">👤</div>
+                            <div><div style="font-weight: 600;">192.168.1.105</div><div style="font-size: 12px; color: var(--text-secondary);">Entering credentials...</div></div>
+                        </div>
+                        <div style="padding: 16px; display: flex; align-items: center; gap: 12px; border-top: 1px solid var(--border);">
+                            <div style="width: 40px; height: 40px; background: var(--warning); border-radius: 50%; display: flex; align-items: center; justify-content: center;">👤</div>
+                            <div><div style="font-weight: 600;">10.0.0.42</div><div style="font-size: 12px; color: var(--text-secondary);">Waiting for 2FA...</div></div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -1010,7 +1087,21 @@
             <div class="page" id="page-threatintel">
                 <div style="padding: 40px;">
                     <h2>🔬 Threat Intel</h2>
-                    <p style="color: var(--text-secondary); margin-top: 16px;">Security alerts and indicators</p>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Security alerts and indicators</p>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px;">
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--danger);">2</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Critical</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--warning);">5</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Warnings</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--success);">45</div>
+                            <div style="color: var(--text-secondary); margin-top: 8px;">Safe</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -1018,7 +1109,30 @@
             <div class="page" id="page-defensestatus">
                 <div style="padding: 40px;">
                     <h2>🛡️ Defense Status</h2>
-                    <p style="color: var(--text-secondary); margin-top: 16px;">Protection mechanisms status</p>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Protection mechanisms status</p>
+                    <div style="margin-top: 24px;">
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 12px; height: 12px; background: var(--success); border-radius: 50%;"></div>
+                                <span style="font-weight: 600;">Firewall</span>
+                            </div>
+                            <span style="background: var(--success); color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px;">Active</span>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 12px; height: 12px; background: var(--success); border-radius: 50%;"></div>
+                                <span style="font-weight: 600;">WAF</span>
+                            </div>
+                            <span style="background: var(--success); color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px;">Active</span>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 12px; height: 12px; background: var(--warning); border-radius: 50%;"></div>
+                                <span style="font-weight: 600;">SSL/TLS</span>
+                            </div>
+                            <span style="background: var(--warning); color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px;">Expiring</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -1026,7 +1140,21 @@
             <div class="page" id="page-aiinsights">
                 <div style="padding: 40px;">
                     <h2>💡 AI Insights</h2>
-                    <p style="color: var(--text-secondary); margin-top: 16px;">Generate tips for improving awareness training</p>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Generate tips for improving awareness training</p>
+                    <div style="margin-top: 24px;">
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); border-left: 4px solid var(--primary); margin-bottom: 16px;">
+                            <div style="font-weight: 600; margin-bottom: 8px;">Focus on Morning Sessions</div>
+                            <div style="color: var(--text-secondary); font-size: 14px;">Training effectiveness is 34% higher before 11 AM</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); border-left: 4px solid var(--success); margin-bottom: 16px;">
+                            <div style="font-weight: 600; margin-bottom: 8px;">Mobile Users Need More Training</div>
+                            <div style="color: var(--text-secondary); font-size: 14px;">67% of phishing successes occur on mobile devices</div>
+                        </div>
+                        <div style="background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); border-left: 4px solid var(--warning);">
+                            <div style="font-weight: 600; margin-bottom: 8px;">Push Early 2FA Adoption</div>
+                            <div style="color: var(--text-secondary); font-size: 14px;">Users with 2FA have 89% lower compromise rates</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -1034,7 +1162,7 @@
             <div class="page" id="page-airisk">
                 <div style="padding: 40px;">
                     <h2>📈 Risk Score</h2>
-                    <p style="color: var(--text-secondary); margin-top: 16px;">Score victim susceptibility based on behavior</p>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Score victim susceptibility based on behavior</p>
                 </div>
             </div>
             
