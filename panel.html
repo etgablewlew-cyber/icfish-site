@@ -794,15 +794,7 @@
             const state = await stateRes.json();
             const ips = await ipsRes.json();
             
-            // Only rebuild UI if data changed
-            if (creds.length !== lastCredsLength || codes.length !== last2faLength || resends.length !== lastResendLength || state.status !== lastVictimStatus || ips.length !== lastIpsLength) {
-                lastCredsLength = creds.length;
-                last2faLength = codes.length;
-                lastResendLength = resends.length;
-                lastVictimStatus = state.status;
-                lastIpsLength = ips.length;
-                renderAll(creds, codes, resends, state, ips);
-            }
+            renderAll(creds, codes, resends, state, ips);
         }, 1500);
         
         function renderAll(creds, codes, resends, state, ips = []) {
