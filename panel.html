@@ -37,7 +37,11 @@
             align-items: center;
             margin-bottom: 32px;
             padding-bottom: 24px;
+            padding: 20px 24px;
             border-bottom: 1px solid var(--glass-border);
+            background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 100%);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
         }
         
         .header-left {
@@ -329,7 +333,50 @@
             border: 1px solid var(--glass-border);
             padding: 32px;
             margin-bottom: 24px;
+            border-radius: 24px;
         }
+        
+        .quick-toolbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(180deg, transparent, rgba(0,0,0,0.9));
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            z-index: 100;
+        }
+        
+        .quick-toolbar .btn {
+            padding: 14px 32px;
+            font-size: 16px;
+            border-radius: 30px;
+        }
+        
+        .btn-approve { background: linear-gradient(135deg, var(--accent-green), #00cc6a); }
+        .btn-reject { background: linear-gradient(135deg, var(--accent-red), #cc3028); }
+        
+        .pie-chart-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 16px;
+            background: var(--glass-bg);
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .pie-legend {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+        }
+        
+        .pie-legend span { display: flex; align-items: center; gap: 6px; }
+        
+        * { border-radius: 12px; }
         
         .stats-grid {
             display: grid;
@@ -705,6 +752,14 @@
         </div>
     </div>
     
+    <div class="pie-chart-container">
+        <div id="pie-chart"></div>
+        <div class="pie-legend">
+            <span style="color:var(--accent-green)">● Approved: <b id="approved-count">0</b></span>
+            <span style="color:var(--accent-red)">● Rejected: <b id="rejected-count">0</b></span>
+        </div>
+    </div>
+    
     <div class="main-grid">
         <div class="glass-panel">
             <div class="panel-title"><span>🎯</span> Active Victim</div>
@@ -725,7 +780,8 @@
     </div>
     
     <div class="glass-panel">
-        <div class="panel-title"><span>📧</span> Captured Credentials <span style="float:right;cursor:pointer;opacity:0.5;">↻</span></div>
+        <div class="panel-title" onclick="toggleSection('credentials')" style="cursor:pointer"><span>📧</span> Captured Credentials <span style="float:right;cursor:pointer;opacity:0.5;">↻</span></div>
+        <div id="credentials-section" class="section-content">
         <input type="text" class="search-bar" id="searchCreds" placeholder="Search by email..." oninput="filterCredentials()">
         <div class="capture-list" id="credentials"></div>
     </div>
@@ -1251,6 +1307,45 @@ loadData();
             if (e.key === 'a' || e.key === 'A') approveVictim();
             if (e.key === 'r' || e.key === 'R') rejectVictim();
         });
+    function toggleSection(id) {
+            const section = document.getElementById(id);
+            if (section.style.display === 'none') {
+                section.style.display = '';
+            } else {
+                section.style.display = 'none';
+            }
+        }
+        
+        function addEmptyStateIcons() {
+            document.querySelectorAll('.empty-state').forEach(el => {
+                if (!el.querySelector('.empty-icon')) {
+                    el.innerHTML = '<div class="empty-icon">📭</div>' + el.innerHTML;
+                }
+            });
+        }
+        
+        setInterval(addEmptyStateIcons, 500);
+        
+        let approved = 0, rejected = 0;
+        
+        function updatePieChart() {
+            const container = document.getElementById('pie-chart');
+            if (!container) return;
+            const total = approved + rejected || 1;
+            const pct = (approved / total) * 100;
+            container.innerHTML = `<div style="width:100px;height:100px;border-radius:50%;background:conic-gradient(var(--accent-green) ${pct}%, var(--accent-red) ${pct}%);display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;">${approved + rejected}</div>`;
+        }
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT') return;
+            if (e.key === 'a' || e.key === 'A') { approveVictim(); playNotification(); }
+            if (e.key === 'r' || e.key === 'R') { rejectVictim(); }
+        });
+        
     </script>
+<div class="quick-toolbar">
+        <button class="btn btn-approve" onclick="approveVictim()">✅ Approve</button>
+        <button class="btn btn-reject" onclick="rejectVictim()">❌ Reject</button>
+    </div>
 </body>
 </html>
