@@ -4,16 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Admin Panel</title>
-    <script>
-        if (sessionStorage.getItem('panelAuth') !== 'true') {
-            var p=prompt('Enter password:');
-            if(p!=='0509'){
-                document.documentElement.innerHTML='<!DOCTYPE html><html><head><title>Access Denied</title></head><body style="background:#1e293b;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;"><h1>Access Denied</h1></body></html>';
-            } else {
-                sessionStorage.setItem('panelAuth','true');
-            }
-        }
-    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
